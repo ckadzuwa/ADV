@@ -1,12 +1,16 @@
-*.class
+# Created by https://www.gitignore.io
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+### Intellij ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
+*.iml
 
-# Package Files #
-*.jar
-*.war
-*.ear
+## Directory-based project format:
+.idea/
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+## File-based project format:
+*.ipr
+*.iws
+
+# IntelliJ compiled folders
+out/
+target/
