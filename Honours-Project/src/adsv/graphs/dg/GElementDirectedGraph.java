@@ -31,13 +31,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package adsv.graphs.dg;
 
-import java.awt.Point;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.ListIterator;
-
-import javax.swing.JOptionPane;
-
 import adsv.globals.Constants;
 import edu.usfca.vas.app.Localized;
 import edu.usfca.xj.appkit.gview.GView;
@@ -46,29 +39,51 @@ import edu.usfca.xj.appkit.gview.object.GLink;
 import edu.usfca.xj.appkit.utils.XJAlert;
 import edu.usfca.xj.foundation.XJXMLSerializable;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.TreeMap;
+
 // This class is bassed on GElementFAMachine
 // (found in Jean Bovet VAS app) but has been 
 // modified
 public class GElementDirectedGraph extends GElement implements XJXMLSerializable {
 
-    private HashMap vertices;
-    private HashMap edges;
+    private TreeMap<String, GElementVertex> vertices;
+    private HashMap<EdgePair, GLink> edges;
     private boolean edgeModificationAllowed;
 
     public GElementDirectedGraph(boolean edgeModificationAllowed) {
-        vertices = new HashMap();
-        edges = new HashMap();
+        vertices = new TreeMap<String, GElementVertex>();
+        edges = new HashMap<EdgePair, GLink>();
         this.edgeModificationAllowed = edgeModificationAllowed;
     }
 
     public void addVertexAtXY(String s, double x, double y) {
         GElementVertex vertex = new GElementVertex(s, x, y);
+        vertex.setLabelColor(Constants.ANDROID_RED);
+        vertex.setFillColor(Color.WHITE);
         vertices.put(vertex.getVertexValue(), vertex);
         addElement(vertex);
     }
 
+    public boolean[][] getConnectedMatrix() {
+        int N = getNumberVertices();
+        boolean[][] connected = new boolean[N][N];
+
+        for (EdgePair edge : edges.keySet()) {
+            String fromVertex = edges.get(edge).getSource().getLabel();
+            String toVertex = edges.get(edge).getTarget().getLabel();
+            connected[Integer.parseInt(fromVertex)][Integer.parseInt(toVertex)] = true;
+        }
+
+        return connected;
+    }
+
     public GElementVertex getVertex(String name) {
-        return (GElementVertex) vertices.get(name);
+        return vertices.get(name);
     }
 
     public GElementVertex getVertex1(GLink link) {
@@ -202,7 +217,6 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     }
 
     public void renameVertex(GElementVertex vertex, String newVertexName) {
-
         String oldVertexName = vertex.getVertexValue();
 
         GElementVertex storedVertex = (GElementVertex) vertices.get(oldVertexName);

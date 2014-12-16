@@ -1,14 +1,10 @@
 package adsv.views;
 
-import java.awt.Point;
-
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-
 import adsv.globals.Constants;
 import adsv.globals.GenericFunctions;
 import adsv.graphs.dg.GElementDirectedGraph;
 import adsv.graphs.dg.GElementVertex;
+import adsv.panels.ADSVPanel;
 import edu.usfca.vas.app.Localized;
 import edu.usfca.vas.window.tools.DesignToolsDG;
 import edu.usfca.xj.appkit.frame.XJFrame;
@@ -17,6 +13,9 @@ import edu.usfca.xj.appkit.gview.object.GLink;
 import edu.usfca.xj.appkit.menu.XJMenu;
 import edu.usfca.xj.appkit.menu.XJMenuItem;
 import edu.usfca.xj.appkit.utils.XJAlert;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ADSVDirectedGraphView extends DSView {
 
@@ -31,12 +30,14 @@ public class ADSVDirectedGraphView extends DSView {
 
     protected DesignToolsDG designToolFA = null;
     protected XJFrame parent;
+    protected ADSVPanel panel;
 
     private boolean edgeModificationAllowed = false;
     private boolean automaticVertexCreation = true;
 
-    public ADSVDirectedGraphView(XJFrame parent) {
-        this.parent = parent;
+    public ADSVDirectedGraphView(ADSVPanel panel) {
+        this.panel = panel;
+        this.parent = panel.getWindow();
         setDirectedGraph(new GElementDirectedGraph(edgeModificationAllowed));
     }
 
@@ -137,6 +138,7 @@ public class ADSVDirectedGraphView extends DSView {
                 break;
             case MI_REMOVE_VERTEX:
                 getDirectedGraph().removeVertex((GElementVertex) item.getObject());
+                checkGraphHasVertices();
                 changeDone();
                 break;
             case MI_CLEAR_ALL:
@@ -175,6 +177,7 @@ public class ADSVDirectedGraphView extends DSView {
                 String vertexValue;
                 if (automaticVertexCreation) {
                     vertexValue = firstAvailableVertexValue();
+                    designToolFA.consumeSelectedState();
                 } else {
                     vertexValue = designToolFA.retrieveVertexValue();
                 }
@@ -200,6 +203,7 @@ public class ADSVDirectedGraphView extends DSView {
                         Localized.getString("dgNewVertexAlreadyExists"));
             else {
                 getDirectedGraph().addVertexAtXY(vertexValue, x, y);
+                checkGraphHasVertices();
                 changeDone();
                 repaint();
             }
@@ -237,5 +241,19 @@ public class ADSVDirectedGraphView extends DSView {
             editVertex((GElementVertex) e);
         }
     }
+
+    private void checkGraphHasVertices() {
+        int N = getDirectedGraph().getNumberVertices();
+
+       if (N  == 0 ) {
+           panel.disableGoAndSkip();
+       } else if (N > 0) {
+           panel.enableGoAndSkip();
+       } else {
+           return;
+       }
+    }
+
+
 
 }

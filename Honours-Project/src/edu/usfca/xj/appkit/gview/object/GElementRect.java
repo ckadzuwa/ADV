@@ -41,98 +41,89 @@ import java.awt.*;
 
 public class GElementRect extends GElement implements XJXMLSerializable {
 
-	public static final int DEFAULT_WIDTH = 40;
-	public static final int DEFAULT_HEIGHT = 40;
+    public static final int DEFAULT_WIDTH = 40;
+    public static final int DEFAULT_HEIGHT = 40;
 
-	protected double width = DEFAULT_WIDTH;
-	protected double height = DEFAULT_HEIGHT;
+    protected double width = DEFAULT_WIDTH;
+    protected double height = DEFAULT_HEIGHT;
 
-	public GElementRect() {
-	}
+    public GElementRect() {
+    }
 
-	public void setPositionOfUpperLeftCorner(double x, double y) {
-		setPosition(x + width * 0.5, y + height * 0.5);
-	}
+    public void setPositionOfUpperLeftCorner(double x, double y) {
+        setPosition(x + width * 0.5, y + height * 0.5);
+    }
 
-	public void setSize(double width, double height) {
-		this.width = width;
-		this.height = height;
-		elementDimensionDidChange();
-	}
+    public void setSize(double width, double height) {
+        this.width = width;
+        this.height = height;
+        elementDimensionDidChange();
+    }
 
-	public void setWidth(double width) {
-		this.width = width;
-		elementDimensionDidChange();
-	}
+    public void setWidth(double width) {
+        this.width = width;
+        elementDimensionDidChange();
+    }
 
-	public double getWidth() {
-		return width;
-	}
+    public double getWidth() {
+        return width;
+    }
 
-	public void setHeight(double height) {
-		this.height = height;
-		elementDimensionDidChange();
-	}
+    public void setHeight(double height) {
+        this.height = height;
+        elementDimensionDidChange();
+    }
 
-	public double getHeight() {
-		return height;
-	}
+    public double getHeight() {
+        return height;
+    }
 
-	public void updateAnchors() {
-		setAnchor(ANCHOR_CENTER, position.copy(), Anchor2D.DIRECTION_FREE);
-		setAnchor(ANCHOR_TOP, position.add(new Vector2D(0, -height * 0.5)), Anchor2D.DIRECTION_TOP);
-		setAnchor(ANCHOR_BOTTOM, position.add(new Vector2D(0, height * 0.5)), Anchor2D.DIRECTION_BOTTOM);
-		setAnchor(ANCHOR_LEFT, position.add(new Vector2D(-width * 0.5, 0)), Anchor2D.DIRECTION_LEFT);
-		setAnchor(ANCHOR_RIGHT, position.add(new Vector2D(width * 0.5, 0)), Anchor2D.DIRECTION_RIGHT);
-	}
+    public void updateAnchors() {
+        setAnchor(ANCHOR_CENTER, position.copy(), Anchor2D.DIRECTION_FREE);
+        setAnchor(ANCHOR_TOP, position.add(new Vector2D(0, -height * 0.5)), Anchor2D.DIRECTION_TOP);
+        setAnchor(ANCHOR_BOTTOM, position.add(new Vector2D(0, height * 0.5)), Anchor2D.DIRECTION_BOTTOM);
+        setAnchor(ANCHOR_LEFT, position.add(new Vector2D(-width * 0.5, 0)), Anchor2D.DIRECTION_LEFT);
+        setAnchor(ANCHOR_RIGHT, position.add(new Vector2D(width * 0.5, 0)), Anchor2D.DIRECTION_RIGHT);
+    }
 
-	public Rect getFrame() {
-		double x = getPositionX() - getWidth() * 0.5;
-		double y = getPositionY() - getHeight() * 0.5;
-		double dx = getWidth();
-		double dy = getHeight();
-		return new Rect(x, y, dx, dy);
-	}
+    public Rect getFrame() {
+        double x = getPositionX() - getWidth() * 0.5;
+        double y = getPositionY() - getHeight() * 0.5;
+        double dx = getWidth();
+        double dy = getHeight();
+        return new Rect(x, y, dx, dy);
+    }
 
-	public boolean isInside(Point p) {
-		return getFrame().contains(p);
-	}
+    public boolean isInside(Point p) {
+        return getFrame().contains(p);
+    }
 
-	public void draw(Graphics2D g) {
+    public void draw(Graphics2D g) {
 
 		/*--Modification: Only draw rectangle if meant to be visible --*/
-		
-		if (elementVisible) {
-			if (labelVisible) {
-				g.setColor(labelColor);
-				if (label != null && label.length() > 0)
-					drawLabel(g);
-			}
 
-			drawShape(g);
-			g.setStroke(strokeLight);
+        if (elementVisible) {
+            drawShape(g);
 
-		}
-	}
+            if (labelVisible) {
+                g.setColor(labelColor);
+                SLabel.drawCenteredString(label, (int) getPositionX(), (int) getPositionY(), g);
+            }
+        }
+    }
 
-	public void drawShape(Graphics2D g) {
-		super.drawShape(g);
+    public void drawShape(Graphics2D g) {
+        super.drawShape(g);
 
-		g.setColor(outlineColor);
-		g.setStroke(strokeHeavy);
-
-		Rectangle r = getFrame().rectangle();
-
-		g.drawRect(r.x, r.y, r.width, r.height);
+        g.setColor(outlineColor);
+        g.setStroke(strokeHeavy);
+        Rectangle r = getFrame().rectangle();
+        g.drawRect(r.x, r.y, r.width, r.height);
 
 		/*--MODIFICATION: Adding ability for rectangle to be filled--*/
-		g.setColor(fillColor);
-		g.fillRect(r.x + 1, r.y + 1, r.width - 1, r.height - 1);
-		/*--END MODIFICATION: Adding ability for rectangle to be filled--*/
-	}
-
-	public void drawLabel(Graphics2D g) {
-		SLabel.drawCenteredString(label, (int) getPositionX(), (int) getPositionY(), g);
-	}
+        g.setColor(fillColor);
+        g.fillRect(r.x + 1, r.y + 1, r.width - 1, r.height - 1);
+        /*--END MODIFICATION: Adding ability for rectangle to be filled--*/
+    }
 
 }

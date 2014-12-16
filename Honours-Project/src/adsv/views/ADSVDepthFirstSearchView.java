@@ -1,11 +1,22 @@
 package adsv.views;
 
-import edu.usfca.xj.appkit.frame.XJFrame;
+import adsv.graphs.dg.GElementDirectedGraph;
+import adsv.panels.ADSVPanel;
 
 public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
 
-	public ADSVDepthFirstSearchView(XJFrame parent) {
-		super(parent);
+	protected GElementDirectedGraph directedGraph;
+
+	public ADSVDepthFirstSearchView(ADSVPanel panel) {
+		super(panel);
+		directedGraph = getDirectedGraph();
 	}
 
+	public void callFunction() {
+		dfs();
+	}
+
+	public void dfs() {
+
+	}
 }

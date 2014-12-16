@@ -66,49 +66,45 @@ public class GElementCircle extends GElement implements XJXMLSerializable {
     }
 
     public double getDefaultAnchorOffset(String anchorKey) {
-        if(anchorKey != null && anchorKey.equals(ANCHOR_CENTER))
+        if (anchorKey != null && anchorKey.equals(ANCHOR_CENTER))
             return radius;
         else
             return 0;
     }
 
     public Rect getFrame() {
-        double x = getPositionX()-radius;
-        double y = getPositionY()-radius;
-        double dx = radius*2;
-        double dy = radius*2;
+        double x = getPositionX() - radius;
+        double y = getPositionY() - radius;
+        double dx = radius * 2;
+        double dy = radius * 2;
         return new Rect(x, y, dx, dy);
     }
 
     public boolean isInside(Point p) {
-        return Math.abs(p.getX()-getPositionX())<radius && Math.abs(p.getY()-getPositionY())<radius;
+        return Math.abs(p.getX() - getPositionX()) < radius && Math.abs(p.getY() - getPositionY()) < radius;
     }
 
     public void draw(Graphics2D g) {
-        if(labelVisible) {
-            g.setColor(labelColor);
-            SLabel.drawCenteredString(getLabel(), (int)getPositionX(), (int)getPositionY(), g);
-        }
-
-        if(outlineColor != null)
-            g.setColor(outlineColor);
-        else
-            g.setColor(Color.black);
-
-        g.setStroke(strokeSize);
-
         drawShape(g);
 
-        g.setStroke(strokeLight);
+        if (labelVisible) {
+            g.setColor(labelColor);
+            SLabel.drawCenteredString(getLabel(), (int) getPositionX(), (int) getPositionY(), g);
+        }
     }
 
     public void drawShape(Graphics2D g) {
         super.drawShape(g);
 
-        int x = (int)(getPositionX()-radius);
-        int y = (int)(getPositionY()-radius);
+        int x = (int) (getPositionX() - radius);
+        int y = (int) (getPositionY() - radius);
 
-        g.drawOval(x, y, (int)(radius*2), (int)(radius*2));
+        g.setStroke(strokeHeavy);
+        g.setColor(outlineColor);
+        g.drawOval(x, y, (int) (radius * 2), (int) (radius * 2));
+        /*--MODIFICATION: Adding ability for circles to be filled--*/
+        g.setColor(fillColor);
+        g.fillOval(x + 1, y + 1, (int) (radius * 2 - 1), (int) (radius * 2 - 1));
+         /*--END MODIFICATION: Adding ability for circles to be filled--*/
     }
-
 }
