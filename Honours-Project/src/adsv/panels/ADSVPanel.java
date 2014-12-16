@@ -292,4 +292,8 @@ public class ADSVPanel extends JPanel {
 		goButton.setEnabled(true);
 		skipButton.setEnabled(true);
 	}
+
+	public ADSVWindow getWindow() {
+		return window;
+	}
 }
