@@ -32,7 +32,7 @@ public class ADSVDirectedGraphView extends DSView {
     protected XJFrame parent;
     protected ADSVPanel panel;
 
-    private boolean edgeModificationAllowed = true;
+    private boolean edgeModificationAllowed = false;
     private boolean automaticVertexCreation = true;
 
     public ADSVDirectedGraphView(ADSVPanel panel) {
@@ -143,6 +143,7 @@ public class ADSVDirectedGraphView extends DSView {
                 break;
             case MI_CLEAR_ALL:
                 getDirectedGraph().clear();
+                checkGraphHasVertices();
                 changeDone();
                 break;
             case MI_EDIT_EDGE:
@@ -257,6 +258,8 @@ public class ADSVDirectedGraphView extends DSView {
            return;
        }
     }
+
+
 
 
 

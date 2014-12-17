@@ -51,12 +51,12 @@ import java.util.TreeMap;
 // modified
 public class GElementDirectedGraph extends GElement implements XJXMLSerializable {
 
-    private TreeMap<String, GElementVertex> vertices;
+    private TreeMap<Integer, GElementVertex> vertices;
     private HashMap<EdgePair, GLink> edges;
     private boolean edgeModificationAllowed;
 
     public GElementDirectedGraph(boolean edgeModificationAllowed) {
-        vertices = new TreeMap<String, GElementVertex>();
+        vertices = new TreeMap<Integer, GElementVertex>();
         edges = new HashMap<EdgePair, GLink>();
         this.edgeModificationAllowed = edgeModificationAllowed;
     }
@@ -65,7 +65,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         GElementVertex vertex = new GElementVertex(s, x, y);
         vertex.setLabelColor(Constants.ANDROID_RED);
         vertex.setFillColor(Color.WHITE);
-        vertices.put(vertex.getVertexValue(), vertex);
+        vertices.put(Integer.parseInt(vertex.getVertexValue()), vertex);
         addElement(vertex);
     }
 
@@ -110,7 +110,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     // }
 
     public void removeVertex(GElementVertex s) {
-        vertices.remove(s.getVertexValue());
+        vertices.remove(Integer.parseInt(s.getVertexValue()));
         removeElement(s);
         // Remove any other link which is using the vertex s
         ListIterator e = elements.listIterator();
@@ -197,7 +197,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     }
 
     public boolean containsVertex(String s) {
-        return vertices.containsKey(s);
+        return vertices.containsKey(Integer.parseInt(s));
     }
 
     public String getFirstAvailableVertexValue() {
@@ -222,8 +222,8 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         GElementVertex storedVertex = (GElementVertex) vertices.get(oldVertexName);
         storedVertex.setVertexValue(newVertexName);
 
-        vertices.remove(oldVertexName);
-        vertices.put(newVertexName, storedVertex);
+        vertices.remove(Integer.parseInt(oldVertexName));
+        vertices.put(Integer.parseInt(newVertexName), storedVertex);
     }
 
 }
