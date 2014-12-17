@@ -34,6 +34,7 @@ package edu.usfca.xj.appkit.gview.event;
 import edu.usfca.xj.appkit.gview.GView;
 import edu.usfca.xj.appkit.gview.object.GElement;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -44,9 +45,12 @@ public class GEventEditElement extends GAbstractEvent {
     }
 
     public void mousePressed(MouseEvent e, Point mousePosition) {
-        GElement selectedElement = delegate.eventQueryElementAtPoint(mousePosition);
-        if(e.getClickCount() == 2 && selectedElement != null) {
-            delegate.eventEditElement(selectedElement);
+        /*MODIFICATION - Editing elements should be done via left-clicks only*/
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            GElement selectedElement = delegate.eventQueryElementAtPoint(mousePosition);
+            if (e.getClickCount() == 2 && selectedElement != null) {
+                delegate.eventEditElement(selectedElement);
+            }
         }
     }
 

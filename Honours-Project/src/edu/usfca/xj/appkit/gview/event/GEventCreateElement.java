@@ -34,6 +34,7 @@ package edu.usfca.xj.appkit.gview.event;
 import edu.usfca.xj.appkit.gview.GView;
 import edu.usfca.xj.appkit.gview.object.GElement;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -44,13 +45,17 @@ public class GEventCreateElement extends GAbstractEvent {
     }
 
     public void mousePressed(MouseEvent e, Point mousePosition) {
-        GElement selectedElement = delegate.eventQueryElementAtPoint(mousePosition);
+         /*MODIFICATION - Creating elements should be done via left-clicks only - ABSOLUTELY NECESSARY!*/
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            GElement selectedElement = delegate.eventQueryElementAtPoint(mousePosition);
 
-        if(selectedElement == null) {
-            if(e.getClickCount() == 1)
-                delegate.eventCreateElement(mousePosition, false);
-            else
-                delegate.eventCreateElement(mousePosition, true);
+            if (selectedElement == null) {
+                if (e.getClickCount() == 1)
+                    delegate.eventCreateElement(mousePosition, false);
+                else
+                    delegate.eventCreateElement(mousePosition, true);
+            }
+
         }
     }
 

@@ -40,6 +40,7 @@ import edu.usfca.xj.appkit.gview.shape.SLink;
 import edu.usfca.xj.appkit.gview.shape.SLinkArc;
 import edu.usfca.xj.appkit.gview.shape.SLinkElbow;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -57,53 +58,56 @@ public class GEventCreateLinkElement extends GAbstractEvent {
     }
 
     public void mousePressed(MouseEvent e, Point mousePosition) {
-        GElement selectedElement = delegate.eventQueryElementAtPoint(mousePosition);
+        /*MODIFICATION - Creating links should be done via left-clicks only* - ABSOLUTELY NECESSARY!*/
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            GElement selectedElement = delegate.eventQueryElementAtPoint(mousePosition);
 
-        if(startElement != null) {
-            if(selectedElement != null) {
-                int type;
-                if(linkElement instanceof SLinkElbow)
-                    type = GLink.SHAPE_ELBOW;
-                else
-                    type = GLink.SHAPE_ARC;
+            if (startElement != null) {
+                if (selectedElement != null) {
+                    int type;
+                    if (linkElement instanceof SLinkElbow)
+                        type = GLink.SHAPE_ELBOW;
+                    else
+                        type = GLink.SHAPE_ARC;
 
-                delegate.eventCreateLink(startElement, startAnchorKey,
-                                            selectedElement, selectedElement.getAnchorKeyClosestToPoint(mousePosition),
-                                            type, mousePosition);
+                    delegate.eventCreateLink(startElement, startAnchorKey,
+                            selectedElement, selectedElement.getAnchorKeyClosestToPoint(mousePosition),
+                            type, mousePosition);
+                }
+                removeExclusiveValue(GEventManager.EXCLUSIVE_CREATE_LINK_VALUE);
+                startElement = null;
+                linkElement = null;
+                delegate.eventShouldRepaint();
+                return;
             }
-            removeExclusiveValue(GEventManager.EXCLUSIVE_CREATE_LINK_VALUE);
-            startElement = null;
-            linkElement = null;
-            delegate.eventShouldRepaint();
-            return;
-        }
 
-        if(selectedElement == null || !selectedElement.acceptOutgoingLink()) {
-            return;
-        }
+            if (selectedElement == null || !selectedElement.acceptOutgoingLink()) {
+                return;
+            }
 
-        int mask = InputEvent.SHIFT_DOWN_MASK + InputEvent.BUTTON1_DOWN_MASK;
-        if((e.getModifiersEx() & mask) == mask || delegate.eventCanCreateLink()) {
-            startElement = selectedElement;
-            startAnchorKey = startElement.getAnchorKeyClosestToPoint(mousePosition);
+            int mask = InputEvent.SHIFT_DOWN_MASK + InputEvent.BUTTON1_DOWN_MASK;
+            if ((e.getModifiersEx() & mask) == mask || delegate.eventCanCreateLink()) {
+                startElement = selectedElement;
+                startAnchorKey = startElement.getAnchorKeyClosestToPoint(mousePosition);
 
-            linkArc = new SLinkArc();
-            linkArc.setStartTangentOffset(startElement.getDefaultAnchorOffset(startAnchorKey));
+                linkArc = new SLinkArc();
+                linkArc.setStartTangentOffset(startElement.getDefaultAnchorOffset(startAnchorKey));
 
-            linkElbow = new SLinkElbow();
+                linkElbow = new SLinkElbow();
 
-            if(view.defaultLinkShape() == GLink.SHAPE_ARC)
-                linkElement = linkArc;
-            else
-                linkElement = linkElbow;
+                if (view.defaultLinkShape() == GLink.SHAPE_ARC)
+                    linkElement = linkArc;
+                else
+                    linkElement = linkElbow;
 
-            linkElement.setFlateness(delegate.eventLinkFlateness());
-            addExclusiveValue(GEventManager.EXCLUSIVE_CREATE_LINK_VALUE);
+                linkElement.setFlateness(delegate.eventLinkFlateness());
+                addExclusiveValue(GEventManager.EXCLUSIVE_CREATE_LINK_VALUE);
+            }
         }
     }
 
     public void mouseMoved(MouseEvent e, Point mousePosition) {
-        if(startElement == null)
+        if (startElement == null)
             return;
 
         updateLink(mousePosition);
@@ -111,7 +115,7 @@ public class GEventCreateLinkElement extends GAbstractEvent {
     }
 
     public boolean shouldFocusOnElement(GElement element) {
-        if(startElement == null)
+        if (startElement == null)
             return true;
         else
             return element.acceptIncomingLink();
@@ -123,15 +127,15 @@ public class GEventCreateLinkElement extends GAbstractEvent {
         boolean selfLoop = ce == startElement;
         setLinkStartAnchor(startElement.getAnchor(startAnchorKey));
 
-        if(ce == null || ce instanceof GLink) {
+        if (ce == null || ce instanceof GLink) {
             setLinkEnd(Vector2D.vector(mouse), Anchor2D.DIRECTION_BOTTOM);
         } else {
             Anchor2D anchor = ce.getAnchorClosestToPoint(mouse);
             String anchorKey = ce.getAnchorKeyClosestToPoint(mouse);
             setLinkEnd(anchor.position, anchor.direction);
 
-            if(selfLoop) {
-                if(anchor.direction == Anchor2D.DIRECTION_FREE)
+            if (selfLoop) {
+                if (anchor.direction == Anchor2D.DIRECTION_FREE)
                     linkArc.setMouse(mouse);
                 else
                     linkArc.setMouse(anchor.position.add(anchor.direction));
@@ -141,13 +145,12 @@ public class GEventCreateLinkElement extends GAbstractEvent {
                 linkArc.setEndTangentOffset(ce.getDefaultAnchorOffset(anchorKey));
             }
 
-            if(selfLoop && view.defaultLinkShape() == GLink.SHAPE_ELBOW
-                && startElement.getAnchor(startAnchorKey).equals(anchor))
-            {
+            if (selfLoop && view.defaultLinkShape() == GLink.SHAPE_ELBOW
+                    && startElement.getAnchor(startAnchorKey).equals(anchor)) {
                 linkElement = linkArc;
-            } else if(view.defaultLinkShape() == GLink.SHAPE_ELBOW)
+            } else if (view.defaultLinkShape() == GLink.SHAPE_ELBOW)
                 linkElement = linkElbow;
-            else if(view.defaultLinkShape() == GLink.SHAPE_ARC)
+            else if (view.defaultLinkShape() == GLink.SHAPE_ARC)
                 linkElement = linkArc;
         }
         setLinkSelfLoop(selfLoop);
@@ -174,9 +177,9 @@ public class GEventCreateLinkElement extends GAbstractEvent {
     }
 
     public void draw(Graphics g) {
-        if(linkElement == null)
+        if (linkElement == null)
             return;
 
-        linkElement.draw((Graphics2D)g);
+        linkElement.draw((Graphics2D) g);
     }
 }

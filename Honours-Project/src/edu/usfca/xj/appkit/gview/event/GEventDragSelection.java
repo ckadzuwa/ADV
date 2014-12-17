@@ -33,6 +33,7 @@ package edu.usfca.xj.appkit.gview.event;
 
 import edu.usfca.xj.appkit.gview.GView;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -48,18 +49,21 @@ public class GEventDragSelection extends GAbstractEvent {
     }
 
     public void mousePressed(MouseEvent e, Point mousePosition) {
-        if(hasExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE))
-            return;
+       /*MODIFICATION - Dragging selected elements should be done via left-clicks only*/
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            if (hasExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE))
+                return;
 
-        if(e.getClickCount() != 1)
-            return;
-        
-        int mask = InputEvent.BUTTON1_DOWN_MASK;
-        if((e.getModifiersEx() & mask) == mask && delegate.eventQueryElementAtPoint(mousePosition) == null) {
-            addExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE);
-            selecting = true;
-            delegate.eventSouldSelectAllElements(false);
-            p1 = mousePosition;
+            if (e.getClickCount() != 1)
+                return;
+
+            int mask = InputEvent.BUTTON1_DOWN_MASK;
+            if ((e.getModifiersEx() & mask) == mask && delegate.eventQueryElementAtPoint(mousePosition) == null) {
+                addExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE);
+                selecting = true;
+                delegate.eventSouldSelectAllElements(false);
+                p1 = mousePosition;
+            }
         }
     }
 
@@ -72,27 +76,27 @@ public class GEventDragSelection extends GAbstractEvent {
     }
 
     public void mouseDragged(MouseEvent e, Point mousePosition) {
-        if(selecting == false)
+        if (selecting == false)
             return;
 
         p2 = mousePosition;
-        delegate.eventSelectElementsInRect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
+        delegate.eventSelectElementsInRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
         delegate.eventShouldRepaint();
     }
 
     public void draw(Graphics g) {
-        if(selecting && p1 != null && p2 != null) {
-            Graphics2D g2d = (Graphics2D)g;
+        if (selecting && p1 != null && p2 != null) {
+            Graphics2D g2d = (Graphics2D) g;
 
             int x = Math.min(p1.x, p2.x);
             int y = Math.min(p1.y, p2.y);
-            int dx = Math.abs(p2.x-p1.x);
-            int dy = Math.abs(p2.y-p1.y);
+            int dx = Math.abs(p2.x - p1.x);
+            int dy = Math.abs(p2.y - p1.y);
 
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f ));
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
             g.setColor(Color.gray);
             g.fillRect(x, y, dx, dy);
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f ));
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
             g.setColor(Color.black);
             g.drawRect(x, y, dx, dy);
         }

@@ -99,14 +99,14 @@ public class DesignToolsAbstract extends JPanel {
 
             switch(selectedButtonClickCount) {
                 case 1:
-                    selectButton(actionButton);
-                    break;
-                case 2:
+                    // Lock the button - So transitions to mouseButton only
+                    // occur via user selection and not  automatically
                     actionButton.locked = true;
                     selectButton(actionButton);
                     actionButton.repaint();
                     break;
-                case 3:
+                case 2:
+                    //Transition to mouseButton
                     selectButton(mouseButton);
                     break;
             }
@@ -149,5 +149,5 @@ public class DesignToolsAbstract extends JPanel {
             }
         }
     }
-    
+
 }

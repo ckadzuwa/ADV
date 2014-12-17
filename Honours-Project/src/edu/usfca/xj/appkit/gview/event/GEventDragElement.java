@@ -35,6 +35,7 @@ import edu.usfca.xj.appkit.gview.GView;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
 import edu.usfca.xj.appkit.gview.object.GElement;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -54,58 +55,68 @@ public class GEventDragElement extends GAbstractEvent {
     }
 
     public void mousePressed(MouseEvent e, Point mousePosition) {
-        if(hasExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE))
+        if (hasExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE))
             return;
 
-        if(hasExclusiveValue(GEventManager.EXCLUSIVE_CREATE_LINK_VALUE))
+        if (hasExclusiveValue(GEventManager.EXCLUSIVE_CREATE_LINK_VALUE))
             return;
 
-        if(e.getClickCount() != 1)
+        if (e.getClickCount() != 1)
             return;
 
-        if((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK)
+        if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK)
             return;
 
-        dragElement = delegate.eventQueryElementAtPoint(mousePosition);
-        if(dragElement != null && delegate.eventIsSelectedElement(dragElement)) {
-            addExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE);
-            dragging = true;
-            p1 = mousePosition;
-        } else if(dragElement != null && dragElement.isDraggable()) {
-            addExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE);
-            dragElement.beginDrag();
-            dragElementOffset = Vector2D.vector(mousePosition).sub(dragElement.getPosition());
-            return;
+         /*MODIFICATION - Dragging elements should be done via left-clicks only*/
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            dragElement = delegate.eventQueryElementAtPoint(mousePosition);
+            if (dragElement != null && delegate.eventIsSelectedElement(dragElement)) {
+                addExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE);
+                dragging = true;
+                p1 = mousePosition;
+            } else if (dragElement != null && dragElement.isDraggable()) {
+                addExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE);
+                dragElement.beginDrag();
+                dragElementOffset = Vector2D.vector(mousePosition).sub(dragElement.getPosition());
+                return;
+            }
+
+            dragElement = null;
         }
-
-        dragElement = null;
     }
 
     public void mouseReleased(MouseEvent e, Point mousePosition) {
-        removeExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE);
+        /*MODIFICATION - Dragging elements should be done via left-clicks only*/
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            removeExclusiveValue(GEventManager.EXCLUSIVE_DRAG_VALUE);
 
-        view.hideAllMagnetics();
+            view.hideAllMagnetics();
 
-        dragElement = null;
-        dragging = false;
+            dragElement = null;
+            dragging = false;
+        }
+
     }
 
     public void mouseDragged(MouseEvent e, Point mousePosition) {
-        if(dragElement != null) {
-            Vector2D mouse = Vector2D.vector(mousePosition);
-            Vector2D position = mouse.sub(dragElementOffset);
+       /*MODIFICATION - Dragging root elements should be done via left-clicks only*/
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            if (dragElement != null) {
+                Vector2D mouse = Vector2D.vector(mousePosition);
+                Vector2D position = mouse.sub(dragElementOffset);
 
-            view.showAndAjustPositionToMagnetics(position);
-            dragElement.moveToPosition(position);
+                view.showAndAjustPositionToMagnetics(position);
+                dragElement.moveToPosition(position);
 
-            delegate.eventChangeDone();
-            delegate.eventShouldRepaint();
-        } else if(dragging) {
-            p2 = mousePosition;
-            delegate.eventMoveSelectedElements(p2.x-p1.x, p2.y-p1.y);
-            p1 = p2;
-            delegate.eventChangeDone();
-            delegate.eventShouldRepaint();
+                delegate.eventChangeDone();
+                delegate.eventShouldRepaint();
+            } else if (dragging) {
+                p2 = mousePosition;
+                delegate.eventMoveSelectedElements(p2.x - p1.x, p2.y - p1.y);
+                p1 = p2;
+                delegate.eventChangeDone();
+                delegate.eventShouldRepaint();
+            }
         }
     }
 }

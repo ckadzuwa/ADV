@@ -32,7 +32,7 @@ public class ADSVDirectedGraphView extends DSView {
     protected XJFrame parent;
     protected ADSVPanel panel;
 
-    private boolean edgeModificationAllowed = false;
+    private boolean edgeModificationAllowed = true;
     private boolean automaticVertexCreation = true;
 
     public ADSVDirectedGraphView(ADSVPanel panel) {
@@ -238,7 +238,11 @@ public class ADSVDirectedGraphView extends DSView {
         }
 
         if (e instanceof GElementVertex) {
-            editVertex((GElementVertex) e);
+            // Don't allow vertex editing via double click in edge creation mode
+            // (Since double-clicking is for adding an edge from vertex to itself)
+            if (designToolFA.getSelectedTool() != DesignToolsDG.TOOL_EDGE) {
+                editVertex((GElementVertex) e);
+            }
         }
     }
 
