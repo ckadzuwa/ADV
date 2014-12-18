@@ -104,8 +104,10 @@ public class GElementCircle extends GElement implements XJXMLSerializable {
         int y = (int) (getPositionY() - radius);
         g.drawOval(x, y, (int) (radius * 2), (int) (radius * 2));
 
-        g.setColor(fillColor);
-        drawShapeFill(g);
+        if (fillColor != null) {
+            g.setColor(fillColor);
+            drawShapeFill(g);
+        }
     }
 
     /*--MODIFICATION: Adding ability for circles to be filled--*/
