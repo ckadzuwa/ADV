@@ -187,6 +187,10 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         return null;
     }
 
+    public GLink getEdge(int fromVertex, int toVertex) {
+        return edges.get(EdgePair.key(String.valueOf(fromVertex),String.valueOf(toVertex)));
+    }
+
     public void clear() {
         elements.clear();
         vertices.clear();
@@ -214,12 +218,12 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     }
 
     public void renameVertex(GElementVertex vertex, String newVertexName) {
-        String oldVertexName = vertex.getVertexValue();
+        int oldVertexName = Integer.parseInt(vertex.getVertexValue());
 
         GElementVertex storedVertex = (GElementVertex) vertices.get(oldVertexName);
         storedVertex.setVertexValue(newVertexName);
 
-        vertices.remove(Integer.parseInt(oldVertexName));
+        vertices.remove(oldVertexName);
         vertices.put(Integer.parseInt(newVertexName), storedVertex);
     }
 
@@ -233,6 +237,10 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
 
     public Set<Integer> getVertexSet() {
         return vertices.keySet();
+    }
+
+    public Set<EdgePair> getEdgeSet() {
+        return edges.keySet();
     }
 
 }
