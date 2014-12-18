@@ -34,6 +34,7 @@ package adsv.graphs.dg;
 import adsv.globals.Constants;
 import edu.usfca.vas.app.Localized;
 import edu.usfca.xj.appkit.gview.GView;
+import edu.usfca.xj.appkit.gview.base.Vector2D;
 import edu.usfca.xj.appkit.gview.object.GElement;
 import edu.usfca.xj.appkit.gview.object.GLink;
 import edu.usfca.xj.appkit.utils.XJAlert;
@@ -41,10 +42,7 @@ import edu.usfca.xj.foundation.XJXMLSerializable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.TreeMap;
+import java.util.*;
 
 // This class is bassed on GElementFAMachine
 // (found in Jean Bovet VAS app) but has been 
@@ -70,20 +68,19 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     }
 
     public boolean[][] getConnectedMatrix() {
-        int N = getNumberVertices();
-        boolean[][] connected = new boolean[N][N];
+        boolean[][] connectedVertices = new boolean[Constants.MAX_NUM_ELEMENTS][Constants.MAX_NUM_ELEMENTS];
 
         for (EdgePair edge : edges.keySet()) {
             String fromVertex = edges.get(edge).getSource().getLabel();
             String toVertex = edges.get(edge).getTarget().getLabel();
-            connected[Integer.parseInt(fromVertex)][Integer.parseInt(toVertex)] = true;
+            connectedVertices[Integer.parseInt(fromVertex)][Integer.parseInt(toVertex)] = true;
         }
 
-        return connected;
+        return connectedVertices;
     }
 
-    public GElementVertex getVertex(String name) {
-        return vertices.get(name);
+    public GElementVertex getVertex(Integer value) {
+        return vertices.get(value);
     }
 
     public GElementVertex getVertex1(GLink link) {
@@ -224,6 +221,18 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
 
         vertices.remove(Integer.parseInt(oldVertexName));
         vertices.put(Integer.parseInt(newVertexName), storedVertex);
+    }
+
+    public Integer getFirstVertex() {
+        return vertices.firstKey();
+    }
+
+    public Vector2D vertexPosition(int vertexValue) {
+        return getVertex(vertexValue).getPosition();
+    }
+
+    public Set<Integer> getVertexSet() {
+        return vertices.keySet();
     }
 
 }
