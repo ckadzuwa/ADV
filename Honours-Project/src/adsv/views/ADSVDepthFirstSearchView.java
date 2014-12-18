@@ -14,14 +14,13 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
     protected GElement highlightCircle;
 
     protected Color unvisited = Color.WHITE;
-    protected Color visited = Color.BLACK;
+    protected Color visited = Color.decode("#424242");
 
     protected boolean[][] connectedVertices;
 
 
     public ADSVDepthFirstSearchView(ADSVPanel panel) {
         super(panel);
-        directedGraph = getDirectedGraph();
     }
 
     public void callFunction() {
@@ -36,58 +35,71 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
     public void runSetup() {
         directedGraph = getDirectedGraph();
         connectedVertices = directedGraph.getConnectedMatrix();
+        initialiseHighlightCircle();
     }
 
-    private void performDepthFirstSearch() {
-        highlightFirstVertex();
 
+
+    private void performDepthFirstSearch() {
         for (Integer vertex : directedGraph.getVertexSet()) {
             if (vertexNotVisited(vertex)) {
+                highlightCircle.setPosition(vertexPosition(vertex).x, vertexPosition(vertex).y);
                 dfsFromVertexFromVertex(vertex);
             }
         }
     }
 
-    private void highlightFirstVertex() {
-        int firstVertex = directedGraph.getFirstVertex();
-        Vector2D firstVertexPosition = vertexPosition(firstVertex);
-        highlightCircle = createCircle("", firstVertexPosition.x, firstVertexPosition.y);
+    private void initialiseHighlightCircle() {
+        highlightCircle = createCircle("", 0, 0);
         highlightCircle.setFillColor(null);
         highlightCircle.setOutlineColor(Constants.ANDROID_RED);
     }
 
-    private void dfsFromVertexFromVertex(int vertexValue) {
-        visitVertex(vertexValue);
-        int N = connectedVertices[vertexValue].length;
-        //If i is a neighbour of the vertex
+    private void dfsFromVertexFromVertex(int vertex) {
+        visitVertex(vertex);
+        int N = connectedVertices[vertex].length;
         for (int i = 0; i < N; i++) {
-            if (connectedVertices[vertexValue][i] == true) {
+            //If i is a neighbour of the vertex
+            if (connectedVertices[vertex][i] == true) {
                 if (vertexNotVisited(i)) {
                     dfsFromVertexFromVertex(i);
-                    backTrack(vertexValue);
+                    backTrack(vertex);
                 }
             }
         }
 
+
     }
 
-    private void backTrack(int vertexValue) {
-        AnimatePath(highlightCircle, highlightCircle.getPosition(), vertexPosition(vertexValue), 20);
+    private void backTrack(int vertex) {
+        AnimatePath(highlightCircle, highlightCircle.getPosition(), vertexPosition(vertex), 40);
         repaintwait();
     }
 
-    private void visitVertex(int vertexValue) {
-        AnimatePath(highlightCircle, highlightCircle.getPosition(), vertexPosition(vertexValue), 20);
-        directedGraph.getVertex(vertexValue).setFillColor(visited);
+    private void visitVertex(int vertex) {
+        // highlightCircle.setPosition(vertexPosition(vertex).x,vertexPosition(vertex).y);
+        AnimatePath(highlightCircle, highlightCircle.getPosition(), vertexPosition(vertex), 40);
+        repaintwait(10);
+        directedGraph.getVertex(vertex).setFillColor(visited);
         repaintwait();
     }
 
-    private Vector2D vertexPosition(int vertexValue) {
-        return directedGraph.vertexPosition(vertexValue);
+    private Vector2D vertexPosition(int vertex) {
+        return directedGraph.vertexPosition(vertex);
     }
 
-    private boolean vertexNotVisited(int vertexValue) {
-        return directedGraph.getVertex(vertexValue).getFillColor() == unvisited;
+    private boolean vertexNotVisited(int vertex) {
+        return directedGraph.getVertex(vertex).getFillColor() == unvisited;
+    }
+
+    @Override
+    public void restart() {
+       resetDirectedGraph();
+        dfs();
+    }
+
+    private void resetDirectedGraph() {
+        // TODO
     }
 
 }

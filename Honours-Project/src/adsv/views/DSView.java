@@ -9,7 +9,6 @@ import edu.usfca.xj.appkit.gview.object.GElementArrow;
 import edu.usfca.xj.appkit.gview.object.GElementLabel;
 import edu.usfca.xj.appkit.gview.object.GLink;
 
-import java.awt.Dimension;
 import java.util.*;
 
 public class DSView extends GView {
@@ -752,6 +751,7 @@ public class DSView extends GView {
 		skipAnimation = false;
 	}
 
+	/*MODIFICATION - Added ability to restart animations*/
 	/*--This method should be overridden by subclasses--*/
 	public void restart() {
 		
