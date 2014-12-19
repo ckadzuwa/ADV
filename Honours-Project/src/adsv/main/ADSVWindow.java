@@ -3,6 +3,7 @@ package adsv.main;
 import adsv.globals.Constants;
 import adsv.panels.ADSVBubbleSortPanel;
 import adsv.panels.ADSVDepthFirstSearchPanel;
+import adsv.panels.ADSVTopologicalSortPanel;
 import edu.usfca.xj.appkit.frame.XJWindow;
 import edu.usfca.xj.appkit.menu.XJMainMenuBar;
 import edu.usfca.xj.appkit.menu.XJMenu;
@@ -22,6 +23,7 @@ public class ADSVWindow extends XJWindow implements XJMenuItemDelegate {
 	protected JTabbedPane viewTabbedPane;
 	protected ADSVBubbleSortPanel bubbleSortPanel;
 	protected ADSVDepthFirstSearchPanel depthFirstSearchPanel;
+	protected ADSVTopologicalSortPanel topologicalSortPanel;
 
 	public ADSVWindow() {
 
@@ -33,7 +35,10 @@ public class ADSVWindow extends XJWindow implements XJMenuItemDelegate {
 
 		bubbleSortPanel = new ADSVBubbleSortPanel(this);
 		depthFirstSearchPanel = new ADSVDepthFirstSearchPanel(this);
+		topologicalSortPanel = new ADSVTopologicalSortPanel(this);
+
 		viewTabbedPane.add("Depth First Search", depthFirstSearchPanel);
+		viewTabbedPane.add("Topological Sort",topologicalSortPanel);
 		getContentPane().add(viewTabbedPane);
 		pack();
 	}
@@ -109,6 +114,7 @@ public class ADSVWindow extends XJWindow implements XJMenuItemDelegate {
 		case MENUITEM_GRAPH_ALGORITHMS:
 			viewTabbedPane.removeAll();
 			viewTabbedPane.add("Depth First Search", depthFirstSearchPanel);
+			viewTabbedPane.add("Topological Sort",topologicalSortPanel);
 			break;
 			
 		}
