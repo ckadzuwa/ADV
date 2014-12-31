@@ -1,6 +1,5 @@
 package adsv.views;
 
-import adsv.globals.Constants;
 import adsv.graphs.dg.EdgePair;
 import adsv.graphs.dg.GElementDirectedGraph;
 import adsv.graphs.dg.GElementVertex;
@@ -9,24 +8,22 @@ import edu.usfca.xj.appkit.gview.base.Vector2D;
 import edu.usfca.xj.appkit.gview.object.GElement;
 import edu.usfca.xj.appkit.gview.object.GLink;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ADSVGenericDepthFirstSearchView extends ADSVDirectedGraphView {
 
     protected GElementDirectedGraph directedGraph;
     protected GElement highlightCircle;
 
-    protected Color unvisited = Color.WHITE;
-    protected Color processing = Color.LIGHT_GRAY;
-    protected Color visited = Color.decode("#424242");
+    protected final Color unvisited = Color.WHITE;
+    protected final Color visitedAndProcessing = Color.LIGHT_GRAY;
+    protected final Color visitedAndFinished = Color.decode("#424242");
 
-
-    protected Color defaultEdgeColor = Color.BLACK;
-    protected Color considerEdgeColor = Constants.ANDROID_RED;
-    protected Color traversedEdgeColor = Color.BLUE;
+    protected final Color defaultEdgeColor = Color.BLACK;
+    protected final Color considerEdgeColor = Color.decode("#FF6F00");//Constants.ANDROID_RED;
+    protected final Color traversedEdgeColor = Color.BLUE;
 
     protected boolean[][] connectedVertices;
-
 
     public ADSVGenericDepthFirstSearchView(ADSVPanel panel) {
         super(panel);
@@ -42,22 +39,17 @@ public class ADSVGenericDepthFirstSearchView extends ADSVDirectedGraphView {
         showResults();
     }
 
-
-
     protected void runSetup() {
         directedGraph = getDirectedGraph();
         connectedVertices = directedGraph.getConnectedMatrix();
         initialiseHighlightCircle();
     }
 
-
-    private void performDepthFirstSearch() {
+    protected void performDepthFirstSearch() {
         for (Integer vertex : directedGraph.getVertexSet()) {
             if (vertexNotVisited(vertex)) {
                 highlightCircle.setPosition(vertexPosition(vertex).x, vertexPosition(vertex).y);
-                if (dfsFromVertex(vertex)) {
-                    break;
-                }
+                dfsFromVertex(vertex);
             }
         }
     }
@@ -65,10 +57,10 @@ public class ADSVGenericDepthFirstSearchView extends ADSVDirectedGraphView {
     private void initialiseHighlightCircle() {
         highlightCircle = createCircle("", 0, 0);
         highlightCircle.setFillColor(null);
-        highlightCircle.setOutlineColor(Constants.ANDROID_RED);
+        highlightCircle.setOutlineColor(Color.RED);
     }
 
-    private boolean dfsFromVertex(int vertex) {
+    protected boolean dfsFromVertex(int vertex) {
         animateVertexVisit(vertex);
         int N = connectedVertices[vertex].length;
         for (int i = 0; i < N; i++) {
@@ -78,14 +70,17 @@ public class ADSVGenericDepthFirstSearchView extends ADSVDirectedGraphView {
                 repaintwait();
                 if (vertexNotVisited(i)) {
                     getEdge(vertex, i).setOutlineColor(traversedEdgeColor);
-                    //If a cycle is detected - Halt operations
+                    //If a cycle is detected further down in exploration - Halt operations
                     if (dfsFromVertex(i)) {
                         return true;
                     }
                     backTrack(vertex);
                 } else if (vertexBeingProcessed(i)) {
-                    handleVertexProcessed();
-                    return true;
+                    if (handleVertexProcessed(i)) {
+                        return true; // To indicate a cycle has been detected
+                    } else {
+                        getEdge(vertex, i).setOutlineColor(defaultEdgeColor);
+                    }
                 } else {
                     if (vertexVisited(i)) {
                         getEdge(vertex, i).setOutlineColor(defaultEdgeColor);
@@ -97,11 +92,14 @@ public class ADSVGenericDepthFirstSearchView extends ADSVDirectedGraphView {
         return false;
     }
 
-    protected void handleVertexProcessed() {
+    protected boolean handleVertexProcessed(int vertex) {
+        return false; // Default behaviour - Don't indicate cycle has been detected
     }
 
 
     protected void recordVertexFinish(int vertex) {
+        getVertex(vertex).setFillColor(visitedAndFinished);
+        repaintwait();
     }
 
     protected void backTrack(int vertex) {
@@ -117,19 +115,21 @@ public class ADSVGenericDepthFirstSearchView extends ADSVDirectedGraphView {
         } else {
             repaintwait(10);
         }
+
         recordVertexVisit(vertex);
     }
 
     protected void showResults() {
+        removeAny(highlightCircle);
     }
 
 
     protected void recordVertexVisit(int vertex) {
-        getVertex(vertex).setFillColor(visited);
+        getVertex(vertex).setFillColor(visitedAndProcessing);
         repaintwait();
     }
 
-    private GLink getEdge(int fromVertex, int toVertex) {
+    protected GLink getEdge(int fromVertex, int toVertex) {
         return directedGraph.getEdge(fromVertex, toVertex);
     }
 
@@ -137,20 +137,20 @@ public class ADSVGenericDepthFirstSearchView extends ADSVDirectedGraphView {
         return directedGraph.getVertex(vertex);
     }
 
-    private Vector2D vertexPosition(int vertex) {
+    protected Vector2D vertexPosition(int vertex) {
         return directedGraph.vertexPosition(vertex);
     }
 
-    private boolean vertexNotVisited(int vertex) {
+    protected boolean vertexNotVisited(int vertex) {
         return directedGraph.getVertex(vertex).getFillColor() == unvisited;
     }
 
     private boolean vertexBeingProcessed(int vertex) {
-        return directedGraph.getVertex(vertex).getFillColor() == processing;
+        return directedGraph.getVertex(vertex).getFillColor() == visitedAndProcessing;
     }
 
     private boolean vertexVisited(int vertex) {
-        return directedGraph.getVertex(vertex).getFillColor() == visited;
+        return directedGraph.getVertex(vertex).getFillColor() == visitedAndFinished;
     }
 
     @Override

@@ -61,7 +61,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
 
     public void addVertexAtXY(String s, double x, double y) {
         GElementVertex vertex = new GElementVertex(s, x, y);
-        vertex.setLabelColor(Constants.ANDROID_RED);
+        vertex.setLabelColor(Color.RED);
         vertex.setFillColor(Color.WHITE);
         vertices.put(Integer.parseInt(vertex.getVertexValue()), vertex);
         addElement(vertex);
