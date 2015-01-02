@@ -5,7 +5,7 @@ import adsv.panels.ADSVPanel;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ADSVTopologicalSortView extends ADSVGenericDepthFirstSearchView {
+public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
 
     private String topologicalSortOrder;
     private ArrayList<Integer> visitPath;

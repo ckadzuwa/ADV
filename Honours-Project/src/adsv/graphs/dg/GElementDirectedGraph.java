@@ -43,6 +43,7 @@ import edu.usfca.xj.foundation.XJXMLSerializable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 // This class is bassed on GElementFAMachine
 // (found in Jean Bovet VAS app) but has been 
@@ -50,12 +51,12 @@ import java.util.*;
 public class GElementDirectedGraph extends GElement implements XJXMLSerializable {
 
     private TreeMap<Integer, GElementVertex> vertices;
-    private HashMap<EdgePair, GLink> edges;
+    private ConcurrentHashMap<EdgePair, GLink> edges;
     private boolean edgeModificationAllowed;
 
     public GElementDirectedGraph(boolean edgeModificationAllowed) {
         vertices = new TreeMap<Integer, GElementVertex>();
-        edges = new HashMap<EdgePair, GLink>();
+        edges = new ConcurrentHashMap<EdgePair, GLink>();
         this.edgeModificationAllowed = edgeModificationAllowed;
     }
 
@@ -67,16 +68,30 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         addElement(vertex);
     }
 
-    public boolean[][] getConnectedMatrix() {
-        boolean[][] connectedVertices = new boolean[Constants.MAX_NUM_ELEMENTS][Constants.MAX_NUM_ELEMENTS];
+    public HashMap<Integer, TreeSet<Integer>> getConnectedMatrix() {
+        HashMap<Integer,TreeSet<Integer>> connectedMatrix = new HashMap<Integer,TreeSet<Integer>>();
 
         for (EdgePair edge : edges.keySet()) {
             String fromVertex = edges.get(edge).getSource().getLabel();
             String toVertex = edges.get(edge).getTarget().getLabel();
-            connectedVertices[Integer.parseInt(fromVertex)][Integer.parseInt(toVertex)] = true;
+           updateMatrix(connectedMatrix, fromVertex, toVertex);
         }
 
-        return connectedVertices;
+        return connectedMatrix;
+    }
+
+    private void updateMatrix(HashMap<Integer, TreeSet<Integer>> connectedMatrix, String fromVertex, String toVertex) {
+        int fromValue = Integer.parseInt(fromVertex);
+        int toValue = Integer.parseInt(toVertex);
+        TreeSet currentNeighbors = connectedMatrix.get(fromValue);
+
+        if (currentNeighbors == null) {
+            TreeSet<Integer> neighbors = new TreeSet<Integer>();
+            neighbors.add(toValue);
+            connectedMatrix.put(fromValue,neighbors);
+        } else {
+            currentNeighbors.add(toValue);
+        }
     }
 
     public GElementVertex getVertex(Integer value) {
@@ -116,7 +131,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
             if (element.getClass().equals(GLink.class)) {
                 GLink link = (GLink) element;
                 if (link.source == s || link.target == s) {
-                    removeElement(link);
+                   removeEdge(link);
                     e = elements.listIterator();
                 }
             }
@@ -129,8 +144,8 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         EdgePair pair = EdgePair.key(source.getVertexValue(), target.getVertexValue());
 
         if (edges.containsKey(pair)) {
-            XJAlert.display(null, "Invalid Edge", "An edge already exists from vertex " + pair.getFirstValue()
-                    + " vertex " + pair.getSecondValue());
+            XJAlert.display(null, "Invalid Edge", "An edge already exists from vertex " + pair.getFromValue()
+                    + " vertex " + pair.getToValue());
             return;
         }
 
@@ -188,7 +203,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     }
 
     public GLink getEdge(int fromVertex, int toVertex) {
-        return edges.get(EdgePair.key(String.valueOf(fromVertex),String.valueOf(toVertex)));
+        return edges.get(EdgePair.key(fromVertex,toVertex));
     }
 
     public void clear() {
@@ -217,14 +232,22 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         return vertices.size();
     }
 
-    public void renameVertex(GElementVertex vertex, String newVertexName) {
-        int oldVertexName = Integer.parseInt(vertex.getVertexValue());
+    public void renameVertex(GElementVertex vertex, String newVertexValue) {
+        int oldVertexValue = Integer.parseInt(vertex.getVertexValue());
 
-        GElementVertex storedVertex = (GElementVertex) vertices.get(oldVertexName);
-        storedVertex.setVertexValue(newVertexName);
+        GElementVertex storedVertex = (GElementVertex) vertices.get(oldVertexValue);
+        storedVertex.setVertexValue(newVertexValue);
 
-        vertices.remove(oldVertexName);
-        vertices.put(Integer.parseInt(newVertexName), storedVertex);
+        vertices.remove(oldVertexValue);
+        vertices.put(Integer.parseInt(newVertexValue), storedVertex);
+
+        for (EdgePair edge : getEdgeSet()) {
+           if (edge.requiresUpdate(oldVertexValue)) {
+               GLink link = getEdge(edge.getFromValue(),edge.getToValue());
+               edges.remove(edge);
+               edges.put(edge.updatedEdge(oldVertexValue,Integer.parseInt(newVertexValue)),link);
+           }
+        }
     }
 
     public Integer getFirstVertex() {

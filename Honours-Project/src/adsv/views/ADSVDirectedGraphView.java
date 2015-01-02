@@ -17,7 +17,7 @@ import edu.usfca.xj.appkit.utils.XJAlert;
 import javax.swing.*;
 import java.awt.*;
 
-public class ADSVDirectedGraphView extends DSView {
+public abstract class ADSVDirectedGraphView extends DSView {
 
     // Menu items
     private static final int MI_ADD_VERTEX = 0;
@@ -27,6 +27,7 @@ public class ADSVDirectedGraphView extends DSView {
     private static final int MI_REMOVE_EDGE = 4;
     private static final int MI_CLEAR_ALL = 5;
 
+    protected GElementDirectedGraph directedGraph;
 
     protected DesignToolsDG designToolFA = null;
     protected XJFrame parent;
@@ -34,6 +35,7 @@ public class ADSVDirectedGraphView extends DSView {
 
     private boolean edgeModificationAllowed = false;
     private boolean automaticVertexCreation = true;
+    protected boolean canvasLocked = false;
 
     public ADSVDirectedGraphView(ADSVPanel panel) {
         this.panel = panel;
@@ -49,44 +51,50 @@ public class ADSVDirectedGraphView extends DSView {
         this.designToolFA = designToolFA;
     }
 
-    public void setDirectedGraph(GElementDirectedGraph machine) {
-        setRootElement(machine);
+    public void setDirectedGraph(GElementDirectedGraph graph) {
+        setRootElement(graph);
+        directedGraph = graph;
     }
 
     public GElementDirectedGraph getDirectedGraph() {
-        return (GElementDirectedGraph) getRootElement();
+        return directedGraph;
     }
 
 
     public JPopupMenu getContextualMenu(GElement element) {
-        boolean vertexSelected = false;
-        boolean linkSelected = false;
+        if (!canvasLocked) {
 
-        if (element != null) {
-            vertexSelected = element.getClass().equals(GElementVertex.class);
-            linkSelected = element.getClass().equals(GLink.class);
-        }
+            boolean vertexSelected = false;
+            boolean linkSelected = false;
 
-        JPopupMenu menu = new JPopupMenu();
-        menu.addPopupMenuListener(new MyContextualMenuListener());
-
-        if (vertexSelected) {
-            addMenuItem(menu, Localized.getString("dgEditVertexTitle"), MI_EDIT_VERTEX, element);
-            addMenuItem(menu, Localized.getString("dgMIDelete"), MI_REMOVE_VERTEX, element);
-        } else if (linkSelected) {
-
-            if (edgeModificationAllowed) {
-                addMenuItem(menu, Localized.getString("dgMIEdit"), MI_EDIT_EDGE, element);
+            if (element != null) {
+                vertexSelected = element.getClass().equals(GElementVertex.class);
+                linkSelected = element.getClass().equals(GLink.class);
             }
 
-            addMenuItem(menu, Localized.getString("dgMIDelete"), MI_REMOVE_EDGE, element);
-        } else {
-            addMenuItem(menu, Localized.getString("dgMIAddVertex"), MI_ADD_VERTEX, null);
-            menu.addSeparator();
-            addMenuItem(menu, Localized.getString("dgMIDeleteAll"), MI_CLEAR_ALL, null);
+            JPopupMenu menu = new JPopupMenu();
+            menu.addPopupMenuListener(new MyContextualMenuListener());
+
+            if (vertexSelected) {
+                addMenuItem(menu, Localized.getString("dgEditVertexTitle"), MI_EDIT_VERTEX, element);
+                addMenuItem(menu, Localized.getString("dgMIDelete"), MI_REMOVE_VERTEX, element);
+            } else if (linkSelected) {
+
+                if (edgeModificationAllowed) {
+                    addMenuItem(menu, Localized.getString("dgMIEdit"), MI_EDIT_EDGE, element);
+                }
+
+                addMenuItem(menu, Localized.getString("dgMIDelete"), MI_REMOVE_EDGE, element);
+            } else {
+                addMenuItem(menu, Localized.getString("dgMIAddVertex"), MI_ADD_VERTEX, null);
+                menu.addSeparator();
+                addMenuItem(menu, Localized.getString("dgMIDeleteAll"), MI_CLEAR_ALL, null);
+            }
+
+            return menu;
         }
 
-        return menu;
+        return null;
     }
 
     public void createVertexAtXY(double x, double y) {
@@ -121,7 +129,8 @@ public class ADSVDirectedGraphView extends DSView {
             else {
                 getDirectedGraph().renameVertex(state, s);
                 changeDone();
-                repaint();
+                ensureDefaultGraphColours();
+                checkGraphHasVertices();
             }
         }
     }
@@ -140,6 +149,7 @@ public class ADSVDirectedGraphView extends DSView {
                 getDirectedGraph().removeVertex((GElementVertex) item.getObject());
                 checkGraphHasVertices();
                 changeDone();
+                ensureDefaultGraphColours();
                 break;
             case MI_CLEAR_ALL:
                 getDirectedGraph().clear();
@@ -149,10 +159,13 @@ public class ADSVDirectedGraphView extends DSView {
             case MI_EDIT_EDGE:
                 getDirectedGraph().editEdge((GLink) item.getObject());
                 changeDone();
+                ensureDefaultGraphColours();
                 break;
             case MI_REMOVE_EDGE:
                 getDirectedGraph().removeEdge((GLink) item.getObject());
                 changeDone();
+                ensureDefaultGraphColours();
+                checkGraphHasVertices();
                 break;
         }
     }
@@ -168,26 +181,27 @@ public class ADSVDirectedGraphView extends DSView {
     }
 
     public void eventCreateElement(Point p, boolean doubleclick) {
+        if (!canvasLocked) {
 
-        if (doubleclick) {
-            if (spaceExistsForVertex()) {
-                createVertexAtXY(p.x, p.y);
-            }
-        } else if (designToolFA.getSelectedTool() == DesignToolsDG.TOOL_VERTEX) {
-            if (spaceExistsForVertex()) {
-                String vertexValue;
-                if (automaticVertexCreation) {
-                    vertexValue = firstAvailableVertexValue();
-                    designToolFA.consumeSelectedState();
-                } else {
-                    vertexValue = designToolFA.retrieveVertexValue();
+            if (doubleclick) {
+                if (spaceExistsForVertex()) {
+                    createVertexAtXY(p.x, p.y);
                 }
-                validateAndAddVertex(vertexValue, p.x, p.y);
+            } else if (designToolFA.getSelectedTool() == DesignToolsDG.TOOL_VERTEX) {
+                if (spaceExistsForVertex()) {
+                    String vertexValue;
+                    if (automaticVertexCreation) {
+                        vertexValue = firstAvailableVertexValue();
+                        designToolFA.consumeSelectedState();
+                    } else {
+                        vertexValue = designToolFA.retrieveVertexValue();
+                    }
+                    validateAndAddVertex(vertexValue, p.x, p.y);
+                }
+            } else {
+                return;
             }
-        } else {
-            return;
         }
-
     }
 
     private String firstAvailableVertexValue() {
@@ -206,7 +220,8 @@ public class ADSVDirectedGraphView extends DSView {
                 getDirectedGraph().addVertexAtXY(vertexValue, x, y);
                 checkGraphHasVertices();
                 changeDone();
-                repaint();
+                // Ensure graph elements appear in their default manner (i.e. with no colour)
+                ensureDefaultGraphColours();
             }
         }
     }
@@ -222,27 +237,34 @@ public class ADSVDirectedGraphView extends DSView {
 
     public void eventCreateLink(GElement source, String sourceAnchorKey, GElement target, String targetAnchorKey,
                                 int shape, Point p) {
-        getDirectedGraph().createEdge((GElementVertex) source, sourceAnchorKey, (GElementVertex) target, targetAnchorKey,
-                shape, p);
-        changeDone();
+        if (!canvasLocked) {
+            getDirectedGraph().createEdge((GElementVertex) source, sourceAnchorKey, (GElementVertex) target, targetAnchorKey,
+                    shape, p);
+            changeDone();
+            ensureDefaultGraphColours();
+            checkGraphHasVertices();
+
+        }
     }
 
     public void eventEditElement(GElement e) {
-
-        if (edgeModificationAllowed) {
-            if (e instanceof GLink) {
-                if (getDirectedGraph().editEdge((GLink) e)) {
-                    changeDone();
-                    repaint();
+        if (!canvasLocked) {
+            if (edgeModificationAllowed) {
+                if (e instanceof GLink) {
+                    if (getDirectedGraph().editEdge((GLink) e)) {
+                        changeDone();
+                        ensureDefaultGraphColours();
+                        checkGraphHasVertices();
+                    }
                 }
             }
-        }
 
-        if (e instanceof GElementVertex) {
-            // Don't allow vertex editing via double click in edge creation mode
-            // (Since double-clicking is for adding an edge from vertex to itself)
-            if (designToolFA.getSelectedTool() != DesignToolsDG.TOOL_EDGE) {
-                editVertex((GElementVertex) e);
+            if (e instanceof GElementVertex) {
+                // Don't allow vertex editing via double click in edge creation mode
+                // (Since double-clicking is for adding an edge from vertex to itself)
+                if (designToolFA.getSelectedTool() != DesignToolsDG.TOOL_EDGE) {
+                    editVertex((GElementVertex) e);
+                }
             }
         }
     }
@@ -250,17 +272,16 @@ public class ADSVDirectedGraphView extends DSView {
     private void checkGraphHasVertices() {
         int N = getDirectedGraph().getNumberVertices();
 
-       if (N  == 0 ) {
-           panel.disableGoAndSkip();
-       } else if (N > 0) {
-           panel.enableGoAndSkip();
-       } else {
-           return;
-       }
+        if (N == 0) {
+            panel.disableGoAndSkip();
+            panel.disableRestartButton();
+        } else if (N > 0) {
+            panel.enableGoAndSkip();
+            panel.disableRestartButton();
+        } else {
+            return;
+        }
     }
 
-
-
-
-
+    protected abstract void ensureDefaultGraphColours();
 }

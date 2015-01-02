@@ -2,54 +2,79 @@ package adsv.graphs.dg;
 
 public class EdgePair {
 
-	private String firstValue;
-	private String secondValue;
+    private int fromValue;
+    private int toValue;
 
-	public EdgePair(String firstValue, String secondValue) {
-		this.firstValue = firstValue;
-		this.secondValue = secondValue;
-	}
+    public EdgePair(int fromValue, int toValue) {
+        this.fromValue = fromValue;
+        this.toValue = toValue;
+    }
 
-	public String getFirstValue() {
-		return firstValue;
-	}
+    public EdgePair(String fromValue, String toValue) {
+        this.fromValue = Integer.parseInt(fromValue);
+        this.toValue = Integer.parseInt(toValue);
+    }
 
-	public String getSecondValue() {
-		return secondValue;
-	}
+    public int getFromValue() {
+        return fromValue;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((firstValue == null) ? 0 : firstValue.hashCode());
-		result = prime * result + ((secondValue == null) ? 0 : secondValue.hashCode());
-		return result;
-	}
+    public int getToValue() {
+        return toValue;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EdgePair other = (EdgePair) obj;
-		if (firstValue == null) {
-			if (other.firstValue != null)
-				return false;
-		} else if (!firstValue.equals(other.firstValue))
-			return false;
-		if (secondValue == null) {
-			if (other.secondValue != null)
-				return false;
-		} else if (!secondValue.equals(other.secondValue))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-	public static EdgePair key(String firstValue, String secondValue) {
-		return new EdgePair(firstValue, secondValue);
-	}
+        EdgePair edgePair = (EdgePair) o;
+
+        if (fromValue != edgePair.fromValue) return false;
+        if (toValue != edgePair.toValue) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fromValue;
+        result = 31 * result + toValue;
+        return result;
+    }
+
+    public static EdgePair key(String fromValue, String toValue) {
+        return new EdgePair(Integer.parseInt(fromValue), Integer.parseInt(toValue));
+    }
+
+    public static EdgePair key(int fromValue, int toValue) {
+        return new EdgePair(fromValue, toValue);
+    }
+
+    // Check if edge pair recorded details
+    // for vertex which has underwent renaming
+    public boolean requiresUpdate(int oldVertexValue) {
+        return fromValue == oldVertexValue || toValue == oldVertexValue;
+    }
+
+    // Return an updated edge for edge pair that has had
+    // at least one of its vertices renamed
+    // Note: Generally only one vertex in edge pair relationship
+    // changes , 2 in the case of a self loop.
+    public EdgePair updatedEdge(int oldVertexValue, int renamedVertexValue) {
+        int updatedFromValue = fromValue;
+        int updatedToValue = toValue;
+
+        if (fromValue == oldVertexValue) {
+            updatedFromValue = renamedVertexValue;
+        }
+
+        if (toValue == oldVertexValue) {
+            updatedToValue = renamedVertexValue;
+        }
+
+        return key(updatedFromValue, updatedToValue);
+    }
+
+
 }

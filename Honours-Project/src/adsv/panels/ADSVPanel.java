@@ -293,6 +293,14 @@ public class ADSVPanel extends JPanel {
 		skipButton.setEnabled(true);
 	}
 
+	public void enableRestartButton() {
+		restartButton.setEnabled(true);
+	}
+
+	public void disableRestartButton(){
+		restartButton.setEnabled(false);
+	}
+
 	public ADSVWindow getWindow() {
 		return window;
 	}
