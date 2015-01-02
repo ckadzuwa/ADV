@@ -197,6 +197,8 @@ public class ADSVPanel extends JPanel {
 		restartButton = new JButton("Restart");
 		restartButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+				view.go();
+				paused = false;
 				view.restart();
 				restartButton.setEnabled(false);
 				beginAnimation();
