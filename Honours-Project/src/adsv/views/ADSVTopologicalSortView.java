@@ -9,7 +9,7 @@ public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
 
     private String topologicalSortOrder;
     private ArrayList<Integer> visitPath;
-    private Color cycleHighlight = Color.RED;
+    private Color cycleHighlight = Color.magenta;
     private boolean cycleDetected;
     private int firstCycleElement;
 

@@ -1,7 +1,7 @@
 package adsv.views;
 
-import adsv.graphs.dg.EdgePair;
-import adsv.graphs.dg.GElementVertex;
+import adsv.directedGraphModel.EdgePair;
+import adsv.directedGraphModel.GElementVertex;
 import adsv.panels.ADSVPanel;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
 import edu.usfca.xj.appkit.gview.object.GElement;

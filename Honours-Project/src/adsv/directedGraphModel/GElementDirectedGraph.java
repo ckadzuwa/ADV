@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
 
-package adsv.graphs.dg;
+package adsv.directedGraphModel;
 
 import adsv.globals.Constants;
 import edu.usfca.vas.app.Localized;

@@ -2,8 +2,8 @@ package adsv.views;
 
 import adsv.globals.Constants;
 import adsv.globals.GenericFunctions;
-import adsv.graphs.dg.GElementDirectedGraph;
-import adsv.graphs.dg.GElementVertex;
+import adsv.directedGraphModel.GElementDirectedGraph;
+import adsv.directedGraphModel.GElementVertex;
 import adsv.panels.ADSVPanel;
 import edu.usfca.vas.app.Localized;
 import edu.usfca.vas.window.tools.DesignToolsDG;

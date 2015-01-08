@@ -1,4 +1,4 @@
-package adsv.graphs.dg;
+package adsv.directedGraphModel;
 
 public class EdgePair {
 
