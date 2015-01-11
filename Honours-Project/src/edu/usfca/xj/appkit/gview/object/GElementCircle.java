@@ -104,19 +104,14 @@ public class GElementCircle extends GElement implements XJXMLSerializable {
         int y = (int) (getPositionY() - radius);
         g.drawOval(x, y, (int) (radius * 2), (int) (radius * 2));
 
+         /*--MODIFICATION: Adding ability for circles to be filled--*/
         if (fillColor != null) {
             g.setColor(fillColor);
-            drawShapeFill(g);
+            g.fillOval(x + 1, y + 1, (int) (radius * 2 - 1), (int) (radius * 2 - 1));
         }
+        /*--END MODIFICATION: Adding ability for circles to be filled--*/
     }
 
-    /*--MODIFICATION: Adding ability for circles to be filled--*/
-    // Note allowing this method to be called separately from
-    // draw() means only the outline gets animated in drawFocused
-    // calls
-    public void drawShapeFill(Graphics2D g) {
-        int x = (int) (getPositionX() - radius);
-        int y = (int) (getPositionY() - radius);
-        g.fillOval(x + 1, y + 1, (int) (radius * 2 - 1), (int) (radius * 2 - 1));
-    }
+
+
 }

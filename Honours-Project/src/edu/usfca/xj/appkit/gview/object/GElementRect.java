@@ -99,10 +99,10 @@ public class GElementRect extends GElement implements XJXMLSerializable {
     }
 
     public void draw(Graphics2D g) {
-
 		/*--Modification: Only draw rectangle if meant to be visible --*/
-
         if (elementVisible) {
+            g.setColor(outlineColor);
+            g.setStroke(strokeHeavy);
             drawShape(g);
 
             if (labelVisible) {
@@ -115,14 +115,14 @@ public class GElementRect extends GElement implements XJXMLSerializable {
     public void drawShape(Graphics2D g) {
         super.drawShape(g);
 
-        g.setColor(outlineColor);
-        g.setStroke(strokeHeavy);
         Rectangle r = getFrame().rectangle();
         g.drawRect(r.x, r.y, r.width, r.height);
 
 		/*--MODIFICATION: Adding ability for rectangle to be filled--*/
-        g.setColor(fillColor);
-        g.fillRect(r.x + 1, r.y + 1, r.width - 1, r.height - 1);
+        if (fillColor != null) {
+            g.setColor(fillColor);
+            g.fillRect(r.x + 1, r.y + 1, r.width - 1, r.height - 1);
+        }
         /*--END MODIFICATION: Adding ability for rectangle to be filled--*/
     }
 

@@ -41,8 +41,6 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import adsv.globals.Constants;
-
 public abstract class GElement implements XJXMLSerializable {
 
 	public static final String ANCHOR_CENTER = "CENTER";
@@ -82,7 +80,7 @@ public abstract class GElement implements XJXMLSerializable {
 	protected transient int penSize = 1;
 
 	/*--Modification: Introduce fillColor --*/
-	protected transient Color fillColor = Constants.ANDROID_BLUE;
+	protected transient Color fillColor = null;
 
 	protected transient BasicStroke strokeSize = new BasicStroke(penSize);
 	protected transient BasicStroke strokeLight = new BasicStroke(1);
