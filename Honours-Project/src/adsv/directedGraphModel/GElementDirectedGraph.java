@@ -106,21 +106,6 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         return (GElementVertex) link.target;
     }
 
-    // public GLink getTransition(FATransition transition) {
-    // ListIterator e = elements.listIterator();
-    // while (e.hasNext()) {
-    // GElement element = (GElement) e.next();
-    // if (element.getClass().equals(GLink.class)) {
-    // GLink link = (GLink) element;
-    // if (getState1(link).vertex.name.equals(transition.s1)
-    // && getState2(link).vertex.name.equals(transition.s2)) {
-    // return link;
-    // }
-    // }
-    // }
-    // return null;
-    // }
-
     public void removeVertex(GElementVertex s) {
         vertices.remove(Integer.parseInt(s.getVertexValue()));
         removeElement(s);
