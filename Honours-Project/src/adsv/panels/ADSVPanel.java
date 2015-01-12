@@ -54,7 +54,7 @@ public class ADSVPanel extends JPanel {
 		v.start();
 	}
 
-	protected void animate(final int Function, final Object param) {
+	protected void beginAnimation(final int Function, final Object param) {
 
 		Thread v = new Thread() {
 			public void run() {
@@ -131,7 +131,7 @@ public class ADSVPanel extends JPanel {
 
 	}
 
-	private void setUpGoButton(Box buttonsContainer) {
+	protected void setUpGoButton(Box buttonsContainer) {
 		goButton = new JButton("Go");
 		goButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -260,7 +260,7 @@ public class ADSVPanel extends JPanel {
 		/* Override this method to enable specific buttons */
 	}
 
-	public void endAnimation() {
+	protected void endAnimation() {
 		running = false;
 		runningMsg.setText("Animation Completed");
 		runningMsg.setForeground(Color.BLACK);
