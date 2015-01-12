@@ -12,7 +12,7 @@ public class ADSVBubbleSortView extends ADSVSortView {
 		}
 	}
 
-	public void callFunction() {
+	public void runAlgorithm() {
 		bubbleSort();
 	}
 

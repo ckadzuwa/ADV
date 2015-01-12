@@ -30,7 +30,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
         super(panel);
     }
 
-    public void callFunction() {
+    public void runAlgorithm() {
         dfs();
     }
 
