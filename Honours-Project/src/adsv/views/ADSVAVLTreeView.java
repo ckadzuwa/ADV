@@ -31,7 +31,7 @@ public class ADSVAVLTreeView extends DSView {
         // root element is set
     }
 
-    
+
     public void runAlgorithm(int algorithm, Object param) {
         String list = (String) param;
         switch (algorithm) {
@@ -110,7 +110,12 @@ public class ADSVAVLTreeView extends DSView {
                 String[] numbers = list.split(",");
 
                 for (int i = 0; i < numbers.length; i++) {
-                    findElement(Integer.parseInt(list));
+                    findElement(Integer.parseInt(numbers[i]));
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -132,6 +137,7 @@ public class ADSVAVLTreeView extends DSView {
                 animateVertexVisit(u);
             }
             removeAny(highlightCircle);
+            repaint();
             if (!u.isLeafVertex() && u.value == k) {
                 return u;
             } else {

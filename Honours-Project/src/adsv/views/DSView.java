@@ -207,11 +207,12 @@ public class DSView extends GView {
 		return path;
 	}
 
-	protected void callFunction() {
+	protected void runAlgorithm() {
 		/* Override this function!! */
 	}
 
-	protected void CallFunction(int Function, Object param1) {
+
+	protected void runAlgorithm(int Function, Object param1) {
 		/* Override this function!! */
 	}
 
@@ -297,14 +298,14 @@ public class DSView extends GView {
 
 	public void Animate(int function, Object param1) {
 		startingAnimation();
-		CallFunction(function, param1);
+		runAlgorithm(function, param1);
 		endingAnimation();
 		repaint();
 	}
 
 	public void Animate() {
 		startingAnimation();
-		callFunction();
+		runAlgorithm();
 		endingAnimation();
 	}
 
