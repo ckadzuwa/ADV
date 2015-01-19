@@ -15,39 +15,50 @@ public class AVLVertex {
 
     public GElement graphicalVertex; //Circle (internal vertex) , Square (leaf vertex)
 
-    public static AVLVertex newRootVertex(int value, GElement graphicalRoot, GElement leftLeafChild, GElement rightLeafChild) {
-        AVLVertex root = new AVLVertex();
-        root.value = value;
-        root.parent = null;
-        root.leftChild = AVLVertex.newLeafVertex(root, leftLeafChild);
-        root.rightChild = AVLVertex.newLeafVertex(root, rightLeafChild);
-        root.height = 1;
-        root.graphicalVertex = graphicalRoot;
+    public static AVLVertex newVertex(int value, GElement graphicalRoot) {
+        AVLVertex newVertex = new AVLVertex();
+        newVertex.value = value;
+        newVertex.height = 1;
+        newVertex.graphicalVertex = graphicalRoot;
 
-        return root;
+        return newVertex;
     }
 
-    public static AVLVertex newLeafVertex(AVLVertex parent, GElement graphicalLeaf) {
+    public static AVLVertex newLeafVertex(GElement graphicalLeaf) {
         AVLVertex leafVertex = new AVLVertex();
-        leafVertex.parent = parent;
         leafVertex.leftChild = null;
         leafVertex.rightChild = null;
         leafVertex.height = 0;
         leafVertex.graphicalVertex = graphicalLeaf;
+
         return leafVertex;
     }
 
 
     public boolean isLeafVertex() {
-        return (leftChild == null) && (rightChild == null);
+        return (leftChild == null && rightChild == null) && parent != null ;
     }
 
     public boolean isInternalVertex() {
-        return !isLeafVertex();
+        return (leftChild != null && rightChild != null) && parent != null ;
+    }
+
+    public boolean isRoot() {
+        return parent == null;
     }
 
     public void setPosition(int x, int y) {
         this.graphicalVertex.setPosition(x, y);
     }
+
+    public boolean isLeftChild() {
+        return (this.isLeafVertex() || this.isInternalVertex()) && parent.leftChild == this;
+    }
+
+    public boolean isRightChild() {
+        return (this.isLeafVertex() || this.isInternalVertex()) && parent.rightChild == this;
+    }
+
+
 
 }
