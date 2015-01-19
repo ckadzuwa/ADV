@@ -111,6 +111,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
 
     protected void recordVertexFinish(int vertex) {
         getVertex(vertex).setFillColor(visitedAndFinished);
+        getVertex(vertex).setLabelColor(Color.WHITE);
         repaintwait();
     }
 
@@ -182,6 +183,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
     private void setDefaultVertexColor() {
         for (Integer vertex : directedGraph.getVertexSet()) {
             getVertex(vertex).setFillColor(unvisited);
+            getVertex(vertex).setLabelColor(Color.BLACK);
         }
     }
 
