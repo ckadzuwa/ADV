@@ -9,6 +9,6 @@ public class GenericFunctions {
 	}
 
 	public static boolean isValidNumberList(String currentString) {
-		return !currentString.isEmpty() && currentString.matches("("+TWO_DIGIT_NUMBER+","+TWO_DIGIT_NUMBER+")"+"+");
+		return !currentString.isEmpty() && currentString.matches(TWO_DIGIT_NUMBER+"(,"+TWO_DIGIT_NUMBER+")"+"+");
 	}
 }
