@@ -280,12 +280,14 @@ public class ADSVSortView extends DSView {
             arrayLocationIndex[i].setLabelVisible(showIndices);
             arrayLocationIndex[i].setLabelColor(Color.BLUE);
             arrayLocationFrame[i] = createRectangle("", Xpos[i], Ypos[i] + 2, 20, 20, false);
+            arrayLocationFrame[i].setFillColor(Constants.ANDROID_BLUE);
         }
 
         // This has to be done in a seperate loop to ensure Z-ordering of
         // elements on the canvas
         for (int i = 0; i < currentNumElements; i++) {
             arrayLocationBar[i] = buildGrapicElement(arrayLocationValue[i], Xpos[i], Ypos[i]);
+            arrayLocationBar[i].setFillColor(Constants.ANDROID_BLUE);
             ((GElementRect) arrayLocationBar[i]).setElementVisible(showBars);
             arrayLocationTextValue[i] = createLabel(String.valueOf(arrayLocationValue[i]), Xpos[i], Ypos[i]);
         }
@@ -314,6 +316,7 @@ public class ADSVSortView extends DSView {
         for (int i = 0; i < currentNumElements; i++) {
             if (showBars) {
                 arrayLocationBar[i] = buildGrapicElement(arrayLocationValue[i], Xpos[i], Ypos[i]);
+                arrayLocationBar[i].setFillColor(Constants.ANDROID_BLUE);
                 ((GElementRect) arrayLocationBar[i]).setElementVisible(showBars);
             } else {
                 removeAny(arrayLocationBar[i]);
