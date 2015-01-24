@@ -9,7 +9,6 @@ import edu.usfca.xj.appkit.gview.object.GLink;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeSet;
 
 public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
@@ -71,40 +70,50 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
     }
 
     protected boolean dfsFromVertex(int vertex) {
-        animateVertexVisit(vertex);
+        visitVertex(vertex);
         // If vertex has neighbors
         if (connectedVertices.get(vertex) != null) {
-            Iterator<Integer> neighbors = connectedVertices.get(vertex).iterator();
-            while (neighbors.hasNext()) {
-                int neighbor = neighbors.next();
+            for (Integer neighbor : connectedVertices.get(vertex)) {
+                considerTraversingEdge(vertex, neighbor);
 
-                getEdge(vertex, neighbor).setOutlineColor(considerEdgeColor);
-                repaintwait();
                 if (vertexNotVisited(neighbor)) {
-                    getEdge(vertex, neighbor).setOutlineColor(traversedEdgeColor);
-                    //If a cycle is detected further down in exploration - Halt operations
+                    setEdgeAsTraversed(vertex, neighbor);
                     if (dfsFromVertex(neighbor)) {
-                        return true;
+                        return true; //If a cycle is detected further down in DFS - Halt exploration
                     }
-                    backTrack(vertex);
+
+                    backTrackTo(vertex);
                 } else if (vertexBeingProcessed(neighbor)) {
-                    if (handleVertexProcessed(neighbor)) {
-                        return true; // To indicate a cycle has been detected
-                    } else {
-                        getEdge(vertex, neighbor).setOutlineColor(defaultEdgeColor);
+                    if (indicateCycleDetected(neighbor)) {
+                        return true; // Indicate a cycle has been detected
                     }
+
+                    resetEdgeToDefaultColor(vertex, neighbor);
                 } else {
-                    if (vertexVisited(neighbor)) {
-                        getEdge(vertex, neighbor).setOutlineColor(defaultEdgeColor);
+                    if (vertexVisited(vertex)) {
+                        resetEdgeToDefaultColor(vertex, neighbor);
                     }
                 }
             }
         }
         recordVertexFinish(vertex);
-        return false;
+        return false; // No cycle reported on this DFS exploration
     }
 
-    protected boolean handleVertexProcessed(int vertex) {
+    private void resetEdgeToDefaultColor(Integer fromVertex, Integer toVertex) {
+        getEdge(fromVertex, toVertex).setOutlineColor(defaultEdgeColor);
+    }
+
+    private void setEdgeAsTraversed(Integer fromVertex, Integer toVertex) {
+        getEdge(fromVertex, toVertex).setOutlineColor(traversedEdgeColor);
+    }
+
+    private void considerTraversingEdge(Integer fromVertex, Integer toVertex) {
+        getEdge(fromVertex, toVertex).setOutlineColor(considerEdgeColor);
+        repaintwait();
+    }
+
+    protected boolean indicateCycleDetected(int vertex) {
         return false; // Default behaviour - Don't indicate cycle has been detected
     }
 
@@ -115,12 +124,12 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
         repaintwait();
     }
 
-    protected void backTrack(int vertex) {
+    protected void backTrackTo(int vertex) {
         AnimatePath(highlightCircle, highlightCircle.getPosition(), vertexPosition(vertex), 40);
         repaintwait();
     }
 
-    private void animateVertexVisit(int vertex) {
+    private void visitVertex(int vertex) {
         // highlightCircle.setPosition(vertexPosition(vertex).x,vertexPosition(vertex).y);
         AnimatePath(highlightCircle, highlightCircle.getPosition(), vertexPosition(vertex), 40);
         if (skipAnimation) {
@@ -168,11 +177,11 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
 
     @Override
     public void restart() {
-        ensureDefaultGraphColours();
+        setDefaultGraphColours();
     }
 
     @Override
-    protected void ensureDefaultGraphColours() {
+    protected void setDefaultGraphColours() {
         setDefaultVertexColor();
         setDefaultEdgeColor();
         removeAny(highlightCircle);
@@ -191,7 +200,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
         for (EdgePair pair : directedGraph.getEdgeSet()) {
             int fromVertex = pair.getFromValue();
             int toVertex = pair.getToValue();
-            getEdge(fromVertex, toVertex).setOutlineColor(defaultEdgeColor);
+            resetEdgeToDefaultColor(fromVertex, toVertex);
         }
     }
 
