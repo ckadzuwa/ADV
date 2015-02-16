@@ -85,16 +85,18 @@ public class GElementCircle extends GElement implements XJXMLSerializable {
     }
 
     public void draw(Graphics2D g) {
-        g.setStroke(strokeHeavy);
-        g.setColor(outlineColor);
-        drawShape(g);
+        if (elementVisible) {
+            g.setStroke(strokeHeavy);
+            g.setColor(outlineColor);
+            drawShape(g);
 
-        if (labelVisible) {
-            g.setColor(labelColor);
-            SLabel.drawCenteredString(getLabel(), (int) getPositionX(), (int) getPositionY(), g);
+            if (labelVisible) {
+                g.setColor(labelColor);
+                SLabel.drawCenteredString(getLabel(), (int) getPositionX(), (int) getPositionY(), g);
+            }
+
+            g.setStroke(strokeLight);
         }
-
-        g.setStroke(strokeLight);
     }
 
     public void drawShape(Graphics2D g) {
@@ -111,7 +113,6 @@ public class GElementCircle extends GElement implements XJXMLSerializable {
         }
         /*--END MODIFICATION: Adding ability for circles to be filled--*/
     }
-
 
 
 }
