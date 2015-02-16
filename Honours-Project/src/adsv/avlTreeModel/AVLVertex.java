@@ -1,6 +1,7 @@
 package adsv.avlTreeModel;
 
 import edu.usfca.xj.appkit.gview.object.GElement;
+import edu.usfca.xj.appkit.gview.object.GElementLabel;
 
 /**
  * Created by CK on 08/01/2015.
@@ -12,29 +13,33 @@ public class AVLVertex {
     public AVLVertex leftChild;
     public AVLVertex rightChild;
     public int height;
+    public int depth;
+    public int rowIndex;
 
     public GElement graphicVertex; //Circle (internal vertex) , Square (leaf vertex)
+    public GElementLabel label;
 
-    public static AVLVertex newVertex(int value, GElement graphicVertex) {
+    public static AVLVertex newVertex(int value) {
         AVLVertex newVertex = new AVLVertex();
         newVertex.value = value;
         newVertex.height = 1;
-        newVertex.graphicVertex = graphicVertex;
 
         return newVertex;
     }
 
-    public static AVLVertex newLeafVertex(GElement graphicalLeaf) {
+    public static AVLVertex newLeafVertex() {
         AVLVertex leafVertex = new AVLVertex();
         leafVertex.value = null;
         leafVertex.leftChild = null;
         leafVertex.rightChild = null;
         leafVertex.height = 0;
-        leafVertex.graphicVertex = graphicalLeaf;
 
         return leafVertex;
     }
 
+    public boolean hasParent() {
+        return parent != null;
+    }
 
     public boolean isLeafVertex() {
         return value == null;
@@ -50,11 +55,11 @@ public class AVLVertex {
     }
 
     public boolean isLeftChild() {
-        return parent != null && parent.leftChild == this;
+        return hasParent() && parent.leftChild == this;
     }
 
     public boolean isRightChild() {
-        return parent != null && parent.rightChild == this;
+        return hasParent() && parent.rightChild == this;
     }
 
 
