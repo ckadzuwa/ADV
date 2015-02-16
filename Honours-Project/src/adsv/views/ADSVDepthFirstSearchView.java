@@ -9,20 +9,19 @@ import edu.usfca.xj.appkit.gview.object.GLink;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeSet;
 
 public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
 
     protected GElement highlightCircle;
 
-    protected final Color unvisited = Color.WHITE;
-    protected final Color visitedAndProcessing = Color.LIGHT_GRAY;
-    protected final Color visitedAndFinished = Color.decode("#424242");
+    protected static final Color UNVISITED = Color.WHITE;
+    protected static final Color VISITED_AND_PROCESSING = Color.LIGHT_GRAY;
+    protected static final Color VISITED_AND_FINISHED = Color.decode("#424242");
 
-    protected final Color defaultEdgeColor = Color.BLACK;
-    protected final Color considerEdgeColor = Color.decode("#FF6F00");//Constants.ANDROID_RED;
-    protected final Color traversedEdgeColor = Color.BLUE;
+    protected static final Color DEFAULT_EDGE_COLOR = Color.BLACK;
+    protected static final Color CONSIDER_EDGE_COLOR = Color.decode("#FF6F00");//Constants.ANDROID_RED;
+    protected static final Color TRAVERSED_EDGE_COLOR = Color.BLUE;
 
     protected HashMap<Integer, TreeSet<Integer>> connectedVertices;
 
@@ -74,14 +73,11 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
         animateVertexVisit(vertex);
         // If vertex has neighbors
         if (connectedVertices.get(vertex) != null) {
-            Iterator<Integer> neighbors = connectedVertices.get(vertex).iterator();
-            while (neighbors.hasNext()) {
-                int neighbor = neighbors.next();
-
-                getEdge(vertex, neighbor).setOutlineColor(considerEdgeColor);
+            for (Integer neighbor : connectedVertices.get(vertex)) {
+                getEdge(vertex, neighbor).setOutlineColor(CONSIDER_EDGE_COLOR);
                 repaintwait();
                 if (vertexNotVisited(neighbor)) {
-                    getEdge(vertex, neighbor).setOutlineColor(traversedEdgeColor);
+                    getEdge(vertex, neighbor).setOutlineColor(TRAVERSED_EDGE_COLOR);
                     //If a cycle is detected further down in exploration - Halt operations
                     if (dfsFromVertex(neighbor)) {
                         return true;
@@ -91,11 +87,11 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
                     if (handleVertexProcessed(neighbor)) {
                         return true; // To indicate a cycle has been detected
                     } else {
-                        getEdge(vertex, neighbor).setOutlineColor(defaultEdgeColor);
+                        getEdge(vertex, neighbor).setOutlineColor(DEFAULT_EDGE_COLOR);
                     }
                 } else {
                     if (vertexVisited(neighbor)) {
-                        getEdge(vertex, neighbor).setOutlineColor(defaultEdgeColor);
+                        getEdge(vertex, neighbor).setOutlineColor(DEFAULT_EDGE_COLOR);
                     }
                 }
             }
@@ -110,7 +106,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
 
 
     protected void recordVertexFinish(int vertex) {
-        getVertex(vertex).setFillColor(visitedAndFinished);
+        getVertex(vertex).setFillColor(VISITED_AND_FINISHED);
         getVertex(vertex).setLabelColor(Color.WHITE);
         repaintwait();
     }
@@ -138,7 +134,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
 
 
     protected void recordVertexVisit(int vertex) {
-        getVertex(vertex).setFillColor(visitedAndProcessing);
+        getVertex(vertex).setFillColor(VISITED_AND_PROCESSING);
         repaintwait();
     }
 
@@ -155,15 +151,15 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
     }
 
     protected boolean vertexNotVisited(int vertex) {
-        return directedGraph.getVertex(vertex).getFillColor() == unvisited;
+        return directedGraph.getVertex(vertex).getFillColor() == UNVISITED;
     }
 
     private boolean vertexBeingProcessed(int vertex) {
-        return directedGraph.getVertex(vertex).getFillColor() == visitedAndProcessing;
+        return directedGraph.getVertex(vertex).getFillColor() == VISITED_AND_PROCESSING;
     }
 
     private boolean vertexVisited(int vertex) {
-        return directedGraph.getVertex(vertex).getFillColor() == visitedAndFinished;
+        return directedGraph.getVertex(vertex).getFillColor() == VISITED_AND_FINISHED;
     }
 
     @Override
@@ -182,7 +178,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
 
     private void setDefaultVertexColor() {
         for (Integer vertex : directedGraph.getVertexSet()) {
-            getVertex(vertex).setFillColor(unvisited);
+            getVertex(vertex).setFillColor(UNVISITED);
             getVertex(vertex).setLabelColor(Color.BLACK);
         }
     }
@@ -191,7 +187,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
         for (EdgePair pair : directedGraph.getEdgeSet()) {
             int fromVertex = pair.getFromValue();
             int toVertex = pair.getToValue();
-            getEdge(fromVertex, toVertex).setOutlineColor(defaultEdgeColor);
+            getEdge(fromVertex, toVertex).setOutlineColor(DEFAULT_EDGE_COLOR);
         }
     }
 

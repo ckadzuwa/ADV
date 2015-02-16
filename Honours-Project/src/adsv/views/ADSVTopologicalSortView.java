@@ -9,7 +9,7 @@ public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
 
     private String topologicalSortOrder;
     private ArrayList<Integer> visitPath;
-    private Color cycleHighlight = Color.magenta;
+    private Color CYCLE_HIGHLIGHT_COLOR = Color.magenta;
     private boolean cycleDetected;
     private int firstCycleElement;
 
@@ -65,7 +65,7 @@ public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
             for (int i = firstCycleElementIndex; i < visitPath.size() - 1; i++) {
                 int fromVertex = visitPath.get(i);
                 int toVertex = visitPath.get(i + 1);
-                getEdge(fromVertex, toVertex).setOutlineColor(cycleHighlight);
+                getEdge(fromVertex, toVertex).setOutlineColor(CYCLE_HIGHLIGHT_COLOR);
             }
             repaint();
         }
