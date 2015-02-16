@@ -1,5 +1,6 @@
 package adsv.views;
 
+import adsv.globals.Constants;
 import adsv.panels.ADSVPanel;
 
 import java.awt.*;
@@ -39,8 +40,8 @@ public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
     }
 
     @Override
-    protected void backTrack(int vertex) {
-        super.backTrack(vertex);
+    protected void backTrackTo(int vertex) {
+        super.backTrackTo(vertex);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
         return -1;
     }
 
-    protected boolean handleVertexProcessed(int vertex) {
+    protected boolean indicateCycleDetected(int vertex) {
         topologicalSortOrder = topologicalSortOrder + " - Graph has a cycle. No topological sort exists!";
         visitPath.add(vertex);
         firstCycleElement = vertex;

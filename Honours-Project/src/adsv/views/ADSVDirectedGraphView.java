@@ -129,7 +129,7 @@ public abstract class ADSVDirectedGraphView extends DSView {
             else {
                 getDirectedGraph().renameVertex(state, s);
                 changeDone();
-                ensureDefaultGraphColours();
+                setDefaultGraphColours();
                 checkGraphHasVertices();
             }
         }
@@ -149,7 +149,7 @@ public abstract class ADSVDirectedGraphView extends DSView {
                 getDirectedGraph().removeVertex((GElementVertex) item.getObject());
                 checkGraphHasVertices();
                 changeDone();
-                ensureDefaultGraphColours();
+                setDefaultGraphColours();
                 break;
             case MI_CLEAR_ALL:
                 getDirectedGraph().clear();
@@ -159,12 +159,12 @@ public abstract class ADSVDirectedGraphView extends DSView {
             case MI_EDIT_EDGE:
                 getDirectedGraph().editEdge((GLink) item.getObject());
                 changeDone();
-                ensureDefaultGraphColours();
+                setDefaultGraphColours();
                 break;
             case MI_REMOVE_EDGE:
                 getDirectedGraph().removeEdge((GLink) item.getObject());
                 changeDone();
-                ensureDefaultGraphColours();
+                setDefaultGraphColours();
                 checkGraphHasVertices();
                 break;
         }
@@ -187,7 +187,9 @@ public abstract class ADSVDirectedGraphView extends DSView {
                 if (spaceExistsForVertex()) {
                     createVertexAtXY(p.x, p.y);
                 }
-            } else if (designToolFA.getSelectedTool() == DesignToolsDG.TOOL_VERTEX) {
+            }
+
+            if (designToolFA.getSelectedTool() == DesignToolsDG.TOOL_VERTEX) {
                 if (spaceExistsForVertex()) {
                     String vertexValue;
                     if (automaticVertexCreation) {
@@ -198,8 +200,6 @@ public abstract class ADSVDirectedGraphView extends DSView {
                     }
                     validateAndAddVertex(vertexValue, p.x, p.y);
                 }
-            } else {
-                return;
             }
         }
     }
@@ -221,7 +221,7 @@ public abstract class ADSVDirectedGraphView extends DSView {
                 checkGraphHasVertices();
                 changeDone();
                 // Ensure graph elements appear in their default manner (i.e. with no colour)
-                ensureDefaultGraphColours();
+                setDefaultGraphColours();
             }
         }
     }
@@ -241,7 +241,7 @@ public abstract class ADSVDirectedGraphView extends DSView {
             getDirectedGraph().createEdge((GElementVertex) source, sourceAnchorKey, (GElementVertex) target, targetAnchorKey,
                     shape, p);
             changeDone();
-            ensureDefaultGraphColours();
+            setDefaultGraphColours();
             checkGraphHasVertices();
 
         }
@@ -253,7 +253,7 @@ public abstract class ADSVDirectedGraphView extends DSView {
                 if (e instanceof GLink) {
                     if (getDirectedGraph().editEdge((GLink) e)) {
                         changeDone();
-                        ensureDefaultGraphColours();
+                        setDefaultGraphColours();
                         checkGraphHasVertices();
                     }
                 }
@@ -275,13 +275,13 @@ public abstract class ADSVDirectedGraphView extends DSView {
         if (N == 0) {
             panel.disableGoAndSkip();
             panel.disableRestartButton();
-        } else if (N > 0) {
+        }
+
+        if (N > 0) {
             panel.enableGoAndSkip();
             panel.disableRestartButton();
-        } else {
-            return;
         }
     }
 
-    protected abstract void ensureDefaultGraphColours();
+    protected abstract void setDefaultGraphColours();
 }
