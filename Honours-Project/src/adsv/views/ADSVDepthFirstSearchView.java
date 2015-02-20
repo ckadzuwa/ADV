@@ -105,15 +105,15 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
     }
 
     private void resetEdgeToDefaultColor(Integer fromVertex, Integer toVertex) {
-        getEdge(fromVertex, toVertex).setOutlineColor(defaultEdgeColor);
+        getEdge(fromVertex, toVertex).setOutlineColor(DEFAULT_EDGE_COLOR);
     }
 
     private void setEdgeAsTraversed(Integer fromVertex, Integer toVertex) {
-        getEdge(fromVertex, toVertex).setOutlineColor(traversedEdgeColor);
+        getEdge(fromVertex, toVertex).setOutlineColor(TRAVERSED_EDGE_COLOR);
     }
 
     private void considerTraversingEdge(Integer fromVertex, Integer toVertex) {
-        getEdge(fromVertex, toVertex).setOutlineColor(considerEdgeColor);
+        getEdge(fromVertex, toVertex).setOutlineColor(CONSIDER_EDGE_COLOR);
         repaintwait();
     }
 
