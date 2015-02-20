@@ -49,6 +49,10 @@ public class AVLVertex {
         return !isLeafVertex();
     }
 
+    public boolean hasOnlyLeafChildren() {
+        return isInternalVertex() && leftChild.isLeafVertex() && rightChild.isLeafVertex();
+    }
+
 
     public void setPosition(int x, int y) {
         this.graphicVertex.setPosition(x, y);

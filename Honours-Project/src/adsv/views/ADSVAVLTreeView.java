@@ -87,7 +87,7 @@ public class ADSVAVLTreeView extends DSView {
     }
 
     private void updateHeightsOnInsertionPath(AVLVertex vertex) {
-        vertex.height = childOfGreaterHeight(vertex.leftChild, vertex.rightChild).height + 1;
+        vertex.height = heightOf(vertex);
         vertex.label.setLabelColor(Color.RED);
         repaintwait();
         vertex.label.setLabel(String.valueOf(vertex.height));
@@ -441,6 +441,7 @@ public class ADSVAVLTreeView extends DSView {
         repaintwait();
 
         AVLVertex leafVertexToReplace = findInsertionLocation(vertexToInsert);
+        positionVertex(newVertex, leafVertexToReplace);
         replaceLeafVertex(newVertex, leafVertexToReplace);
         setVertexLabel(newVertex);
 
@@ -453,7 +454,6 @@ public class ADSVAVLTreeView extends DSView {
     }
 
     private void replaceLeafVertex(AVLVertex newVertex, AVLVertex leafVertexToReplace) {
-        positionVertex(newVertex, leafVertexToReplace);
         AVLVertex parent = leafVertexToReplace.parent;
 
         // Replace the leaf vertex with the new vertex
@@ -576,9 +576,6 @@ public class ADSVAVLTreeView extends DSView {
         edge.setArrowVisible(false);
     }
 
-    private void runTreeDeletion(Object param) {
-    }
-
     private void runTreeFind(String list) {
 
         //If the list is a single number
@@ -616,7 +613,7 @@ public class ADSVAVLTreeView extends DSView {
                 }
                 animateVertexVisit(u);
             }
-            removeAny(highlightCircle);
+           removeHighlightCircle();
             repaint();
             if (!u.isLeafVertex() && u.value == k) {
                 return u;
@@ -669,6 +666,84 @@ public class ADSVAVLTreeView extends DSView {
     private void setHighlightCircleAtVertex(AVLVertex vertex) {
         highlightCircle = createCircle("", vertex.graphicVertex.getPositionX(), vertex.graphicVertex.getPositionY());
         highlightCircle.setOutlineColor(Color.RED);
+    }
+
+    private void runTreeDeletion(String list) {
+        //If the list is a single number
+        if (GenericFunctions.isValidNumber(list)) {
+            deleteVertex(Integer.parseInt(list));
+        } else {
+            //Otherwise , if the list is composed of several numbers
+            if (GenericFunctions.isValidNumberList(list)) {
+                String[] numbers = list.split(",");
+
+                for (int i = 0; i < numbers.length; i++) {
+                    deleteVertex(Integer.parseInt(numbers[i]));
+                }
+            }
+        }
+    }
+
+    private void deleteVertex(int vertex) {
+        AVLVertex vertexToDelete = findElement(vertex);
+
+        if (vertexToDelete == null) {
+
+        } else {
+
+            if (vertexToDelete.hasOnlyLeafChildren()) {
+
+                if (vertexToDelete == root) {
+                    removeGraphicalElements(root);
+                    root = null;
+                } else {
+                    AVLVertex leafVertex = AVLVertex.newLeafVertex();
+                    removeInternalVertex(leafVertex, vertexToDelete);
+                    updateHeightsOnInsertionPath(leafVertex);
+                    checkTreeBalanced(leafVertex.parent);
+                }
+
+            } else {
+
+            }
+
+        }
+
+
+    }
+
+    private void removeInternalVertex(AVLVertex leafVertex, AVLVertex vertexToDelete) {
+        AVLVertex parent = vertexToDelete.parent;
+
+        // Replace the internal vertex with the leaf
+        // vertex by adopting leaf vertex as child
+        if (vertexToDelete.isLeftChild()) {
+            addLeftChild(parent, leafVertex);
+        } else {
+            addRightChild(parent, leafVertex);
+        }
+
+        removeGraphicalElements(vertexToDelete);
+
+        setLeafVertexAtTreePosition(leafVertex);
+        setVertexLabel(leafVertex);
+        addGraphicEdge(parent, leafVertex);
+    }
+
+    private void removeGraphicalElements(AVLVertex vertexToDelete) {
+        if (vertexToDelete.hasParent()) {
+            removeLink(vertexToDelete.parent.graphicVertex, vertexToDelete.graphicVertex);
+        }
+        removeAny(vertexToDelete.graphicVertex);
+        removeAny(vertexToDelete.label);
+
+        removeLink(vertexToDelete.graphicVertex, vertexToDelete.leftChild.graphicVertex);
+        removeAny(vertexToDelete.leftChild.graphicVertex);
+        removeAny(vertexToDelete.leftChild.label);
+
+        removeLink(vertexToDelete.graphicVertex, vertexToDelete.rightChild.graphicVertex);
+        removeAny(vertexToDelete.rightChild.graphicVertex);
+        removeAny(vertexToDelete.rightChild.label);
     }
 
 }
