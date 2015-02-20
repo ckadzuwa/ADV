@@ -40,7 +40,6 @@ public class ADSVAVLTreeView extends DSView {
         // root element is set
     }
 
-
     public void runAlgorithm(int algorithm, Object param) {
         String list = (String) param;
         switch (algorithm) {
@@ -258,8 +257,8 @@ public class ADSVAVLTreeView extends DSView {
         edge.setSource(vertexY.graphicVertex);
         edge.setTarget(vertexZ.graphicVertex);
 
-        vertexZ.height = 1 + childOfGreaterHeight(vertexZ.leftChild, vertexZ.rightChild).height;
-
+        // Update tree model to reflect changes
+        // due to rotation
         updateTreeModel(root);
         animateTreeRotation(vertexZ);
     }
@@ -352,7 +351,6 @@ public class ADSVAVLTreeView extends DSView {
             return 1 + Math.max(heightOf(vertex.leftChild), heightOf(vertex.rightChild));
         }
     }
-
 
     private void prepareEdgeRotation(AVLVertex subtreeX, AVLVertex vertexY, AVLVertex vertexZ, boolean vertexYWasLeftChild) {
         if (vertexYWasLeftChild) {
@@ -472,7 +470,6 @@ public class ADSVAVLTreeView extends DSView {
         removeAny(leafVertexToReplace.label);
     }
 
-
     private void positionVertex(AVLVertex newVertex, AVLVertex leafVertexToReplace) {
         GElement newGraphicVertex = newVertex.graphicVertex;
         GElement leafGraphicVertex = leafVertexToReplace.graphicVertex;
@@ -578,7 +575,6 @@ public class ADSVAVLTreeView extends DSView {
 
         edge.setArrowVisible(false);
     }
-
 
     private void runTreeDeletion(Object param) {
     }
