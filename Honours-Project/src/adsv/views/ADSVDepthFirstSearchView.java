@@ -94,7 +94,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
                     resetEdgeToDefaultColor(vertex, neighbor);
                 } else {
 
-                    if (vertexVisited(vertex)) {
+                    if (vertexVisited(neighbor)) {
                         resetEdgeToDefaultColor(vertex, neighbor);
                     }
                 }
