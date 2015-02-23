@@ -3,6 +3,8 @@ package adsv.avlTreeModel;
 import edu.usfca.xj.appkit.gview.object.GElement;
 import edu.usfca.xj.appkit.gview.object.GElementLabel;
 
+import java.security.InvalidParameterException;
+
 /**
  * Created by CK on 08/01/2015.
  */
@@ -12,9 +14,9 @@ public class AVLVertex {
     public AVLVertex parent;
     public AVLVertex leftChild;
     public AVLVertex rightChild;
-    public int height;
-    public int depth;
-    public int rowIndex;
+    public Integer height;
+    public Integer depth;
+    public Integer rowIndex;
 
     public GElement graphicVertex; //Circle (internal vertex) , Square (leaf vertex)
     public GElementLabel label;
@@ -37,22 +39,25 @@ public class AVLVertex {
         return leafVertex;
     }
 
-    public boolean hasParent() {
-        return parent != null;
-    }
-
-    public boolean isLeafVertex() {
-        return value == null;
+    public boolean hasTwoLeafChildren() {
+        return isInternalVertex() && leftChild.isLeafVertex() && rightChild.isLeafVertex();
     }
 
     public boolean isInternalVertex() {
         return !isLeafVertex();
     }
 
-    public boolean hasOnlyLeafChildren() {
-        return isInternalVertex() && leftChild.isLeafVertex() && rightChild.isLeafVertex();
+    public boolean isLeafVertex() {
+        return value == null;
     }
 
+    public boolean rightChildIsInternalVertex() {
+        return rightChild.isInternalVertex();
+    }
+
+    public boolean leftChildIsInternalVertex() {
+        return leftChild.isInternalVertex();
+    }
 
     public void setPosition(int x, int y) {
         this.graphicVertex.setPosition(x, y);
@@ -62,9 +67,31 @@ public class AVLVertex {
         return hasParent() && parent.leftChild == this;
     }
 
+    public boolean hasParent() {
+        return parent != null;
+    }
+
     public boolean isRightChild() {
         return hasParent() && parent.rightChild == this;
     }
 
+    public void removeValue() {
 
+        // Don't set to null since
+        // vertex then becomes a leaf vertex
+        this.value = -1;
+        graphicVertex.setLabel("");
+
+    }
+
+    public void setValue(Integer value) {
+
+        if (value >= 0) {
+            this.value = value;
+            graphicVertex.setLabel(String.valueOf(value));
+        } else {
+            throw new InvalidParameterException();
+        }
+
+    }
 }
