@@ -158,7 +158,7 @@ public class ADSVPanel extends JPanel {
 		buttonsContainer.add(goButton);
 	}
 
-	private void setUpSkipButton(Box buttonsContainer) {
+	protected void setUpSkipButton(Box buttonsContainer) {
 		skipButton = new JButton("Skip");
 		skipButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -193,7 +193,7 @@ public class ADSVPanel extends JPanel {
 		buttonsContainer.add(stepButton);
 	}
 
-	private void setUpRestartButton(Box buttonsContainer) {
+	protected void setUpRestartButton(Box buttonsContainer) {
 		restartButton = new JButton("Restart");
 		restartButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {

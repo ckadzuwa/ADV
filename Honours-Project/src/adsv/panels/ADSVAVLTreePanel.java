@@ -223,6 +223,36 @@ public class ADSVAVLTreePanel extends ADSVPanel implements DocumentListener, Act
         buttonsContainer.add(goButton);
     }
 
+    @Override
+    protected void setUpSkipButton(Box buttonsContainer) {
+        skipButton = new JButton("Skip");
+        skipButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                if (!running) {
+                    beginAnimation(nonEmptyField,nonEmptyFieldInput);
+                    view.skip();
+                } else {
+                    if (!paused) {
+                        view.skip();
+                    } else {
+                        view.skip();
+                        paused = false;
+                        view.go();
+                    }
+
+                }
+                changeDone();
+            }
+        });
+        buttonsContainer.add(skipButton);
+    }
+
+    @Override
+    protected void setUpRestartButton(Box buttonsContainer) {
+        super.setUpRestartButton(buttonsContainer);
+        buttonsContainer.remove(restartButton);
+    }
+
     private void showInvalidInputDialog() {
         XJAlert.display(window.getJavaContainer(), "Invalid Input", "Please enter a number or a list of comma separated numbers\n\n" + "Note: Number(s) can't be be greater than " + Constants.MAX_VALUE);
     }
