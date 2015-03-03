@@ -7,7 +7,7 @@ import edu.usfca.xj.appkit.gview.object.GElementRect;
 
 import java.awt.*;
 
-public class ADSVSortView extends DSView {
+public class SortView extends DSView {
 
     public final int BUBBLESORT = 1;
 
@@ -29,7 +29,7 @@ public class ADSVSortView extends DSView {
     protected final static int STARTING_X_COORD = 400;
     protected final static int STARTING_Y_COORD = 400;
 
-    public ADSVSortView() {
+    public SortView() {
         showIndices = true;
         showBars = true;
         waitscalefactor = 10;

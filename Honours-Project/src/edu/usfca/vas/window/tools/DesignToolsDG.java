@@ -37,7 +37,7 @@ import edu.usfca.xj.appkit.frame.XJFrame;
 
 import javax.swing.*;
 
-import adsv.main.ADSVWindow;
+import adsv.main.Window;
 
 public class DesignToolsDG extends DesignToolsAbstract {
 
@@ -47,7 +47,7 @@ public class DesignToolsDG extends DesignToolsAbstract {
     
     protected XJFrame parent;
 
-    public DesignToolsDG(ADSVWindow window) {
+    public DesignToolsDG(Window window) {
     	parent = window;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 

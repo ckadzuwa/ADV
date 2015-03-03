@@ -1,8 +1,8 @@
 package adsv.panels;
 
-import adsv.main.ADSVWindow;
+import adsv.main.Window;
 import adsv.inputHandlers.SortInputDialog;
-import adsv.views.ADSVSortView;
+import adsv.views.SortView;
 
 import javax.swing.*;
 
@@ -10,19 +10,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ADSVSortPanel extends ADSVPanel {
+public class SortPanel extends GenericPanel {
 
 	protected boolean showBars;
 	protected boolean showIndices;
-	protected ADSVSortView sortView;
-	protected ADSVWindow window;
+	protected SortView sortView;
+	protected Window window;
 	protected JButton hideBars;
 	protected JButton hideIndices;
 	protected JButton startAnimation;
 	protected JButton newInput;
 	protected SortInputDialog dialog;
 
-	public ADSVSortPanel(ADSVWindow window) {
+	public SortPanel(Window window) {
 		super(window);
 		// this.window = window; unneccssary line!!
 		Box box = Box.createHorizontalBox();
@@ -103,7 +103,7 @@ public class ADSVSortPanel extends ADSVPanel {
 		return sortView.getData();
 	}
 
-	public ADSVSortView getSortView() {
+	public SortView getSortView() {
 		return sortView;
 	}
 

@@ -2,8 +2,8 @@ package adsv.panels;
 
 import adsv.globals.Constants;
 import adsv.globals.GenericFunctions;
-import adsv.main.ADSVWindow;
-import adsv.views.ADSVAVLTreeView;
+import adsv.main.Window;
+import adsv.views.AVLTreeView;
 import edu.usfca.xj.appkit.utils.XJAlert;
 
 import javax.swing.*;
@@ -15,9 +15,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ADSVAVLTreePanel extends ADSVPanel implements DocumentListener, ActionListener {
+public class AVLTreePanel extends GenericPanel implements DocumentListener, ActionListener {
 
-    private ADSVAVLTreeView ADSVAVLTreeView;
+    private AVLTreeView AVLTreeView;
     private JLabel insertLabel;
     private JTextField insertField;
     private Document insertFieldDocument;
@@ -36,7 +36,7 @@ public class ADSVAVLTreePanel extends ADSVPanel implements DocumentListener, Act
     private static final int DELETE = 2;
     private static final int FIND = 3;
 
-    public ADSVAVLTreePanel(ADSVWindow window) {
+    public AVLTreePanel(Window window) {
         super(window);
 
         Box box = Box.createHorizontalBox();
@@ -74,18 +74,18 @@ public class ADSVAVLTreePanel extends ADSVPanel implements DocumentListener, Act
         userInputMessage.setForeground(Color.RED);
 
         this.add(box, BorderLayout.NORTH);
-        this.add(view = ADSVAVLTreeView = new ADSVAVLTreeView());
-        setUpAnimationPanel(ADSVAVLTreeView);
+        this.add(view = AVLTreeView = new AVLTreeView());
+        setUpAnimationPanel(AVLTreeView);
     }
 
     // Persistence
 
     public void setData(Object data) {
-        ADSVAVLTreeView.setData(data);
+        AVLTreeView.setData(data);
     }
 
     public Object getData() {
-        return ADSVAVLTreeView.getData();
+        return AVLTreeView.getData();
     }
 
     @Override

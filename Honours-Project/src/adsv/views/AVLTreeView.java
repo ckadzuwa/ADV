@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ADSVAVLTreeView extends DSView {
+public class AVLTreeView extends DSView {
 
     private static final int INSERT = 1;
     private static final int DELETE = 2;
@@ -34,7 +34,7 @@ public class ADSVAVLTreeView extends DSView {
     private GElement draggingCircle;
     private DSShapeLink rotatingEdge;
 
-    public ADSVAVLTreeView() {
+    public AVLTreeView() {
         super();
         removeShape(messageBox);
         messageBox = null;

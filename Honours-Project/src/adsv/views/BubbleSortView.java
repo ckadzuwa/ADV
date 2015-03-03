@@ -1,6 +1,6 @@
 package adsv.views;
 
-public class ADSVBubbleSortView extends ADSVSortView {
+public class BubbleSortView extends SortView {
 
 	public void bubbleSort() {
 

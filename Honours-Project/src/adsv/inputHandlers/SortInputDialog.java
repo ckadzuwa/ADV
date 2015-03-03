@@ -29,20 +29,16 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import adsv.globals.Constants;
 import adsv.globals.GenericFunctions;
-import adsv.panels.ADSVSortPanel;
+import adsv.panels.SortPanel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.text.ParseException;
 
 public class SortInputDialog extends JDialog implements ItemListener, ActionListener, DocumentListener {
     private JPanel inputMethodsContainer;
@@ -63,7 +59,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
     private JRadioButton randomPresetChoice;
     private JRadioButton decreasing;
     private JRadioButton increasing;
-    private ADSVSortPanel sortPanel;
+    private SortPanel sortPanel;
 
     public static final int RANDOM_CHOICE = 0;
     public static final int DECREASING_CHOICE = 1;
@@ -90,7 +86,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
     /**
      * Create the dialog.
      */
-    public SortInputDialog(ADSVSortPanel sortPanel) {
+    public SortInputDialog(SortPanel sortPanel) {
         this();
         this.sortPanel = sortPanel;
     }

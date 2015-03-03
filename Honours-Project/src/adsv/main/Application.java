@@ -12,12 +12,12 @@ import edu.usfca.xj.appkit.app.XJApplicationDelegate;
 import edu.usfca.xj.appkit.document.XJDataXML;
 import edu.usfca.xj.appkit.utils.XJLocalizable;
 
-public class ADSVApplication extends XJApplicationDelegate {
+public class Application extends XJApplicationDelegate {
 
 	public static void main(String[] args) {
 		setNimbusLookAndFeel();
 		//setSubtanceLookAndFeel();
-		XJApplication.run(new ADSVApplication(), args, "Algorithms & Data Structures Visualisation");
+		XJApplication.run(new Application(), args, "Algorithms & Data Structures Visualisation");
 		
 	}
 
@@ -49,7 +49,7 @@ public class ADSVApplication extends XJApplicationDelegate {
 	public void appDidLaunch(String[] args) {
 
 		XJApplication.setPropertiesPath("adsv/properties/");
-		XJApplication.addDocumentType(ADSVDocument.class, ADSVWindow.class, XJDataXML.class, "adsv",
+		XJApplication.addDocumentType(Document.class, Window.class, XJDataXML.class, "adsv",
 				XJLocalizable.getString("strings", "ADSVDocumentType"));
 
 		XJApplication.shared();
@@ -63,7 +63,7 @@ public class ADSVApplication extends XJApplicationDelegate {
 
 	@Override
 	public Class appPreferencesClass() {
-		return ADSVApplication.class;
+		return Application.class;
 	}
 
 	public boolean supportsPersistence() {

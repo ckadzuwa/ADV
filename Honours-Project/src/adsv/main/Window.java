@@ -1,10 +1,10 @@
 package adsv.main;
 
 import adsv.globals.Constants;
-import adsv.panels.ADSVAVLTreePanel;
-import adsv.panels.ADSVBubbleSortPanel;
-import adsv.panels.ADSVDepthFirstSearchPanel;
-import adsv.panels.ADSVTopologicalSortPanel;
+import adsv.panels.AVLTreePanel;
+import adsv.panels.BubbleSortPanel;
+import adsv.panels.DepthFirstSearchPanel;
+import adsv.panels.TopologicalSortPanel;
 import edu.usfca.xj.appkit.frame.XJWindow;
 import edu.usfca.xj.appkit.menu.XJMainMenuBar;
 import edu.usfca.xj.appkit.menu.XJMenu;
@@ -16,19 +16,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class ADSVWindow extends XJWindow implements XJMenuItemDelegate {
+public class Window extends XJWindow implements XJMenuItemDelegate {
 
     private static final int MENUITEM_SORTING_ALGORITHMS = 201;
     private static final int MENUITEM_GRAPH_ALGORITHMS = 202;
     private static final int MENUITEM_TREE_ALGORITHMS = 203;
 
     protected JTabbedPane viewTabbedPane;
-    protected ADSVBubbleSortPanel bubbleSortPanel;
-    protected ADSVDepthFirstSearchPanel depthFirstSearchPanel;
-    protected ADSVTopologicalSortPanel topologicalSortPanel;
-    protected ADSVAVLTreePanel avlTreePanel;
+    protected BubbleSortPanel bubbleSortPanel;
+    protected DepthFirstSearchPanel depthFirstSearchPanel;
+    protected TopologicalSortPanel topologicalSortPanel;
+    protected AVLTreePanel avlTreePanel;
 
-    public ADSVWindow() {
+    public Window() {
 
         setWindowSize();
         // setLookAndFeel();
@@ -36,10 +36,10 @@ public class ADSVWindow extends XJWindow implements XJMenuItemDelegate {
         viewTabbedPane = new JTabbedPane();
         viewTabbedPane.setTabPlacement(JTabbedPane.LEFT);
 
-        bubbleSortPanel = new ADSVBubbleSortPanel(this);
-        depthFirstSearchPanel = new ADSVDepthFirstSearchPanel(this);
-        topologicalSortPanel = new ADSVTopologicalSortPanel(this);
-        avlTreePanel = new ADSVAVLTreePanel(this);
+        bubbleSortPanel = new BubbleSortPanel(this);
+        depthFirstSearchPanel = new DepthFirstSearchPanel(this);
+        topologicalSortPanel = new TopologicalSortPanel(this);
+        avlTreePanel = new AVLTreePanel(this);
 
         viewTabbedPane.add("AVL Tree",avlTreePanel);
         getContentPane().add(viewTabbedPane);

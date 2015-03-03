@@ -1,18 +1,18 @@
 package adsv.views;
 
-import adsv.panels.ADSVPanel;
+import adsv.panels.GenericPanel;
 
 import java.awt.*;
 import java.util.LinkedList;
 
-public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
+public class TopologicalSortView extends DepthFirstSearchView {
 
     private LinkedList<Integer> sortOrder;
     private Color CYCLE_HIGHLIGHT_COLOR = Color.magenta;
     private boolean cycleDetected;
     private int firstVertexInCycle;
 
-    public ADSVTopologicalSortView(ADSVPanel panel) {
+    public TopologicalSortView(GenericPanel panel) {
         super(panel);
     }
 

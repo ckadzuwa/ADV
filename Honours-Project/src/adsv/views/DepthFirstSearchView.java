@@ -2,7 +2,7 @@ package adsv.views;
 
 import adsv.directedGraphModel.EdgePair;
 import adsv.directedGraphModel.GElementVertex;
-import adsv.panels.ADSVPanel;
+import adsv.panels.GenericPanel;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
 import edu.usfca.xj.appkit.gview.object.GElement;
 import edu.usfca.xj.appkit.gview.object.GLink;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
+public class DepthFirstSearchView extends DirectedGraphView {
 
     protected static final Color UNVISITED = Color.WHITE;
     protected static final Color VISITED_AND_PROCESSING = Color.LIGHT_GRAY;
@@ -24,7 +24,7 @@ public class ADSVDepthFirstSearchView extends ADSVDirectedGraphView {
     protected HashMap<Integer, TreeSet<Integer>> connectedVertices;
     protected ArrayList<Integer> visitPath;
 
-    public ADSVDepthFirstSearchView(ADSVPanel panel) {
+    public DepthFirstSearchView(GenericPanel panel) {
         super(panel);
     }
 

@@ -1,6 +1,6 @@
 package adsv.panels;
 
-import adsv.main.ADSVWindow;
+import adsv.main.Window;
 import adsv.views.DSView;
 
 import javax.swing.*;
@@ -11,9 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.Vector;
 
-public class ADSVPanel extends JPanel {
+public class GenericPanel extends JPanel {
 
-	protected ADSVWindow window;
+	protected Window window;
 	protected JButton restartButton;
 	protected JButton stepButton;
 	protected JButton goButton;
@@ -35,7 +35,7 @@ public class ADSVPanel extends JPanel {
 	private final static int FAST_VALUE = 15;
 	private final static int VERY_FAST_VALUE = 5;
 
-	public ADSVPanel(ADSVWindow window) {
+	public GenericPanel(Window window) {
 		super(new BorderLayout());
 		DirtyDisplay = new Vector();
 		this.window = window;
@@ -303,7 +303,7 @@ public class ADSVPanel extends JPanel {
 		restartButton.setEnabled(false);
 	}
 
-	public ADSVWindow getWindow() {
+	public Window getWindow() {
 		return window;
 	}
 }
