@@ -7,7 +7,7 @@ import edu.usfca.xj.appkit.gview.object.GElementRect;
 
 import java.awt.*;
 
-public class SortView extends DSView {
+public class SortView extends View {
 
     public final int BUBBLESORT = 1;
 

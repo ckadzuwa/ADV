@@ -4,7 +4,7 @@ import adsv.globals.Constants;
 import adsv.globals.GenericFunctions;
 import adsv.directedGraphModel.GElementDirectedGraph;
 import adsv.directedGraphModel.GElementVertex;
-import adsv.panels.GenericPanel;
+import adsv.panels.Panel;
 import edu.usfca.vas.app.Localized;
 import edu.usfca.vas.window.tools.DesignToolsDG;
 import edu.usfca.xj.appkit.frame.XJFrame;
@@ -17,7 +17,7 @@ import edu.usfca.xj.appkit.utils.XJAlert;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class DirectedGraphView extends DSView {
+public abstract class DirectedGraphView extends View {
 
     // Menu items
     private static final int MI_ADD_VERTEX = 0;
@@ -31,13 +31,13 @@ public abstract class DirectedGraphView extends DSView {
 
     protected DesignToolsDG designToolFA = null;
     protected XJFrame parent;
-    protected GenericPanel panel;
+    protected Panel panel;
 
     private boolean edgeModificationAllowed = false;
     private boolean automaticVertexCreation = true;
     protected boolean canvasLocked = false;
 
-    public DirectedGraphView(GenericPanel panel) {
+    public DirectedGraphView(Panel panel) {
         this.panel = panel;
         this.parent = panel.getWindow();
         setDirectedGraph(new GElementDirectedGraph(edgeModificationAllowed));

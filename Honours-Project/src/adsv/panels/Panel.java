@@ -1,7 +1,7 @@
 package adsv.panels;
 
 import adsv.main.Window;
-import adsv.views.DSView;
+import adsv.views.View;
 
 import javax.swing.*;
 
@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.Vector;
 
-public class GenericPanel extends JPanel {
+public class Panel extends JPanel {
 
 	protected Window window;
 	protected JButton restartButton;
@@ -22,7 +22,7 @@ public class GenericPanel extends JPanel {
 	protected JLabel runningMsg;
 	protected boolean paused;
 	protected boolean running;
-	protected DSView view;
+	protected View view;
 	protected Vector DirtyDisplay;
 
 	private final static int SLOW_INDEX = 0;
@@ -35,7 +35,7 @@ public class GenericPanel extends JPanel {
 	private final static int FAST_VALUE = 15;
 	private final static int VERY_FAST_VALUE = 5;
 
-	public GenericPanel(Window window) {
+	public Panel(Window window) {
 		super(new BorderLayout());
 		DirtyDisplay = new Vector();
 		this.window = window;
@@ -80,7 +80,7 @@ public class GenericPanel extends JPanel {
 		v.start();
 	}
 
-	protected void setUpAnimationPanel(final DSView view) {
+	protected void setUpAnimationPanel(final View view) {
 		Box bottomPanel = Box.createHorizontalBox();
 
 		Box buttonsAndLabel = Box.createVerticalBox();

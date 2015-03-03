@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class DSView extends GView {
+public class View extends GView {
 
     protected List shapes = new ArrayList();
     protected List links = new ArrayList();
@@ -23,7 +23,7 @@ public class DSView extends GView {
     int steps;
     Vector HoldoverGraphics;
 
-    public DSView() {
+    public View() {
         super();
         HoldoverGraphics = new Vector();
         createLabel("", 1, 1); // Minor hack to ensure canvas

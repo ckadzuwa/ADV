@@ -15,7 +15,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AVLTreePanel extends GenericPanel implements DocumentListener, ActionListener {
+public class AVLTreePanel extends Panel implements DocumentListener, ActionListener {
 
     private AVLTreeView AVLTreeView;
     private JLabel insertLabel;

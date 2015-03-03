@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AVLTreeView extends DSView {
+public class AVLTreeView extends View {
 
     private static final int INSERT = 1;
     private static final int DELETE = 2;

@@ -2,7 +2,7 @@ package adsv.views;
 
 import adsv.directedGraphModel.EdgePair;
 import adsv.directedGraphModel.GElementVertex;
-import adsv.panels.GenericPanel;
+import adsv.panels.Panel;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
 import edu.usfca.xj.appkit.gview.object.GElement;
 import edu.usfca.xj.appkit.gview.object.GLink;
@@ -24,7 +24,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
     protected HashMap<Integer, TreeSet<Integer>> connectedVertices;
     protected ArrayList<Integer> visitPath;
 
-    public DepthFirstSearchView(GenericPanel panel) {
+    public DepthFirstSearchView(Panel panel) {
         super(panel);
     }
 

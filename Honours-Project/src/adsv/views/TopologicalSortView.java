@@ -1,6 +1,6 @@
 package adsv.views;
 
-import adsv.panels.GenericPanel;
+import adsv.panels.Panel;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -12,7 +12,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
     private boolean cycleDetected;
     private int firstVertexInCycle;
 
-    public TopologicalSortView(GenericPanel panel) {
+    public TopologicalSortView(Panel panel) {
         super(panel);
     }
 
