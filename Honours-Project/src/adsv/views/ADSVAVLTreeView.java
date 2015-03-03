@@ -36,8 +36,8 @@ public class ADSVAVLTreeView extends DSView {
 
     public ADSVAVLTreeView() {
         super();
-        createLabel("", 1, 1); // Minor hack to ensure canvas
-        // root element is set
+        removeShape(messageBox);
+        messageBox = null;
     }
 
     public void runAlgorithm(int algorithm, Object param) {

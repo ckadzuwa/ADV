@@ -1,18 +1,16 @@
 package adsv.views;
 
-import adsv.globals.Constants;
 import adsv.panels.ADSVPanel;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
 
-    private String topologicalSortOrder;
-    private ArrayList<Integer> visitPath;
+    private LinkedList<Integer> sortOrder;
     private Color CYCLE_HIGHLIGHT_COLOR = Color.magenta;
     private boolean cycleDetected;
-    private int firstCycleElement;
+    private int firstVertexInCycle;
 
     public ADSVTopologicalSortView(ADSVPanel panel) {
         super(panel);
@@ -21,20 +19,17 @@ public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
     @Override
     protected void runSetup() {
         super.runSetup();
-        topologicalSortOrder = "";
+        sortOrder = new LinkedList<Integer>();
         cycleDetected = false;
-        visitPath = new ArrayList<Integer>();
     }
-
 
     protected void performDepthFirstSearch() {
         for (Integer vertex : directedGraph.getVertexSet()) {
             if (vertexNotVisited(vertex)) {
-                highlightCircle.setPosition(vertexPosition(vertex).x, vertexPosition(vertex).y);
                 if (dfsFromVertex(vertex)) {
-                    cycleDetected = true;
                     break;
                 }
+                removeHighlightCircle();
             }
         }
     }
@@ -45,36 +40,51 @@ public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
     }
 
     @Override
-    protected void recordVertexVisit(int vertex) {
-        super.recordVertexVisit(vertex);
-        visitPath.add(vertex);
-    }
-
-    @Override
     protected void recordVertexFinish(int vertex) {
         super.recordVertexFinish(vertex);
-        topologicalSortOrder = vertex + " < " + topologicalSortOrder;
+        sortOrder.add(vertex);
         visitPath.remove(new Integer(vertex));
     }
 
     @Override
     protected void showResults() {
-        super.showResults();
-        System.out.println(topologicalSortOrder);
+        removeHighlightCircle();
+
         if (cycleDetected) {
-            int firstCycleElementIndex = firstCycleElementIndex();
-            for (int i = firstCycleElementIndex; i < visitPath.size() - 1; i++) {
+            int firstVertexInCycleIndex = firstVertexInCycleIndex();
+
+            for (int i = firstVertexInCycleIndex; i < visitPath.size() - 1; i++) {
                 int fromVertex = visitPath.get(i);
                 int toVertex = visitPath.get(i + 1);
                 getEdge(fromVertex, toVertex).setOutlineColor(CYCLE_HIGHLIGHT_COLOR);
             }
+
             repaint();
+            displayMessage("No topological sort exists as the entered graph has a cycle!");
+        } else {
+            buildAndDisplayOrdering();
         }
+
     }
 
-    private int firstCycleElementIndex() {
+    private void buildAndDisplayOrdering() {
+        String ordering = "";
+        int numElementsInOrder = sortOrder.size();
+        for (int i = 0 ; i < numElementsInOrder ; i++) {
+
+            if (i == numElementsInOrder - 1) {
+                ordering = ordering + sortOrder.get(i);
+            } else {
+                ordering = ordering + sortOrder.get(i) + " < ";
+            }
+        }
+
+        displayMessage("Graph has topological sort: " + ordering);
+    }
+
+    private int firstVertexInCycleIndex() {
         for (int i = 0; i < visitPath.size(); i++) {
-            if (visitPath.get(i) == firstCycleElement) {
+            if (visitPath.get(i) == firstVertexInCycle) {
                 return i;
             }
         }
@@ -82,9 +92,9 @@ public class ADSVTopologicalSortView extends ADSVDepthFirstSearchView {
     }
 
     protected boolean indicateCycleDetected(int vertex) {
-        topologicalSortOrder = topologicalSortOrder + " - Graph has a cycle. No topological sort exists!";
+        cycleDetected = true;
         visitPath.add(vertex);
-        firstCycleElement = vertex;
+        firstVertexInCycle = vertex;
         return true;
     }
 

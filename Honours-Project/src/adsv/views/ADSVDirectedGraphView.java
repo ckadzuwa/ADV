@@ -41,6 +41,12 @@ public abstract class ADSVDirectedGraphView extends DSView {
         this.panel = panel;
         this.parent = panel.getWindow();
         setDirectedGraph(new GElementDirectedGraph(edgeModificationAllowed));
+        setUpMessageBox("");
+    }
+
+    protected void setUpMessageBox(String messageToDisplay) {
+        Dimension canvas = getRealSize();
+        messageBox = createRectangle(messageToDisplay, canvas.width / 2, (canvas.height/10)*7.5, 0.5 * canvas.width, (canvas.height/10));
     }
 
     public int defaultLinkShape() {
@@ -153,6 +159,7 @@ public abstract class ADSVDirectedGraphView extends DSView {
                 break;
             case MI_CLEAR_ALL:
                 getDirectedGraph().clear();
+                setUpMessageBox("");
                 checkGraphHasVertices();
                 changeDone();
                 break;
