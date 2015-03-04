@@ -736,8 +736,8 @@ public class AVLTreeView extends View {
 
             // Vertex to delete is root or internal vertex with two leaves
             if (vertexToDelete.hasTwoLeafChildren()) {
-                removeHighlightCircle();
                 repaintwait();
+                removeHighlightCircle();
                 deletedVertexPlaceHolder = simpleDeletion(vertexToDelete);
             } else {
                 vertexToDelete.removeValue();
@@ -756,17 +756,17 @@ public class AVLTreeView extends View {
     }
 
     private AVLVertex complexDeletion(AVLVertex vertexToDelete) {
-        if (vertexToDelete.rightChildIsInternalVertex()) {
-            AVLVertex u = findInOrderSuccessor(vertexToDelete);
-            return inheritValueFromSuccessor(vertexToDelete, u);
+        if (vertexToDelete.leftChildIsInternalVertex()) {
+            AVLVertex u = findInOrderPredecessor(vertexToDelete);
+            return inheritValueFromPredecessor(vertexToDelete, u);
         } else {
-            AVLVertex u = vertexToDelete.leftChild;
+            AVLVertex u = vertexToDelete.rightChild;
             animateVertexVisit(u);
-            return inheritValueFromSuccessor(vertexToDelete, u);
+            return inheritValueFromPredecessor(vertexToDelete, u);
         }
     }
 
-    private AVLVertex inheritValueFromSuccessor(AVLVertex vertexToDelete, AVLVertex u) {
+    private AVLVertex inheritValueFromPredecessor(AVLVertex vertexToDelete, AVLVertex u) {
 
         floatValueUp(vertexToDelete, u);
 
@@ -777,24 +777,24 @@ public class AVLTreeView extends View {
             return leafVertex;
         } else {
             AVLVertex uParent = u.parent;
-            AVLVertex uRightChild = u.rightChild;
-            adoptGrandChild(uParent, u, uRightChild, u.isLeftChild());
+            AVLVertex uLeftChild = u.leftChild;
+            adoptGrandChild(uParent, u, uLeftChild, u.isLeftChild());
             updateTreeModel(root);
-            removeSuccessorGraphicElements(u);
+            removePredecessorGraphicElements(u);
             animateTreeMovement(root, false); // Fix vertex positioning
 
-            return uRightChild;
+            return uLeftChild;
         }
 
     }
 
-    private void removeSuccessorGraphicElements(AVLVertex u) {
-        removeLink(u.graphicVertex, u.leftChild.graphicVertex);
+    private void removePredecessorGraphicElements(AVLVertex u) {
+        removeLink(u.graphicVertex, u.rightChild.graphicVertex);
         removeAny(u.graphicVertex);
         removeAny(u.label);
-        removeAny(u.leftChild.graphicVertex);
-        removeAny(u.leftChild.label);
-        removeLink(u.graphicVertex, u.rightChild.graphicVertex);
+        removeAny(u.rightChild.graphicVertex);
+        removeAny(u.rightChild.label);
+        removeLink(u.graphicVertex, u.leftChild.graphicVertex);
     }
 
     private void floatValueUp(AVLVertex vertexToDelete, AVLVertex u) {
@@ -811,12 +811,12 @@ public class AVLTreeView extends View {
         removeHighlightCircle();
     }
 
-    private AVLVertex findInOrderSuccessor(AVLVertex vertexToDelete) {
-        AVLVertex u = vertexToDelete.rightChild;
+    private AVLVertex findInOrderPredecessor(AVLVertex vertexToDelete) {
+        AVLVertex u = vertexToDelete.leftChild;
         animateVertexVisit(u);
 
-        while (u.leftChildIsInternalVertex()) {
-            u = u.leftChild;
+        while (u.rightChildIsInternalVertex()) {
+            u = u.rightChild;
             animateVertexVisit(u);
         }
 
