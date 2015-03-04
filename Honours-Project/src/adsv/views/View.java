@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class View extends GView {
+public abstract class View extends GView {
 
     protected List shapes = new ArrayList();
     protected List links = new ArrayList();

@@ -7,7 +7,7 @@ import edu.usfca.vas.window.tools.DesignToolsDG;
 
 import java.awt.*;
 
-public class DirectedGraphPanel extends Panel {
+public abstract class DirectedGraphPanel extends Panel {
 
 	protected DirectedGraphView graphView;
 	protected DesignToolsDG designToolFA;

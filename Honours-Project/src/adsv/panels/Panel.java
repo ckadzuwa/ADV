@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.Vector;
 
-public class Panel extends JPanel {
+public abstract class Panel extends JPanel {
 
 	protected Window window;
 	protected JButton restartButton;

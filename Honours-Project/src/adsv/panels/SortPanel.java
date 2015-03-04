@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SortPanel extends Panel {
+public abstract class SortPanel extends Panel {
 
 	protected boolean showBars;
 	protected boolean showIndices;
