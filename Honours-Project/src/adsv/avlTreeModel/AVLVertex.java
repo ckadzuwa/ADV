@@ -52,11 +52,11 @@ public class AVLVertex {
     }
 
     public boolean rightChildIsInternalVertex() {
-        return rightChild.isInternalVertex();
+        return isInternalVertex() && rightChild.isInternalVertex();
     }
 
     public boolean leftChildIsInternalVertex() {
-        return leftChild.isInternalVertex();
+        return isInternalVertex() && leftChild.isInternalVertex();
     }
 
     public void setPosition(int x, int y) {
