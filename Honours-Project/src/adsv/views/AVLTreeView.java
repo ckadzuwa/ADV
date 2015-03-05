@@ -673,6 +673,16 @@ public class AVLTreeView extends View {
             while (!u.isLeafVertex()) {
                 if (k < u.value) {
                     u = u.leftChild;
+                } else if (k == u.value) {
+
+                    u = findInOrderPredecessor(u);
+
+                    // Vertex u is a leaf is we only have one
+                    // vertex with k as the key
+                    if (!u.isLeafVertex()) {
+                       u = u.rightChild;
+                    }
+
                 } else {
                     u = u.rightChild;
                 }
@@ -682,6 +692,23 @@ public class AVLTreeView extends View {
             removeHighlightCircle();
             return u;
         }
+    }
+
+    private AVLVertex appropriateLeafLocation(int k, AVLVertex u) {
+
+        AVLVertex leafLocation;
+
+        // If the vertex with the largest key no greater than k
+        // has a smaller key than the key k
+        if (u.value < k) {
+            leafLocation = u.rightChild;
+        } else {
+            // Else if the vertex's value is equal to k
+            leafLocation = u.leftChild;
+        }
+
+        return leafLocation;
+
     }
 
     private void removeHighlightCircle() {
@@ -811,8 +838,8 @@ public class AVLTreeView extends View {
         removeHighlightCircle();
     }
 
-    private AVLVertex findInOrderPredecessor(AVLVertex vertexToDelete) {
-        AVLVertex u = vertexToDelete.leftChild;
+    private AVLVertex findInOrderPredecessor(AVLVertex vertex) {
+        AVLVertex u = vertex.leftChild;
         animateVertexVisit(u);
 
         while (u.rightChildIsInternalVertex()) {
