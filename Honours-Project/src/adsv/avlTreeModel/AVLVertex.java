@@ -51,6 +51,14 @@ public class AVLVertex {
         return value == null;
     }
 
+    public boolean isRightLeafVertex() {
+        return isLeafVertex() && isRightChild();
+    }
+
+    public boolean isLeftLeafVertex() {
+        return isLeafVertex() && isLeftChild();
+    }
+
     public boolean rightChildIsInternalVertex() {
         return isInternalVertex() && rightChild.isInternalVertex();
     }
