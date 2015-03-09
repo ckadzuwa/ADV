@@ -41,13 +41,9 @@ public abstract class DirectedGraphView extends View {
         this.panel = panel;
         this.parent = panel.getWindow();
         setDirectedGraph(new GElementDirectedGraph(edgeModificationAllowed));
-        setUpMessageBox("");
+        setUpExplainationText("Explaination Text");
     }
 
-    protected void setUpMessageBox(String messageToDisplay) {
-        Dimension canvas = getRealSize();
-        messageBox = createRectangle(messageToDisplay, canvas.width / 2, (canvas.height/10)*7.5, 0.5 * canvas.width, (canvas.height/10));
-    }
 
     public int defaultLinkShape() {
         return GLink.SHAPE_ARC;
@@ -159,7 +155,7 @@ public abstract class DirectedGraphView extends View {
                 break;
             case MI_CLEAR_ALL:
                 getDirectedGraph().clear();
-                setUpMessageBox("");
+                setUpExplainationText("");
                 checkGraphHasVertices();
                 changeDone();
                 break;
