@@ -71,6 +71,10 @@ public class DepthFirstSearchView extends DirectedGraphView {
         visitVertex(vertex);
         // If vertex has neighbors
         if (connectedVertices.get(vertex) != null) {
+
+            displayMessage("Process vertex "+vertex+"'s neighbours.");
+            repaintwait();
+
             for (Integer neighbor : connectedVertices.get(vertex)) {
 
                 considerTraversingEdge(vertex, neighbor);
@@ -97,7 +101,11 @@ public class DepthFirstSearchView extends DirectedGraphView {
                     }
                 }
             }
+        } else {
+            displayMessage("Vertex "+vertex+" has no neighbours to be processed.");
+            repaintwait();
         }
+
         recordVertexFinish(vertex);
         return false; // No cycle reported on this DFS exploration
     }
@@ -107,7 +115,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
     }
 
     private void considerTraversingEdge(Integer fromVertex, Integer toVertex) {
-        displayMessage("Considering traversing edge from vertex " + fromVertex + " to vertex " + toVertex);
+        displayMessage("Consider traversing edge from vertex " + fromVertex + " to vertex " + toVertex+".");
         getEdge(fromVertex, toVertex).setOutlineColor(CONSIDER_EDGE_COLOR);
         repaintwait();
     }
@@ -117,21 +125,21 @@ public class DepthFirstSearchView extends DirectedGraphView {
     }
 
     protected void recordVertexFinish(int vertex) {
-        displayMessage("Finished processing all of vertex " + vertex + "'s neighbours");
+        displayMessage("Finished processing vertex " + vertex+".");
         getVertex(vertex).setFillColor(VISITED_AND_FINISHED);
         getVertex(vertex).setLabelColor(Color.WHITE);
         repaintwait();
     }
 
     protected void backTrackTo(int vertex) {
-        displayMessage("Backtracking to vertex " + vertex);
+        displayMessage("Backtrack to vertex " + vertex+".");
         AnimatePath(highlightCircle, highlightCircle.getPosition(), vertexPosition(vertex), 40);
         repaintwait();
     }
 
     private void visitVertex(int vertex) {
 
-        displayMessage("Visiting vertex " + vertex);
+        displayMessage("Visit vertex " + vertex+".");
 
         if (highlightCircle == null) {
             setHighlightCircleAtVertex(vertex);
@@ -168,12 +176,12 @@ public class DepthFirstSearchView extends DirectedGraphView {
 
         }
 
-        displayMessage("Finished traversal."+" DFS traversal order - "+dfsTraversalOrder);
+        displayMessage("Finished traversal,"+" vertices visited in the order: "+dfsTraversalOrder);
     }
 
     protected void recordVertexVisit(int vertex) {
         visitPath.add(vertex);
-        displayMessage("Vertex " + vertex + " has been visited. Processing neighbours");
+        displayMessage("Vertex " + vertex + " has been visited.");
         getVertex(vertex).setFillColor(VISITED_AND_PROCESSING);
         repaintwait();
     }
@@ -201,7 +209,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
 
     @Override
     protected void setDefaultGraphColours() {
-        displayMessage("");
+        displayMessage("Explaination Text");
         setDefaultVertexColor();
         setDefaultEdgeColor();
         removeHighlightCircle();
@@ -228,7 +236,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
     }
 
     private void abortEdgeTraversal(Integer fromVertex, Integer toVertex) {
-        displayMessage("Vertex "+toVertex+ " already visited. Aborting visit");
+        displayMessage("Vertex "+toVertex+ " already visited, abort visit.");
         getEdge(fromVertex, toVertex).setOutlineColor(DEFAULT_EDGE_COLOR);
         repaintwait();
     }

@@ -60,7 +60,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
             }
 
             repaint();
-            displayMessage("No topological sort exists as the entered graph has a cycle!");
+            displayMessage("No topological sort exists as this graph has a cycle!");
         } else {
             buildAndDisplayOrdering();
         }
@@ -79,7 +79,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
             }
         }
 
-        displayMessage("Graph has topological sort: " + ordering);
+        displayMessage("Graph has topological sort: " + ordering+".");
     }
 
     private int firstVertexInCycleIndex() {

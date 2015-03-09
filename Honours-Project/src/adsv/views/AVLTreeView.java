@@ -12,15 +12,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AVLTreeView extends View {
 
+    // Algorithmic operations
     private static final int INSERT = 1;
     private static final int DELETE = 2;
     private static final int FIND = 3;
+
+    // Single rotation cases
+    private static final int CLOCKWISE = 4;
+    private static final int ANTI_CLOCKWISE = 5;
+
+    // Double rotation cases
+    private static final int CLOCKWISE_ANTI_CLOCKWISE = 6;
+    private static final int ANTI_CLOCKWISE_CLOCKWISE = 7;
+
+    private static int rotationCurrentlyPerforming;
 
     // The width/height difference between two levels in the tree for insertion
     //private static final int WIDTH_DELTA = 20;
     private static final int WIDTH_DELTA = 50;
     private static final int HEIGHT_DELTA = 100;
-
     private static final int INSERTION_X_POSITION = 100;
     private static final int INSERTION_Y_POSITION = 50;
 
@@ -30,14 +40,13 @@ public class AVLTreeView extends View {
     private static final int STEPS = 40;
 
     AVLVertex root;
-    private GElement highlightCircle;
+    private GElementCircle highlightCircle;
     private GElement draggingCircle;
     private DSShapeLink rotatingEdge;
+    private GElementRect highlightLine;
 
     public AVLTreeView() {
         super();
-        removeShape(messageBox);
-        messageBox = null;
     }
 
     public void runAlgorithm(int algorithm, Object param) {
@@ -67,37 +76,111 @@ public class AVLTreeView extends View {
 
                 for (int i = 0; i < numbers.length; i++) {
                     insertVertex(Integer.parseInt(numbers[i]));
+                    addOneSecondDelay();
                 }
             }
         }
 
     }
 
-    private void insertVertex(int vertexToInsert) {
-        //If the tree is empty
-        if (root == null) {
-            root = insertRootVertex(vertexToInsert);
-            addLeafChildren(root);
-        } else {
-            AVLVertex vertexInserted = insertIntoTree(vertexToInsert);
-            addLeafChildren(vertexInserted);
-            updateHeightsOnInsertionPath(vertexInserted);
-            checkTreeBalanced(vertexInserted);
+    private void addTwoSecondDelay() {
+        if (!skipAnimation) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void updateHeightsOnInsertionPath(AVLVertex vertex) {
+    private void addOneSecondDelay() {
+        if (!skipAnimation) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addHalfSecondDelay() {
+        if (!skipAnimation) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void insertVertex(int vertexToInsert) {
+        //If the tree is empty
+        if (root == null) {
+            displayMessage("Insert " + vertexToInsert + " as the root vertex.");
+            repaintwait();
+            root = insertRootVertex(vertexToInsert);
+            addLeafChildren(root);
+            repaint();
+        } else {
+            AVLVertex vertexInserted = insertIntoTree(vertexToInsert);
+            addLeafChildren(vertexInserted);
+
+            addTwoSecondDelay();
+            updateHeightsOnPath(vertexInserted.parent);
+
+            addTwoSecondDelay();
+            displayMessage("Check if any vertex on the insertion path is unbalanced.");
+            repaintwait();
+            checkTreeBalanced(vertexInserted.parent);
+        }
+    }
+
+    // Update the heights on the insertion/deletion path
+    private void updateHeightsOnPath(AVLVertex vertex) {
+
+        int heightBefore = vertex.height;
         vertex.height = heightOf(vertex);
-        vertex.label.setLabelColor(Color.RED);
-        repaintwait();
-        vertex.label.setLabel(String.valueOf(vertex.height));
-        repaintwait();
-        vertex.label.setLabelColor(Color.BLUE);
+        int heightAfter = vertex.height;
+
+        displayMessage("Check if vertex " + vertex.value + "'s height needs an update.");
+        setHighlightLineAt(vertex.label);
         repaintwait();
 
-        if (vertex.hasParent()) {
-            updateHeightsOnInsertionPath(vertex.parent);
+
+        if (heightBefore != heightAfter) {
+            displayMessage("Update vertex " + vertex.value + "'s height from " + heightBefore + " to " + heightAfter + ".");
+        } else {
+            displayMessage("Vertex " + vertex.value + "'s height unchanged.");
         }
+
+        vertex.label.setLabel(String.valueOf(vertex.height));
+        repaintwait();
+
+
+        if (vertex.hasParent()) {
+            updateHeightsOnPath(vertex.parent);
+        }
+
+        removeHighlightLine();
+        repaint();
+    }
+
+    private void removeHighlightLine() {
+        removeAny(highlightLine);
+        highlightLine = null;
+    }
+
+    private void setHighlightLineAt(GElementLabel heightLabel) {
+
+        double heightLabelWidth = heightLabel.getFrame().rectangle().getWidth();
+
+        if (highlightLine == null) {
+            highlightLine = createRectangle("", heightLabel.getPositionX(), heightLabel.getPositionY() + heightLabelWidth + 2, heightLabelWidth, 0.05);
+            highlightLine.setOutlineColor(Color.BLUE);
+        } else {
+            highlightLine.setPosition(heightLabel.getPositionX(), heightLabel.getPositionY() + heightLabelWidth + 2);
+        }
+
     }
 
     private void checkTreeBalanced(AVLVertex vertex) {
@@ -105,14 +188,25 @@ public class AVLTreeView extends View {
 
         if (isVertexBalanced(vertex)) {
             if (vertex.hasParent()) {
+                displayMessage("Vertex " + vertex.value + " is balanced, checking parent.");
+                repaintwait();
                 checkTreeBalanced(vertex.parent);
+            } else {
+                displayMessage("Vertex " + vertex.value + " is balanced.");
+                repaintwait();
             }
         } else {
-            removeHighlightCircle();
+            displayMessage("Vertex " + vertex.value + " is unbalanced!");
             repaintwait();
+
+            //removeHighlightCircle();
             balanceTree(vertex);
+
         }
 
+
+        displayMessage("The entire tree is balanced.");
+        repaintwait();
         removeHighlightCircle();
     }
 
@@ -120,15 +214,27 @@ public class AVLTreeView extends View {
         AVLVertex vertexY = childOfGreaterHeight(vertexZ.leftChild, vertexZ.rightChild);
         AVLVertex vertexX = childOfGreaterHeight(vertexY.leftChild, vertexY.rightChild);
 
-        boolean bothLeftChildren = (vertexY.isLeftChild() == vertexX.isLeftChild());
-        boolean bothRightChildren = (vertexX.isRightChild() == vertexY.isRightChild());
+        boolean leftLeftCase = (vertexY.isLeftChild() && vertexX.isLeftChild());
+        boolean rightRightCase = (vertexX.isRightChild() && vertexY.isRightChild());
 
-        if (bothLeftChildren || bothRightChildren) {
+
+        if (leftLeftCase) {
+            rotationCurrentlyPerforming = CLOCKWISE;
+            performSingleRotation(vertexZ, vertexY, vertexX);
+        } else if (rightRightCase) {
+            rotationCurrentlyPerforming = ANTI_CLOCKWISE;
             performSingleRotation(vertexZ, vertexY, vertexX);
         } else {
+            boolean leftRightCase = vertexY.isLeftChild() && vertexX.isRightChild();
+
+            if (leftRightCase) {
+                rotationCurrentlyPerforming = ANTI_CLOCKWISE_CLOCKWISE;
+            } else {
+                rotationCurrentlyPerforming = CLOCKWISE_ANTI_CLOCKWISE;
+            }
+
             performDoubleRotation(vertexZ, vertexY, vertexX);
         }
-
     }
 
     private void performDoubleRotation(AVLVertex vertexZ, AVLVertex vertexY, AVLVertex vertexX) {
@@ -141,9 +247,34 @@ public class AVLTreeView extends View {
         labelAndColourSubtrees(subtreeV, subtreeW, subtreeX, subtreeY);
         repaintwait();
 
+        displayRotationCase();
+
+        displayFirstRotationTypeMessage();
         singleRotationInDoubleRotation(vertexX, subtreeV, subtreeW, vertexY); // Rotation 1
+
+        displaySecondRotationTypeMessage();
         singleRotationInDoubleRotation(vertexX, subtreeV, subtreeW, vertexZ); // Rotation 2
         resetTreeHeights();
+    }
+
+    private void displayFirstRotationTypeMessage() {
+        if (rotationCurrentlyPerforming == CLOCKWISE_ANTI_CLOCKWISE) {
+            displayMessage("Perform a clockwise rotation first.");
+        } else {
+            displayMessage(" to perform an anti-clockwise rotation first.");
+        }
+
+        repaintwait();
+    }
+
+    private void displaySecondRotationTypeMessage() {
+        if (rotationCurrentlyPerforming == CLOCKWISE_ANTI_CLOCKWISE) {
+            displayMessage("Finish with an anti-clockwise rotation to balance tree.");
+        } else {
+            displayMessage("Finish with an clockwise rotation to balance tree.");
+        }
+
+        repaintwait();
     }
 
     private void resetTreeHeights() {
@@ -171,12 +302,26 @@ public class AVLTreeView extends View {
     private void labelVertices(AVLVertex vertexZ, AVLVertex vertexY, AVLVertex vertexX) {
         blankVertexLabels(root);
         repaintwait();
+
+
+        displayMessage("Let "+vertexZ.value+" be unbalanced vertex z.");
         vertexZ.label.setLabel("z");
+        removeHighlightCircle();
+        addHalfSecondDelay();
         repaintwait();
+
+
+        displayMessage("Let "+vertexY.value+" be vertex y (child of z of greater height).");
         vertexY.label.setLabel("y");
+        addHalfSecondDelay();
         repaintwait();
+
+
+        displayMessage("Let "+vertexX.value+" be vertex x (child of y of greater height).");
         vertexX.label.setLabel("x");
+        addHalfSecondDelay();
         repaintwait();
+
     }
 
     private void blankVertexLabels(AVLVertex vertex) {
@@ -200,10 +345,25 @@ public class AVLTreeView extends View {
         boolean vertexYWasLeftChild = vertexY.isLeftChild();
         boolean vertexZWasLeftChild = vertexZ.isLeftChild();
         moveSubtree(subtreeX, vertexY, vertexYWasLeftChild, vertexZ);
+        displayRotationCase();
         rotateAroundVertex(vertexY, vertexYWasLeftChild, vertexZ, vertexZWasLeftChild);
         repaintwait();
 
         resetTreeHeights();
+    }
+
+    private void displayRotationCase() {
+        if (rotationCurrentlyPerforming == CLOCKWISE) {
+            displayMessage("Perform a clockwise rotation to balance tree.");
+        } else if (rotationCurrentlyPerforming == ANTI_CLOCKWISE){
+            displayMessage("Perform an anti-clockwise rotation to balance tree.");
+        } else if (rotationCurrentlyPerforming == CLOCKWISE_ANTI_CLOCKWISE) {
+            displayMessage("Perform an clockwise, anti-clockwise rotation to balance tree.");
+        } else {
+            displayMessage("Perform an anti-clockwise, clockwise rotation to balance tree.");
+        }
+
+        repaintwait();
     }
 
     private void redrawHeights(AVLVertex vertex) {
@@ -403,17 +563,31 @@ public class AVLTreeView extends View {
     }
 
     private void labelAndColourSubtrees(AVLVertex subtreeV, AVLVertex subtreeW, AVLVertex subtreeX, AVLVertex subtreeY) {
+        displayMessage("V is the subtree rooted at x's left child.");
         colourSubtree(subtreeV, Color.RED);
         subtreeV.label.setLabel("V");
+        addHalfSecondDelay();
         repaintwait();
+
+
+        displayMessage("W is the subtree rooted at x's right child.");
         colourSubtree(subtreeW, Color.GREEN);
         subtreeW.label.setLabel("W");
+        addHalfSecondDelay();
         repaintwait();
+
+
+        displayMessage("X is the subtree rooted at x's sibling.");
         colourSubtree(subtreeX, Color.BLUE);
         subtreeX.label.setLabel("X");
+        addHalfSecondDelay();
         repaintwait();
+
+
+        displayMessage("Y is the subtree rooted at y's sibling.");
         colourSubtree(subtreeY, Color.YELLOW);
         subtreeY.label.setLabel("Y");
+        addHalfSecondDelay();
         repaintwait();
     }
 
@@ -471,12 +645,16 @@ public class AVLTreeView extends View {
     private AVLVertex insertIntoTree(int vertexToInsert) {
         AVLVertex newVertex = AVLVertex.newVertex(vertexToInsert);
         setVertexAtAbsolutePosition(newVertex, INSERTION_X_POSITION, INSERTION_Y_POSITION);
+        displayMessage("Prepare to insert vertex " + vertexToInsert + " into the tree.");
         repaintwait();
 
         AVLVertex leafVertexToReplace = findInsertionLocation(vertexToInsert);
+        displayMessage("Insert vertex " + vertexToInsert + " at leaf location.");
+        repaintwait();
         positionVertex(newVertex, leafVertexToReplace);
         replaceLeafVertex(newVertex, leafVertexToReplace);
         setVertexLabel(newVertex);
+        repaint();
 
         return newVertex;
     }
@@ -501,6 +679,7 @@ public class AVLTreeView extends View {
         removeLink(parent.graphicVertex, leafVertexToReplace.graphicVertex);
         removeAny(leafVertexToReplace.graphicVertex);
         removeAny(leafVertexToReplace.label);
+        removeHighlightCircle();
     }
 
     private void positionVertex(AVLVertex newVertex, AVLVertex leafVertexToReplace) {
@@ -622,30 +801,36 @@ public class AVLTreeView extends View {
                 for (int i = 0; i < numbers.length; i++) {
                     findElement(Integer.parseInt(numbers[i]), true);
                     if (!skipAnimation) {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        addOneSecondDelay();
                     }
                 }
             }
         }
+
     }
 
     //Returns vertex if element found , null otherwise
     private AVLVertex findElement(int k, boolean hideHighlightCircle) {
+
         if (root == null) {
+            displayMessage("No elements found since the tree is empty!");
+            repaintwait();
             return null;
         } else {
+            displayMessage("Search for " + k + ", starting from root vertex " + root.value + ".");
             AVLVertex u = root;
             setHighlightCircleAtRoot();
+
             while (!u.isLeafVertex() && u.value != k) {
 
                 if (k < u.value) {
+                    displayMessage(k + " < " + u.value + ", go left.");
                     u = u.leftChild;
+                    repaintwait();
                 } else {
+                    displayMessage(k + " > " + u.value + ", go right.");
                     u = u.rightChild;
+                    repaintwait();
                 }
 
                 animateVertexVisit(u);
@@ -657,8 +842,12 @@ public class AVLTreeView extends View {
             }
 
             if (!u.isLeafVertex() && u.value == k) {
+                displayMessage("Found vertex with key " + k + ".");
+                repaintwait();
                 return u;
             } else {
+                displayMessage("No such element with key " + k + ".");
+                repaintwait();
                 return null;
             }
         }
@@ -666,30 +855,39 @@ public class AVLTreeView extends View {
 
     private AVLVertex findInsertionLocation(int k) {
         if (root == null) {
+            displayMessage("No elements in tree! Insert " + k + " as root vertex.");
+            repaintwait();
             return null;
         } else {
+            displayMessage("Find insertion location for " + k + ", starting from root vertex " + root.value + ".");
             AVLVertex u = root;
             setHighlightCircleAtRoot();
+
             while (!u.isLeafVertex()) {
                 if (k < u.value) {
+                    displayMessage(k + " < " + u.value + ", go left.");
                     u = u.leftChild;
+                    repaintwait();
                 } else if (k == u.value) {
+
+                    displayMessage("Found " + k + " high up in tree.");
+                    repaintwait();
 
                     u = findInOrderPredecessor(u);
 
                     // Vertex u is a leaf is we only have one
                     // vertex with k as the key
                     if (!u.isLeafVertex()) {
-                       u = u.rightChild;
+                        u = u.rightChild;
                     }
 
                 } else {
+                    displayMessage(k + " > " + u.value + ", go right.");
                     u = u.rightChild;
+                    repaintwait();
                 }
                 animateVertexVisit(u);
             }
-            repaintwait();
-            removeHighlightCircle();
             return u;
         }
     }
@@ -721,9 +919,11 @@ public class AVLTreeView extends View {
             setHighlightCircleAtVertex(u);
             repaintwait();
         } else {
+
             AnimatePath(highlightCircle, highlightCircle.getPosition(), u.graphicVertex.getPosition(), STEPS);
             repaintwait();
         }
+
     }
 
     private void setHighlightCircleAtRoot() {
@@ -747,9 +947,11 @@ public class AVLTreeView extends View {
 
                 for (int i = 0; i < numbers.length; i++) {
                     deleteVertex(Integer.parseInt(numbers[i]));
+                    addOneSecondDelay();
                 }
             }
         }
+
     }
 
     private void deleteVertex(int vertex) {
@@ -763,39 +965,64 @@ public class AVLTreeView extends View {
 
             // Vertex to delete is root or internal vertex with two leaves
             if (vertexToDelete.hasTwoLeafChildren()) {
-                repaintwait();
                 removeHighlightCircle();
                 deletedVertexPlaceHolder = simpleDeletion(vertexToDelete);
             } else {
+                displayMessage("Remove "+vertexToDelete.value+"'s key.");
                 vertexToDelete.removeValue();
                 repaintwait();
                 deletedVertexPlaceHolder = complexDeletion(vertexToDelete);
                 repaintwait();
             }
 
-            // Null when all vertices have been removed from tree
-            if (deletedVertexPlaceHolder != null) {
-                updateHeightsOnInsertionPath(deletedVertexPlaceHolder);
-                checkTreeBalancedAfterDeletion(deletedVertexPlaceHolder);
-            }
+            finishHandlingDeletion(deletedVertexPlaceHolder);
 
+        }
+    }
+
+    private void finishHandlingDeletion(AVLVertex deletedVertexPlaceHolder) {
+        // Null when all vertices have been removed from tree
+        if (deletedVertexPlaceHolder != null) {
+            addOneSecondDelay();
+
+            updateHeightsOnPath(deletedVertexPlaceHolder.parent);
+            displayMessage("Check if any vertex is unbalanced on the deletion path.");
+            repaintwait();
+
+            checkTreeBalancedAfterDeletion(deletedVertexPlaceHolder);
+
+            displayMessage("The entire tree is balanced.");
+            repaintwait();
+        } else {
+            displayMessage("The tree is now empty.");
+            repaint();
         }
     }
 
     private AVLVertex complexDeletion(AVLVertex vertexToDelete) {
+
+        AVLVertex u;
+
         if (vertexToDelete.leftChildIsInternalVertex()) {
-            AVLVertex u = findInOrderPredecessor(vertexToDelete);
-            return inheritValueFromPredecessor(vertexToDelete, u);
+            displayMessage("Use the greatest key in left subtree to replace deleted key.");
+            repaintwait();
+            u = findInOrderPredecessor(vertexToDelete);
         } else {
-            AVLVertex u = vertexToDelete.rightChild;
+            displayMessage("Use key to the right to replace deleted key.");
+            repaintwait();
+            u = vertexToDelete.rightChild;
             animateVertexVisit(u);
-            return inheritValueFromPredecessor(vertexToDelete, u);
         }
+
+        return inheritValueFromVertexU(vertexToDelete, u);
     }
 
-    private AVLVertex inheritValueFromPredecessor(AVLVertex vertexToDelete, AVLVertex u) {
+    private AVLVertex inheritValueFromVertexU(AVLVertex vertexToDelete, AVLVertex u) {
 
+
+        displayMessage("Move the key "+u.value+" up to replace deleted vertex.");
         floatValueUp(vertexToDelete, u);
+        repaintwait();
 
         if (u.hasTwoLeafChildren()) {
             AVLVertex leafVertex = AVLVertex.newLeafVertex();
@@ -839,10 +1066,15 @@ public class AVLTreeView extends View {
     }
 
     private AVLVertex findInOrderPredecessor(AVLVertex vertex) {
+
+        displayMessage("Go left once.");
         AVLVertex u = vertex.leftChild;
+        repaintwait();
+
         animateVertexVisit(u);
 
         while (u.rightChildIsInternalVertex()) {
+            displayMessage("Go right until right child is a leaf.");
             u = u.rightChild;
             animateVertexVisit(u);
         }
@@ -870,9 +1102,12 @@ public class AVLTreeView extends View {
             animateVertexVisit(z);
 
             if (!isVertexBalanced(z)) {
-                removeHighlightCircle();
+                displayMessage("Vertex " + z.value + " is unbalanced!");
                 repaintwait();
                 balanceTree(z);
+            } else {
+                displayMessage("Vertex " + z.value + " is balanced.");
+                repaintwait();
             }
 
             u = u.parent;
