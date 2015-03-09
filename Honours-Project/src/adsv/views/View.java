@@ -17,7 +17,7 @@ public abstract class View extends GView {
     protected boolean skipAnimation;
     protected int waitscalefactor = 20;
     protected double minwaitscalefactor = 1.0;
-    protected GElementRect messageBox;
+    protected GElementLabel explainationText;
     long sleeptime;
     boolean paused;
     int steps;
@@ -28,16 +28,17 @@ public abstract class View extends GView {
         HoldoverGraphics = new Vector();
         createLabel("", 1, 1); // Minor hack to ensure canvas
         // root element is set
-        setUpMessageBox("");
+        setUpExplainationText("Explaination Text");
     }
 
-    protected void setUpMessageBox(String messageToDisplay) {
+    protected void setUpExplainationText(String messageToDisplay) {
         Dimension canvas = getRealSize();
-        messageBox = createRectangle(messageToDisplay, canvas.width / 2, (canvas.height/10)*7.5, 0.5 * canvas.width, (canvas.height/10));
+        explainationText = createLabel(messageToDisplay,0.75*canvas.width,(canvas.height/10));
+        //explainationText = createRectangle(messageToDisplay, canvas.width / 2, (canvas.height/10)*7.5, 0.5 * canvas.width, (canvas.height/10));
     }
 
     protected void displayMessage(String messageToDisplay) {
-        messageBox.setLabel(messageToDisplay);
+        explainationText.setLabel(messageToDisplay);
     }
 
     public DSShapeRect createRectangle(String label, double x, double y, double w, double h) {
