@@ -380,7 +380,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
         }
 
         int[] numArray = new int[limit + 1];
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i <= limit; i++) {
             numArray[i] = Integer.parseInt(arrayLocations[i].getText());
         }
 
