@@ -1,7 +1,7 @@
 package adsv.views;
 
 import adsv.avlTreeModel.AVLVertex;
-import adsv.globals.GenericFunctions;
+import adsv.utility.NumberUtil;
 import edu.usfca.ds.shapes.DSShapeLink;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
 import edu.usfca.xj.appkit.gview.object.*;
@@ -67,11 +67,11 @@ public class AVLTreeView extends View {
     private void runTreeInsertion(String list) {
 
         //If the list is a single number
-        if (GenericFunctions.isValidNumber(list)) {
+        if (NumberUtil.isValidNumber(list)) {
             insertVertex(Integer.parseInt(list));
         } else {
             //Otherwise , if the list is composed of several numbers
-            if (GenericFunctions.isValidNumberList(list)) {
+            if (NumberUtil.isValidNumberList(list)) {
                 String[] numbers = list.split(",");
 
                 for (int i = 0; i < numbers.length; i++) {
@@ -791,11 +791,11 @@ public class AVLTreeView extends View {
     private void runTreeFind(String list) {
 
         //If the list is a single number
-        if (GenericFunctions.isValidNumber(list)) {
+        if (NumberUtil.isValidNumber(list)) {
             findElement(Integer.parseInt(list), true);
         } else {
             //Otherwise , if the list is composed of several numbers
-            if (GenericFunctions.isValidNumberList(list)) {
+            if (NumberUtil.isValidNumberList(list)) {
                 String[] numbers = list.split(",");
 
                 for (int i = 0; i < numbers.length; i++) {
@@ -938,11 +938,11 @@ public class AVLTreeView extends View {
 
     private void runTreeDeletion(String list) {
         //If the list is a single number
-        if (GenericFunctions.isValidNumber(list)) {
+        if (NumberUtil.isValidNumber(list)) {
             deleteVertex(Integer.parseInt(list));
         } else {
             //Otherwise , if the list is composed of several numbers
-            if (GenericFunctions.isValidNumberList(list)) {
+            if (NumberUtil.isValidNumberList(list)) {
                 String[] numbers = list.split(",");
 
                 for (int i = 0; i < numbers.length; i++) {

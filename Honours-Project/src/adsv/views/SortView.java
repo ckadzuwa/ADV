@@ -1,6 +1,6 @@
 package adsv.views;
 
-import adsv.globals.Constants;
+import adsv.utility.ColorConstants;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
 import edu.usfca.xj.appkit.gview.object.GElement;
 import edu.usfca.xj.appkit.gview.object.GElementRect;
@@ -117,11 +117,11 @@ public abstract class SortView extends View {
     public boolean lessThan(int index1, int index2) {
 
         // Highlight elements which are being compared
-        arrayLocationTextValue[index1].setLabelColor(Constants.ANDROID_RED);
-        arrayLocationTextValue[index2].setLabelColor(Constants.ANDROID_RED);
+        arrayLocationTextValue[index1].setLabelColor(ColorConstants.ANDROID_RED);
+        arrayLocationTextValue[index2].setLabelColor(ColorConstants.ANDROID_RED);
         if (showBars) {
-            arrayLocationBar[index1].setOutlineColor(Constants.ANDROID_RED);
-            arrayLocationBar[index2].setOutlineColor(Constants.ANDROID_RED);
+            arrayLocationBar[index1].setOutlineColor(ColorConstants.ANDROID_RED);
+            arrayLocationBar[index2].setOutlineColor(ColorConstants.ANDROID_RED);
         }
         repaintwait();
 
@@ -179,14 +179,14 @@ public abstract class SortView extends View {
             arrayLocationIndex[i].setLabelVisible(showIndices);
             arrayLocationIndex[i].setLabelColor(Color.BLUE);
             arrayLocationFrame[i] = createRectangle("", Xpos[i], Ypos[i] + 2, 20, 20, false);
-            arrayLocationFrame[i].setFillColor(Constants.ANDROID_BLUE);
+            arrayLocationFrame[i].setFillColor(ColorConstants.ANDROID_BLUE);
         }
 
         // This has to be done in a seperate loop to ensure Z-ordering of
         // elements on the canvas
         for (int i = 0; i < currentNumElements; i++) {
             arrayLocationBar[i] = buildGrapicElement(arrayLocationValue[i], Xpos[i], Ypos[i]);
-            arrayLocationBar[i].setFillColor(Constants.ANDROID_BLUE);
+            arrayLocationBar[i].setFillColor(ColorConstants.ANDROID_BLUE);
             ((GElementRect) arrayLocationBar[i]).setElementVisible(showBars);
             arrayLocationTextValue[i] = createLabel(String.valueOf(arrayLocationValue[i]), Xpos[i], Ypos[i]);
         }
@@ -213,7 +213,7 @@ public abstract class SortView extends View {
         for (int i = 0; i < currentNumElements; i++) {
             if (showBars) {
                 arrayLocationBar[i] = buildGrapicElement(arrayLocationValue[i], Xpos[i], Ypos[i]);
-                arrayLocationBar[i].setFillColor(Constants.ANDROID_BLUE);
+                arrayLocationBar[i].setFillColor(ColorConstants.ANDROID_BLUE);
                 ((GElementRect) arrayLocationBar[i]).setElementVisible(showBars);
             } else {
                 removeAny(arrayLocationBar[i]);

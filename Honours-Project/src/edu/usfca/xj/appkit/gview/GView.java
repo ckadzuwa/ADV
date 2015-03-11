@@ -31,6 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package edu.usfca.xj.appkit.gview;
 
+import adsv.utility.AppDimensions;
 import edu.usfca.xj.appkit.frame.XJView;
 import edu.usfca.xj.appkit.gview.base.Rect;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
@@ -49,8 +50,6 @@ import edu.usfca.xj.appkit.swing.XJGraphics2DPS;
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-
-import adsv.globals.Constants;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -93,7 +92,7 @@ public class GView extends XJView implements XJMenuItemDelegate, GTimerDelegate,
         setFocusable(false);
 
         setBackground(Color.gray);
-        setPreferredSize(Constants.CANVAS_SIZE);
+        setPreferredSize(AppDimensions.CANVAS_SIZE);
 
         addDefaultEventManager();
     }

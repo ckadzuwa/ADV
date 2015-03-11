@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package adsv.directedGraphModel;
 
-import adsv.globals.Constants;
+import adsv.utility.InputConstraints;
 import edu.usfca.vas.app.Localized;
 import edu.usfca.xj.appkit.gview.GView;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
@@ -202,7 +202,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
 
     public String getFirstAvailableVertexValue() {
 
-        for (int i = 0; i < Constants.MAX_VALUE; i++) {
+        for (int i = 0; i < InputConstraints.MAX_VALUE; i++) {
             String numberString = String.valueOf(i);
             if (!this.containsVertex(numberString)) {
                 return numberString;

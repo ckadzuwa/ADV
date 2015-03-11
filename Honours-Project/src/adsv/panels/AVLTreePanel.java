@@ -1,7 +1,7 @@
 package adsv.panels;
 
-import adsv.globals.Constants;
-import adsv.globals.GenericFunctions;
+import adsv.utility.InputConstraints;
+import adsv.utility.NumberUtil;
 import adsv.main.Window;
 import adsv.views.AVLTreeView;
 import edu.usfca.xj.appkit.utils.XJAlert;
@@ -254,11 +254,11 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
     }
 
     private void showInvalidInputDialog() {
-        XJAlert.display(window.getJavaContainer(), "Invalid Input", "Please enter a number or a list of comma separated numbers\n\n" + "Note: Number(s) can't be be greater than " + Constants.MAX_VALUE);
+        XJAlert.display(window.getJavaContainer(), "Invalid Input", "Please enter a number or a list of comma separated numbers\n\n" + "Note: Number(s) can't be be greater than " + InputConstraints.MAX_VALUE);
     }
 
     private boolean userInputValid(String nonEmptyFieldInput) {
-        return GenericFunctions.isValidNumber(nonEmptyFieldInput) || GenericFunctions.isValidNumberList(nonEmptyFieldInput);
+        return NumberUtil.isValidNumber(nonEmptyFieldInput) || NumberUtil.isValidNumberList(nonEmptyFieldInput);
     }
 
     protected void endAnimation(){

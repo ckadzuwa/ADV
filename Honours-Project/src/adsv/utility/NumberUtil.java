@@ -1,6 +1,6 @@
-package adsv.globals;
+package adsv.utility;
 
-public class GenericFunctions {
+public class NumberUtil {
 
 	private static final String TWO_DIGIT_NUMBER = "\\d{1,2}";
 

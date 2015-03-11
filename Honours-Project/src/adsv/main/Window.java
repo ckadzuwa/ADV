@@ -1,6 +1,6 @@
 package adsv.main;
 
-import adsv.globals.Constants;
+import adsv.utility.AppDimensions;
 import adsv.panels.AVLTreePanel;
 import adsv.panels.BubbleSortPanel;
 import adsv.panels.DepthFirstSearchPanel;
@@ -65,7 +65,7 @@ public class Window extends XJWindow implements XJMenuItemDelegate {
 
     private void setWindowSize() {
 
-        Rectangle r = new Rectangle(Constants.CANVAS_SIZE);
+        Rectangle r = new Rectangle(AppDimensions.CANVAS_SIZE);
         r.width *= 1.065f;
         r.height *= 1.125f;
         getRootPane().setPreferredSize(r.getSize());

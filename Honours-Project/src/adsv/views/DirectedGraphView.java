@@ -1,7 +1,7 @@
 package adsv.views;
 
-import adsv.globals.Constants;
-import adsv.globals.GenericFunctions;
+import adsv.utility.InputConstraints;
+import adsv.utility.NumberUtil;
 import adsv.directedGraphModel.GElementDirectedGraph;
 import adsv.directedGraphModel.GElementVertex;
 import adsv.panels.Panel;
@@ -122,7 +122,7 @@ public abstract class DirectedGraphView extends View {
                 JOptionPane.QUESTION_MESSAGE, null, null, state.getVertexValue());
         if (s != null) {
             s = s.trim();
-            if (!GenericFunctions.isValidNumber(s)) {
+            if (!NumberUtil.isValidNumber(s)) {
                 XJAlert.display(parent.getJavaContainer(), Localized.getString("dgInvalidInputTitle"),
                         Localized.getString("dgInvalidInputMessage"));
             } else if (getDirectedGraph().containsVertex(s))
@@ -174,11 +174,11 @@ public abstract class DirectedGraphView extends View {
     }
 
     private boolean spaceExistsForVertex() {
-        if (getDirectedGraph().getNumberVertices() < Constants.MAX_NUM_ELEMENTS) {
+        if (getDirectedGraph().getNumberVertices() < InputConstraints.MAX_NUM_ELEMENTS) {
             return true;
         } else {
             XJAlert.display(parent.getJavaContainer(), "Too many vertices",
-                    "A graph can have at most " + Constants.MAX_NUM_ELEMENTS + " vertices!");
+                    "A graph can have at most " + InputConstraints.MAX_NUM_ELEMENTS + " vertices!");
             return false;
         }
     }
@@ -213,7 +213,7 @@ public abstract class DirectedGraphView extends View {
 
     private void validateAndAddVertex(String vertexValue, int x, int y) {
         if (vertexValue != null) {
-            if (!GenericFunctions.isValidNumber(vertexValue)) {
+            if (!NumberUtil.isValidNumber(vertexValue)) {
                 XJAlert.display(parent.getJavaContainer(), Localized.getString("dgInvalidInputTitle"),
                         Localized.getString("dgInvalidInputMessage"));
             } else if (getDirectedGraph().containsVertex(vertexValue))

@@ -33,8 +33,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import adsv.globals.Constants;
-import adsv.globals.GenericFunctions;
+import adsv.utility.InputConstraints;
+import adsv.utility.NumberUtil;
 import adsv.panels.SortPanel;
 
 import java.awt.event.ActionListener;
@@ -124,8 +124,8 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
                 }
                 {
                     arraySizeSpinner = new JSpinner();
-                    arraySizeSpinner.setModel(new SpinnerNumberModel((Constants.MAX_NUM_ELEMENTS / 2), 1,
-                            Constants.MAX_NUM_ELEMENTS, 1));
+                    arraySizeSpinner.setModel(new SpinnerNumberModel((InputConstraints.MAX_NUM_ELEMENTS / 2), 1,
+                            InputConstraints.MAX_NUM_ELEMENTS, 1));
 
                     JComponent editor = arraySizeSpinner.getEditor();
                     JTextField arraySizeTextField = ((DefaultEditor) editor).getTextField();
@@ -270,9 +270,9 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
 
     private void intialiseArrayLocations() {
 
-        arrayLocations = new JTextField[Constants.MAX_NUM_ELEMENTS];
+        arrayLocations = new JTextField[InputConstraints.MAX_NUM_ELEMENTS];
 
-        for (int i = 0; i < Constants.MAX_NUM_ELEMENTS; i++) {
+        for (int i = 0; i < InputConstraints.MAX_NUM_ELEMENTS; i++) {
             Box verticalBox = Box.createVerticalBox();
             JLabel arrayIndice = new JLabel(i + "");
             JTextField arrayLocation = new JTextField();
@@ -371,7 +371,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
     private void generateUserInput() {
 
         int limit = 0;
-        for (int i = Constants.MAX_NUM_ELEMENTS - 1; i >= 0; i--) {
+        for (int i = InputConstraints.MAX_NUM_ELEMENTS - 1; i >= 0; i--) {
 
             if (!arrayLocations[i].getText().isEmpty()) {
                 limit = i;
@@ -418,7 +418,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
         int[] numArray = new int[arraySize];
 
         for (int i = 0; i < arraySize; i++) {
-            numArray[i] = (int) (Math.random() * (Constants.MAX_VALUE + 1));
+            numArray[i] = (int) (Math.random() * (InputConstraints.MAX_VALUE + 1));
         }
 
         sortPanel.getSortView().setNewInput(numArray);
@@ -427,11 +427,11 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
 
     private boolean userInputValid() {
 
-        for (int i = 0; i < Constants.MAX_NUM_ELEMENTS; i++) {
+        for (int i = 0; i < InputConstraints.MAX_NUM_ELEMENTS; i++) {
 
             String currentLocationText = arrayLocations[i].getText().trim();
 
-            if (!GenericFunctions.isValidNumber(currentLocationText)) {
+            if (!NumberUtil.isValidNumber(currentLocationText)) {
 
                 if (i > 0 && currentLocationText.isEmpty()) {
                     return ensureEmpty(i);
@@ -475,12 +475,12 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
 
     private void setPresetInputWarning() {
         presetInputMessage.setForeground(Color.RED);
-        presetInputMessage.setText("Array size must be a number between " + 1 + " and " + Constants.MAX_NUM_ELEMENTS);
+        presetInputMessage.setText("Array size must be a number between " + 1 + " and " + InputConstraints.MAX_NUM_ELEMENTS);
     }
 
     private boolean ensureEmpty(int startingPosition) {
 
-        for (int j = startingPosition; j < Constants.MAX_NUM_ELEMENTS; j++) {
+        for (int j = startingPosition; j < InputConstraints.MAX_NUM_ELEMENTS; j++) {
 
             if (!arrayLocations[j].getText().isEmpty()) {
                 setUserInputWarning(startingPosition);
@@ -550,10 +550,10 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
 
         try {
             String content = doc.getText(0, doc.getLength());
-            if (GenericFunctions.isValidNumber(content)) {
+            if (NumberUtil.isValidNumber(content)) {
                 int number = Integer.parseInt(content);
 
-                if (number < 1 || number > Constants.MAX_NUM_ELEMENTS) {
+                if (number < 1 || number > InputConstraints.MAX_NUM_ELEMENTS) {
                     setPresetInputWarning();
                 } else {
                     clearPresetInputWarning();
