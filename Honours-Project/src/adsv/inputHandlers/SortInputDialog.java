@@ -34,7 +34,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import adsv.utility.InputConstraints;
-import adsv.utility.NumberUtil;
 import adsv.panels.SortPanel;
 
 import java.awt.event.ActionListener;
@@ -431,7 +430,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
 
             String currentLocationText = arrayLocations[i].getText().trim();
 
-            if (!NumberUtil.isValidNumber(currentLocationText)) {
+            if (!InputConstraints.isValidNumber(currentLocationText)) {
 
                 if (i > 0 && currentLocationText.isEmpty()) {
                     return ensureEmpty(i);
@@ -550,7 +549,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
 
         try {
             String content = doc.getText(0, doc.getLength());
-            if (NumberUtil.isValidNumber(content)) {
+            if (InputConstraints.isValidNumber(content)) {
                 int number = Integer.parseInt(content);
 
                 if (number < 1 || number > InputConstraints.MAX_NUM_ELEMENTS) {

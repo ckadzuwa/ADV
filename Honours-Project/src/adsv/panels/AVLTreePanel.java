@@ -1,7 +1,6 @@
 package adsv.panels;
 
 import adsv.utility.InputConstraints;
-import adsv.utility.NumberUtil;
 import adsv.main.Window;
 import adsv.views.AVLTreeView;
 import edu.usfca.xj.appkit.utils.XJAlert;
@@ -258,7 +257,7 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
     }
 
     private boolean userInputValid(String nonEmptyFieldInput) {
-        return NumberUtil.isValidNumber(nonEmptyFieldInput) || NumberUtil.isValidNumberList(nonEmptyFieldInput);
+        return InputConstraints.isValidNumber(nonEmptyFieldInput) || InputConstraints.isValidNumberList(nonEmptyFieldInput);
     }
 
     protected void endAnimation(){

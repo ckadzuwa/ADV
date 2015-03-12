@@ -1,7 +1,6 @@
 package adsv.views;
 
 import adsv.utility.InputConstraints;
-import adsv.utility.NumberUtil;
 import adsv.directedGraphModel.GElementDirectedGraph;
 import adsv.directedGraphModel.GElementVertex;
 import adsv.panels.Panel;
@@ -122,7 +121,7 @@ public abstract class DirectedGraphView extends View {
                 JOptionPane.QUESTION_MESSAGE, null, null, state.getVertexValue());
         if (s != null) {
             s = s.trim();
-            if (!NumberUtil.isValidNumber(s)) {
+            if (!InputConstraints.isValidNumber(s)) {
                 XJAlert.display(parent.getJavaContainer(), Localized.getString("dgInvalidInputTitle"),
                         Localized.getString("dgInvalidInputMessage"));
             } else if (getDirectedGraph().containsVertex(s))
@@ -213,7 +212,7 @@ public abstract class DirectedGraphView extends View {
 
     private void validateAndAddVertex(String vertexValue, int x, int y) {
         if (vertexValue != null) {
-            if (!NumberUtil.isValidNumber(vertexValue)) {
+            if (!InputConstraints.isValidNumber(vertexValue)) {
                 XJAlert.display(parent.getJavaContainer(), Localized.getString("dgInvalidInputTitle"),
                         Localized.getString("dgInvalidInputMessage"));
             } else if (getDirectedGraph().containsVertex(vertexValue))
