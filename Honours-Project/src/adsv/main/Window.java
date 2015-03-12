@@ -82,15 +82,8 @@ public class Window extends XJWindow implements XJMenuItemDelegate {
     // Adding additional menu between Algorithms and Window Menu
     @Override
     public void customizeMenuBar(XJMainMenuBar menubar) {
-
-        XJMenu menu = new XJMenu();
-        menu.setTitle("Data Structures");
-
-        menubar.addCustomMenu(menu);
-
+        // Add no custom menus
     }
-
-    ;
 
     @Override
     public void customizeEditMenu(XJMenu menu) {
