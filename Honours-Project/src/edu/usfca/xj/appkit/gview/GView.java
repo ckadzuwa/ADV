@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package edu.usfca.xj.appkit.gview;
 
-import adsv.utility.AppDimensions;
+import adv.utility.AppDimensions;
 import edu.usfca.xj.appkit.frame.XJView;
 import edu.usfca.xj.appkit.gview.base.Rect;
 import edu.usfca.xj.appkit.gview.base.Vector2D;

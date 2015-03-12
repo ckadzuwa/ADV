@@ -27,49 +27,56 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-*/
+ */
 
-package edu.usfca.vas.window.tools;
+package adv.directedGraphModel;
 
-import edu.usfca.vas.app.Localized;
-import edu.usfca.vas.graphics.IconManager;
-import edu.usfca.xj.appkit.frame.XJFrame;
+import java.awt.Graphics2D;
 
-import javax.swing.*;
+import edu.usfca.xj.appkit.gview.base.Anchor2D;
+import edu.usfca.xj.appkit.gview.object.GElementCircle;
+import edu.usfca.xj.foundation.XJXMLSerializable;
 
-import adv.main.Window;
+public class GElementVertex extends GElementCircle implements XJXMLSerializable {
 
-public class DesignToolsDG extends DesignToolsAbstract {
+	private String vertexValue;
 
-    public static final int TOOL_ARROW = 0;
-    public static final int TOOL_EDGE = 1;
-    public static final int TOOL_VERTEX = 2;
-    
-    protected XJFrame parent;
+	public GElementVertex() {
+		setDraggable(true);
+	}
 
-    public DesignToolsDG(Window window) {
-    	parent = window;
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+	public GElementVertex(String vertexName, double x, double y) {
+		setVertexValue(vertexName);
+		setPosition(x, y);
+		setDraggable(true);
+	}
 
-        mouseButton = createDesignToolButton(IconManager.ICON_ARROW, Localized.getString("dgDTSelect"), TOOL_ARROW);
-        createDesignToolSeparator(20);
-        createDesignToolButton(IconManager.ICON_EDGE, Localized.getString("dgDTEdge"), TOOL_EDGE);
-        createDesignToolButton(IconManager.ICON_VERTEX, Localized.getString("dgDTVertex"), TOOL_VERTEX);
+	public void setVertexValue(String state) {
+		this.vertexValue = state;
+	}
 
-        selectButton(mouseButton);
-    }
+	public String getVertexValue() {
+		return vertexValue;
+	}
 
+	public String getLabel() {
+		return getVertexValue();
+	}
 
-    public String retrieveVertexValue() {
-        String s = (String)JOptionPane.showInputDialog(parent.getJavaContainer(), Localized.getString("dgDTNewVertexMessage"),
-                                        Localized.getString("dgDTNewVertexTitle"),
-                                        JOptionPane.QUESTION_MESSAGE, null, null, null);
-        if(s != null) {
-            s = s.trim();
-            consumeSelectedState();
-        }
+	public boolean acceptIncomingLink() {
+		return true;
+	}
 
-        return s;
-    }
+	public boolean acceptOutgoingLink() {
+		return true;
+	}
+
+	public void updateAnchors() {
+		setAnchor(ANCHOR_CENTER, position, Anchor2D.DIRECTION_FREE);
+	}
+
+	public void drawShape(Graphics2D g) {
+		super.drawShape(g);
+	}
 
 }
