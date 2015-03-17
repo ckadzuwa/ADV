@@ -38,6 +38,7 @@ import adv.panels.SortPanel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 
 public class SortInputDialog extends JDialog implements ItemListener, ActionListener, DocumentListener {
     private JPanel inputMethodsContainer;
@@ -60,9 +61,6 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
     private JRadioButton increasing;
     private SortPanel sortPanel;
 
-    public static final int RANDOM_CHOICE = 0;
-    public static final int DECREASING_CHOICE = 1;
-    public static final int INCREASING_CHOICE = 2;
     private JLabel userInputMessage;
     private boolean visitedUserInputPanel;
     private JFormattedTextField arraySizeTextField;
@@ -159,14 +157,14 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
                         }
 
                         {
-                            decreasing = new JRadioButton("Decreasing Sequence");
+                            decreasing = new JRadioButton("Random Decreasing Sequence");
                             decreasing.setHorizontalAlignment(SwingConstants.CENTER);
                             decreasing.addItemListener(this);
                             presetChoices.add(decreasing);
                             presetChoicesContainer.add(decreasing);
                         }
                         {
-                            increasing = new JRadioButton("Increasing Sequence");
+                            increasing = new JRadioButton("Random Increasing Sequence");
                             increasing.setHorizontalAlignment(SwingConstants.CENTER);
                             presetChoices.add(increasing);
                             presetChoicesContainer.add(increasing);
@@ -391,28 +389,38 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
 
     private void generateIncreasingInput(int arraySize) {
 
-        int[] numArray = new int[arraySize];
+        int[] numArray = generateRandomIntegerArray(arraySize);
 
-        for (int i = 0; i < arraySize; i++) {
-            numArray[i] = i;
-        }
-
+        // Sorts in ascending order
+        Arrays.sort(numArray);
         sortPanel.getSortView().setNewInput(numArray);
-
     }
 
     private void generateDecreasingInput(int arraySize) {
-        int[] numArray = new int[arraySize];
 
-        for (int i = 0; i < arraySize; i++) {
-            numArray[i] = arraySize - 1 - i;
+        int[] numArray = generateRandomIntegerArray(arraySize);
+
+        // Sort in ascending order
+        Arrays.sort(numArray);
+
+        // Reverse array
+        for (int i = 0; i < arraySize/2; i++) {
+            int tmp = numArray[i];
+            numArray[i] = numArray[arraySize-i-1];
+            numArray[arraySize-i-1] = tmp;
         }
 
+        sortPanel.getSortView().setNewInput(numArray);
+    }
+
+    private void generateRandomInput(int arraySize) {
+
+        int[] numArray = generateRandomIntegerArray(arraySize);
         sortPanel.getSortView().setNewInput(numArray);
 
     }
 
-    private void generateRandomInput(int arraySize) {
+    private int[] generateRandomIntegerArray(int arraySize) {
 
         int[] numArray = new int[arraySize];
 
@@ -420,7 +428,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
             numArray[i] = (int) (Math.random() * (InputConstraints.MAX_INPUT_VALUE + 1));
         }
 
-        sortPanel.getSortView().setNewInput(numArray);
+       return numArray;
 
     }
 
