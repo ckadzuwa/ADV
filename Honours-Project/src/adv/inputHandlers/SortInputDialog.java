@@ -417,7 +417,7 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
         int[] numArray = new int[arraySize];
 
         for (int i = 0; i < arraySize; i++) {
-            numArray[i] = (int) (Math.random() * (InputConstraints.MAX_VALUE + 1));
+            numArray[i] = (int) (Math.random() * (InputConstraints.MAX_INPUT_VALUE + 1));
         }
 
         sortPanel.getSortView().setNewInput(numArray);
@@ -469,7 +469,8 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
 
     private void setUserInputWarning(int i) {
         userInputMessage.setForeground(Color.RED);
-        userInputMessage.setText("Invald entry at location " + i + ". Please enter a number between 0-99.");
+        userInputMessage.setText("Invald entry at index " + i + ". Please enter a number between "+
+                InputConstraints.MIN_INPUT_VALUE+" and "+InputConstraints.MAX_INPUT_VALUE+".");
     }
 
     private void setPresetInputWarning() {

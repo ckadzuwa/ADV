@@ -123,7 +123,8 @@ public abstract class DirectedGraphView extends View {
             s = s.trim();
             if (!InputConstraints.isValidNumber(s)) {
                 XJAlert.display(parent.getJavaContainer(), Localized.getString("dgInvalidInputTitle"),
-                        Localized.getString("dgInvalidInputMessage"));
+                        "Please enter a valid number between "+InputConstraints.MIN_INPUT_VALUE+
+                                "and "+InputConstraints.MAX_INPUT_VALUE+".");
             } else if (getDirectedGraph().containsVertex(s))
                 XJAlert.display(parent.getJavaContainer(), Localized.getString("dgEditVertexTitle"),
                         Localized.getString("dgEditVertexAlreadyExists"));
@@ -214,7 +215,8 @@ public abstract class DirectedGraphView extends View {
         if (vertexValue != null) {
             if (!InputConstraints.isValidNumber(vertexValue)) {
                 XJAlert.display(parent.getJavaContainer(), Localized.getString("dgInvalidInputTitle"),
-                        Localized.getString("dgInvalidInputMessage"));
+                        "Please enter a valid number between "+InputConstraints.MIN_INPUT_VALUE+
+                                "and "+InputConstraints.MAX_INPUT_VALUE+".");
             } else if (getDirectedGraph().containsVertex(vertexValue))
                 XJAlert.display(parent.getJavaContainer(), Localized.getString("dgNewVertexTitle"),
                         Localized.getString("dgNewVertexAlreadyExists"));

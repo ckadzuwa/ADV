@@ -202,7 +202,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
 
     public String getFirstAvailableVertexValue() {
 
-        for (int i = 0; i < InputConstraints.MAX_VALUE; i++) {
+        for (int i = 0; i < InputConstraints.MAX_INPUT_VALUE; i++) {
             String numberString = String.valueOf(i);
             if (!this.containsVertex(numberString)) {
                 return numberString;

@@ -253,7 +253,7 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
     }
 
     private void showInvalidInputDialog() {
-        XJAlert.display(window.getJavaContainer(), "Invalid Input", "Please enter a number or a list of comma separated numbers\n\n" + "Note: Number(s) can't be be greater than " + InputConstraints.MAX_VALUE);
+        XJAlert.display(window.getJavaContainer(), "Invalid Input", "Please enter a number or a list of comma separated numbers\n\n" + "Note: Number(s) can't be be greater than " + InputConstraints.MAX_INPUT_VALUE);
     }
 
     private boolean userInputValid(String nonEmptyFieldInput) {
