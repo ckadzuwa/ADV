@@ -1,4 +1,4 @@
-package adv.inputHandlers;
+package adv.sortingInputHandler;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -157,14 +157,14 @@ public class SortInputDialog extends JDialog implements ItemListener, ActionList
                         }
 
                         {
-                            decreasing = new JRadioButton("Random Decreasing Sequence");
+                            decreasing = new JRadioButton("<html><br>Random Decreasing<br>Sequence</html>");
                             decreasing.setHorizontalAlignment(SwingConstants.CENTER);
                             decreasing.addItemListener(this);
                             presetChoices.add(decreasing);
                             presetChoicesContainer.add(decreasing);
                         }
                         {
-                            increasing = new JRadioButton("Random Increasing Sequence");
+                            increasing = new JRadioButton("<html><br>Random Increasing<br>Sequence</html>");
                             increasing.setHorizontalAlignment(SwingConstants.CENTER);
                             presetChoices.add(increasing);
                             presetChoicesContainer.add(increasing);

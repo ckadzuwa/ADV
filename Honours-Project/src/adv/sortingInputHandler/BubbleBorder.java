@@ -1,4 +1,4 @@
-package adv.inputHandlers;
+package adv.sortingInputHandler;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;

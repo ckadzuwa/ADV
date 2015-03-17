@@ -1,7 +1,7 @@
 package adv.panels;
 
 import adv.main.Window;
-import adv.inputHandlers.SortInputDialog;
+import adv.sortingInputHandler.SortInputDialog;
 import adv.views.SortView;
 
 import javax.swing.*;
