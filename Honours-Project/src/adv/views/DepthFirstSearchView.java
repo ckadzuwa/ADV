@@ -209,7 +209,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
 
     @Override
     protected void setDefaultGraphColours() {
-        displayMessage("Explaination Text");
+        displayMessage("Message Text");
         setDefaultVertexColor();
         setDefaultEdgeColor();
         removeHighlightCircle();

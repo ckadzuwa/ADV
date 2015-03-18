@@ -40,7 +40,7 @@ public abstract class DirectedGraphView extends View {
         this.panel = panel;
         this.parent = panel.getWindow();
         setDirectedGraph(new GElementDirectedGraph(edgeModificationAllowed));
-        setUpExplainationText("Explaination Text");
+        setUpExplainationText("Message Text");
     }
 
 
@@ -155,7 +155,7 @@ public abstract class DirectedGraphView extends View {
                 break;
             case MI_CLEAR_ALL:
                 getDirectedGraph().clear();
-                setUpExplainationText("");
+                setUpExplainationText("Message Text");
                 checkGraphHasVertices();
                 changeDone();
                 break;

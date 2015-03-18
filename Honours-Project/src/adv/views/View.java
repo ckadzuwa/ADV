@@ -28,7 +28,7 @@ public abstract class View extends GView {
         HoldoverGraphics = new Vector();
         createLabel("", 1, 1); // Minor hack to ensure canvas
         // root element is set
-        setUpExplainationText("Explaination Text");
+        setUpExplainationText("Message Text");
     }
 
     protected void setUpExplainationText(String messageToDisplay) {
