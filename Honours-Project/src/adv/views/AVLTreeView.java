@@ -34,6 +34,15 @@ public class AVLTreeView extends View {
     private static final int INSERTION_X_POSITION = 100;
     private static final int INSERTION_Y_POSITION = 50;
 
+    //Colours for subtrees
+    private static final Color SUBTREE_V_COLOR = Color.decode("#F48FB1");
+    private static final Color SUBTREE_W_COLOR = Color.decode("#D4E157");
+    private static final Color SUBTREE_X_COLOR = Color.decode("#4FC3F7");
+    private static final Color SUBTREE_Y_COLOR = Color.YELLOW;
+
+
+
+
     //Length for a square leaf vertex
     private static final int LEAF_LENGTH = 20;
 
@@ -564,28 +573,28 @@ public class AVLTreeView extends View {
 
     private void labelAndColourSubtrees(AVLVertex subtreeV, AVLVertex subtreeW, AVLVertex subtreeX, AVLVertex subtreeY) {
         displayMessage("V is the subtree rooted at x's left child.");
-        colourSubtree(subtreeV, Color.RED);
+        colourSubtree(subtreeV, SUBTREE_V_COLOR);
         subtreeV.label.setLabel("V");
         addHalfSecondDelay();
         repaintwait();
 
 
         displayMessage("W is the subtree rooted at x's right child.");
-        colourSubtree(subtreeW, Color.GREEN);
+        colourSubtree(subtreeW, SUBTREE_W_COLOR);
         subtreeW.label.setLabel("W");
         addHalfSecondDelay();
         repaintwait();
 
 
         displayMessage("X is the subtree rooted at x's sibling.");
-        colourSubtree(subtreeX, Color.BLUE);
+        colourSubtree(subtreeX, SUBTREE_X_COLOR);
         subtreeX.label.setLabel("X");
         addHalfSecondDelay();
         repaintwait();
 
 
         displayMessage("Y is the subtree rooted at y's sibling.");
-        colourSubtree(subtreeY, Color.YELLOW);
+        colourSubtree(subtreeY, SUBTREE_Y_COLOR);
         subtreeY.label.setLabel("Y");
         addHalfSecondDelay();
         repaintwait();
