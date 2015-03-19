@@ -35,10 +35,10 @@ public class AVLTreeView extends View {
     private static final int INSERTION_Y_POSITION = 50;
 
     //Colours for subtrees
-    private static final Color SUBTREE_V_COLOR = Color.decode("#F48FB1");
-    private static final Color SUBTREE_W_COLOR = Color.decode("#FFB74D");
-    private static final Color SUBTREE_X_COLOR = Color.decode("#4FC3F7");
-    private static final Color SUBTREE_Y_COLOR = Color.YELLOW;
+    private static final Color SUBTREE_V_COLOR = Color.YELLOW;
+    private static final Color SUBTREE_W_COLOR = Color.decode("#4FC3F7");
+    private static final Color SUBTREE_X_COLOR = Color.decode("#FFB74D");
+    private static final Color SUBTREE_Y_COLOR = Color.LIGHT_GRAY;
 
 
 
