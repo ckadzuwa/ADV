@@ -459,7 +459,13 @@ public class AVLTreeView extends View {
 
         if (isTreeRotation) {
             rotatingEdge.setSource(vertex.graphicVertex);
+            removeDraggingCircle();
         }
+    }
+
+    private void removeDraggingCircle() {
+        removeAny(draggingCircle);
+        draggingCircle = null;
     }
 
     private void prepareEdgeRotation(AVLVertex vertex, AtomicInteger graphicElementIdStamper,
