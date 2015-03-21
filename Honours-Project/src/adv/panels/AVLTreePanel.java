@@ -20,9 +20,9 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
     private JLabel insertLabel;
     private JTextField insertField;
     private Document insertFieldDocument;
-    private JLabel deleteLabel;
-    private JTextField deleteField;
-    private Document deleteFieldDocument;
+    private JLabel removeLabel;
+    private JTextField removeField;
+    private Document removeFieldDocument;
     private JLabel findLabel;
     private JTextField findField;
     private Document findFieldDocument;
@@ -51,14 +51,14 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
         box.add(insertLabel);
         box.add(insertField);
 
-        deleteLabel = new JLabel("Delete: ");
-        deleteField = new JTextField("");
-        deleteField.addActionListener(this);
-        deleteFieldDocument = deleteField.getDocument();
-        deleteFieldDocument.addDocumentListener(this);
-        deleteField.setMaximumSize(fieldSize);
-        box.add(deleteLabel);
-        box.add(deleteField);
+        removeLabel = new JLabel("Remove: ");
+        removeField = new JTextField("");
+        removeField.addActionListener(this);
+        removeFieldDocument = removeField.getDocument();
+        removeFieldDocument.addDocumentListener(this);
+        removeField.setMaximumSize(fieldSize);
+        box.add(removeLabel);
+        box.add(removeField);
 
         findLabel = new JLabel("Find: ");
         findField = new JTextField("");
@@ -136,8 +136,8 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
             insertField.setEnabled(false);
         }
 
-        if (!doc.equals(deleteFieldDocument)) {
-            deleteField.setEnabled(false);
+        if (!doc.equals(removeFieldDocument)) {
+            removeField.setEnabled(false);
         }
 
         if (!doc.equals(findFieldDocument)) {
@@ -147,7 +147,7 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
 
     private void clearAllFields() {
         insertField.setText("");
-        deleteField.setText("");
+        removeField.setText("");
         findField.setText("");
     }
 
@@ -155,7 +155,7 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
 
         if (doc.equals(insertFieldDocument)) {
             nonEmptyField = INSERT;
-        } else if (doc.equals(deleteFieldDocument)) {
+        } else if (doc.equals(removeFieldDocument)) {
             nonEmptyField = DELETE;
         } else {
             nonEmptyField = FIND;
@@ -166,14 +166,14 @@ public class AVLTreePanel extends Panel implements DocumentListener, ActionListe
     @Override
     public void enableSpecificButtons() {
         insertField.setEnabled(true);
-        deleteField.setEnabled(true);
+        removeField.setEnabled(true);
         findField.setEnabled(true);
     }
 
     @Override
     public void disableSpecificButtons() {
         insertField.setEnabled(false);
-        deleteField.setEnabled(false);
+        removeField.setEnabled(false);
         findField.setEnabled(false);
     }
 
