@@ -114,7 +114,20 @@ public abstract class SortView extends View {
 
 
 
-    public boolean lessThan(int index1, int index2) {
+    public boolean greaterThan(int index1, int index2) {
+
+        boolean greaterThan = arrayLocationValue[index1] > arrayLocationValue[index2];
+
+        if (greaterThan) {
+            displayMessage(arrayLocationValue[index1]+" > "+arrayLocationValue[index2]+", swap elements.");
+        } else {
+
+            if (arrayLocationValue[index1] < arrayLocationValue[index2]) {
+                displayMessage(arrayLocationValue[index1]+" < "+arrayLocationValue[index2]+", no swap required.");
+            } else {
+                displayMessage(arrayLocationValue[index2]+" = "+arrayLocationValue[index1]+", no swap required.");
+            }
+        }
 
         // Highlight elements which are being compared
         arrayLocationTextValue[index1].setLabelColor(ColorConstants.ANDROID_RED);
@@ -133,7 +146,7 @@ public abstract class SortView extends View {
             arrayLocationBar[index2].setOutlineColor(Color.BLACK);
         }
 
-        return arrayLocationValue[index1] < arrayLocationValue[index2];
+        return greaterThan;
     }
 
     @Override
@@ -145,24 +158,20 @@ public abstract class SortView extends View {
         setRootElement(null);
         currentNumElements = numArray.length;
         intialiseElements();
-
         assignElements(numArray);
-
-
+        setUpExplainationText("Message Text");
     }
 
     private void intialiseElements() {
 
-        int allocSize = currentNumElements * 2;
-
-        arrayLocationValue = new int[allocSize];
-        arrayLocationValueCopy = new int[allocSize];
-        arrayLocationTextValue = new GElement[allocSize];
-        arrayLocationIndex = new GElement[allocSize];
-        arrayLocationFrame = new GElement[allocSize];
-        arrayLocationBar = new GElement[allocSize];
-        Xpos = new int[allocSize];
-        Ypos = new int[allocSize];
+        arrayLocationValue = new int[currentNumElements];
+        arrayLocationValueCopy = new int[currentNumElements];
+        arrayLocationTextValue = new GElement[currentNumElements];
+        arrayLocationIndex = new GElement[currentNumElements];
+        arrayLocationFrame = new GElement[currentNumElements];
+        arrayLocationBar = new GElement[currentNumElements];
+        Xpos = new int[currentNumElements];
+        Ypos = new int[currentNumElements];
 
     }
 

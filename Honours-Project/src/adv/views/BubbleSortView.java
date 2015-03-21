@@ -6,10 +6,12 @@ public class BubbleSortView extends SortView {
 
 		for (int i = 0; i < currentNumElements - 1; i++) {
 			for (int j = 0; j < currentNumElements - 1 - i; j++) {
-				if (lessThan(j + 1, j))
+				if (greaterThan(j, j+1))
 					swap(j + 1, j);
 			}
 		}
+
+		displayMessage("Elements sorted.");
 	}
 
 	public void runAlgorithm() {
