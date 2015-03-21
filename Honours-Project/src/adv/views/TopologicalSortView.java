@@ -42,7 +42,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
     @Override
     protected void recordVertexFinish(int vertex) {
         super.recordVertexFinish(vertex);
-        sortOrder.add(vertex);
+        sortOrder.addFirst(vertex);
         visitPath.remove(new Integer(vertex));
     }
 
@@ -79,7 +79,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
             }
         }
 
-        displayMessage("Graph has topological sort: " + ordering+".");
+        displayMessage("Graph has topological order: " + ordering+".");
     }
 
     private int firstVertexInCycleIndex() {
