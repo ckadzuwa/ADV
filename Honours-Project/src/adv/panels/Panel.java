@@ -30,10 +30,10 @@ public abstract class Panel extends JPanel {
 	private final static int FAST_INDEX = 2;
 	private final static int VERY_FAST_INDEX = 3;
 
-	private final static int SLOW_VALUE = 75;
-	private final static int MEDIUM_VALUE = 50;
-	private final static int FAST_VALUE = 15;
-	private final static int VERY_FAST_VALUE = 5;
+	protected static int slowValue;
+    protected static int mediumValue;
+    protected static int fastValue;
+    protected static int veryFastValue;
 
 	public Panel(Window window) {
 		super(new BorderLayout());
@@ -100,6 +100,7 @@ public abstract class Panel extends JPanel {
 		String[] speedStrings = { "Slow", "Medium", "Fast", "Very Fast" };
 		JComboBox<String> speed = new JComboBox<String>(speedStrings);
 		speed.setMaximumSize(new Dimension(100, 50));
+		setAnimationSpeeds();
 		speed.addActionListener(new ActionListener() {
 
 			@Override
@@ -107,16 +108,16 @@ public abstract class Panel extends JPanel {
 				JComboBox<String> speed = (JComboBox<String>) event.getSource();
 				switch (speed.getSelectedIndex()) {
 				case SLOW_INDEX:
-					view.setDelay(SLOW_VALUE);
+					view.setDelay(slowValue);
 					break;
 				case MEDIUM_INDEX:
-					view.setDelay(MEDIUM_VALUE);
+					view.setDelay(mediumValue);
 					break;
 				case FAST_INDEX:
-					view.setDelay(FAST_VALUE);
+					view.setDelay(fastValue);
 					break;
 				case VERY_FAST_INDEX:
-					view.setDelay(VERY_FAST_VALUE);
+					view.setDelay(veryFastValue);
 					break;
 				}
 			}
@@ -129,6 +130,13 @@ public abstract class Panel extends JPanel {
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		disableGoAndSkip();
 
+	}
+
+	protected void setAnimationSpeeds() {
+        slowValue = 75;
+		mediumValue = 50;
+        fastValue = 15;
+		veryFastValue = 5;
 	}
 
 	protected void setUpGoButton(Box buttonsContainer) {
@@ -284,12 +292,12 @@ public abstract class Panel extends JPanel {
 	public String getEPS() {
 		return view.getEPS();
 	}
-	
+
 	public void disableGoAndSkip() {
 		goButton.setEnabled(false);
 		skipButton.setEnabled(false);
 	}
-	
+
 	public void enableGoAndSkip() {
 		goButton.setEnabled(true);
 		skipButton.setEnabled(true);
