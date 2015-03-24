@@ -18,7 +18,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
     protected static final Color VISITED_AND_PROCESSING = Color.LIGHT_GRAY;
     protected static final Color VISITED_AND_FINISHED = Color.decode("#424242");
     protected static final Color DEFAULT_EDGE_COLOR = Color.BLACK;
-    protected static final Color CONSIDER_EDGE_COLOR = Color.decode("#FF6F00");//Constants.ANDROID_RED;
+    protected static final Color CONSIDER_EDGE_COLOR = Color.decode("#FF6F00"); //AMBER
     protected static final Color TRAVERSED_EDGE_COLOR = Color.BLUE;
     protected GElement highlightCircle;
     protected HashMap<Integer, TreeSet<Integer>> connectedVertices;

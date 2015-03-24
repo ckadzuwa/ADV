@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class TopologicalSortView extends DepthFirstSearchView {
 
-    private LinkedList<Integer> sortOrder;
+    private LinkedList<Integer> topologicalOrder;
     private Color CYCLE_HIGHLIGHT_COLOR = Color.magenta;
     private boolean cycleDetected;
     private int firstVertexInCycle;
@@ -19,7 +19,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
     @Override
     protected void runSetup() {
         super.runSetup();
-        sortOrder = new LinkedList<Integer>();
+        topologicalOrder = new LinkedList<Integer>();
         cycleDetected = false;
     }
 
@@ -42,7 +42,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
     @Override
     protected void recordVertexFinish(int vertex) {
         super.recordVertexFinish(vertex);
-        sortOrder.addFirst(vertex);
+        topologicalOrder.addFirst(vertex);
         visitPath.remove(new Integer(vertex));
     }
 
@@ -60,7 +60,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
             }
 
             repaint();
-            displayMessage("No topological sort exists as this graph has a cycle!");
+            displayMessage("No topological order exists as this graph has a cycle.");
         } else {
             buildAndDisplayOrdering();
         }
@@ -69,13 +69,13 @@ public class TopologicalSortView extends DepthFirstSearchView {
 
     private void buildAndDisplayOrdering() {
         String ordering = "";
-        int numElementsInOrder = sortOrder.size();
+        int numElementsInOrder = topologicalOrder.size();
         for (int i = 0 ; i < numElementsInOrder ; i++) {
 
             if (i == numElementsInOrder - 1) {
-                ordering = ordering + sortOrder.get(i);
+                ordering = ordering + topologicalOrder.get(i);
             } else {
-                ordering = ordering + sortOrder.get(i) + " < ";
+                ordering = ordering + topologicalOrder.get(i) + " < ";
             }
         }
 
