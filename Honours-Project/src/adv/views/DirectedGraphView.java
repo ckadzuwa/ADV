@@ -102,7 +102,7 @@ public abstract class DirectedGraphView extends View {
 
         String s;
         if (automaticVertexCreation) {
-            s = firstAvailableVertexValue();
+            s = lowestNumberedUnusedVertex();
         } else {
             s = (String) JOptionPane.showInputDialog(parent.getJavaContainer(),
                     Localized.getString("dgNewVertexMessage"), Localized.getString("dgNewVertexTitle"),
@@ -196,7 +196,7 @@ public abstract class DirectedGraphView extends View {
                 if (spaceExistsForVertex()) {
                     String vertexValue;
                     if (automaticVertexCreation) {
-                        vertexValue = firstAvailableVertexValue();
+                        vertexValue = lowestNumberedUnusedVertex();
                         designToolFA.consumeSelectedState();
                     } else {
                         vertexValue = designToolFA.retrieveVertexValue();
@@ -207,8 +207,8 @@ public abstract class DirectedGraphView extends View {
         }
     }
 
-    private String firstAvailableVertexValue() {
-        return getDirectedGraph().getFirstAvailableVertexValue();
+    private String lowestNumberedUnusedVertex() {
+        return getDirectedGraph().lowestNumberedUnusedVertex();
     }
 
     private void validateAndAddVertex(String vertexValue, int x, int y) {

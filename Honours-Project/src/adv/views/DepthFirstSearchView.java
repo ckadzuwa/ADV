@@ -1,6 +1,6 @@
 package adv.views;
 
-import adv.directedGraphModel.EdgePair;
+import adv.directedGraphModel.Edge;
 import adv.directedGraphModel.GElementVertex;
 import adv.panels.Panel;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
@@ -49,7 +49,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
     }
 
     protected void runSetup() {
-        connectedVertices = directedGraph.getConnectedMatrix();
+        connectedVertices = directedGraph.adjacencyList();
         visitPath = new ArrayList<Integer>();
     }
 
@@ -224,9 +224,9 @@ public class DepthFirstSearchView extends DirectedGraphView {
     }
 
     private void setDefaultEdgeColor() {
-        for (EdgePair pair : directedGraph.getEdgeSet()) {
-            int fromVertex = pair.getFromValue();
-            int toVertex = pair.getToValue();
+        for (Edge edge : directedGraph.getEdgeSet()) {
+            int fromVertex = edge.getFromVertex();
+            int toVertex = edge.getToVertex();
             resetEdgeToDefaultColor(fromVertex, toVertex);
         }
     }
