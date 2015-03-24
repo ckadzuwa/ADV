@@ -51,12 +51,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GElementDirectedGraph extends GElement implements XJXMLSerializable {
 
     private TreeMap<Integer, GElementVertex> vertices;
-    private ConcurrentHashMap<Edge, GLink> edges;
+    private HashMap<Edge, GLink> edges;
     private boolean edgeModificationAllowed;
 
     public GElementDirectedGraph(boolean edgeModificationAllowed) {
         vertices = new TreeMap<Integer, GElementVertex>();
-        edges = new ConcurrentHashMap<Edge, GLink>();
+        edges = new HashMap<Edge, GLink>();
         this.edgeModificationAllowed = edgeModificationAllowed;
     }
 
@@ -115,13 +115,20 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         vertices.remove(oldVertexValue);
         vertices.put(Integer.parseInt(newVertexValue), storedVertex);
 
-        for (Edge edge : getEdgeSet()) {
+        // Can't add and remove from a HashMap whilst iterating through it
+        // So remove old edge relationships and put one ones in a temp variable
+        HashMap<Edge,GLink> newEdges = new HashMap<Edge,GLink>();
+
+        Iterator<Edge> edgeIterator = getEdgeSet().iterator();
+        while (edgeIterator.hasNext()) {
+            Edge edge = edgeIterator.next();
             if (edge.requiresUpdate(oldVertexValue)) {
                 GLink link = getEdge(edge.getFromVertex(), edge.getToVertex());
-                edges.remove(edge);
-                edges.put(edge.updatedEdge(oldVertexValue, Integer.parseInt(newVertexValue)), link);
+                edgeIterator.remove();
+                newEdges.put(edge.updatedEdge(oldVertexValue, Integer.parseInt(newVertexValue)), link);
             }
         }
+        edges.putAll(newEdges);
     }
 
     public Vector2D vertexPosition(int vertexValue) {
