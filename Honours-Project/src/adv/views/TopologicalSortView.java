@@ -4,6 +4,7 @@ import adv.panels.Panel;
 
 import java.awt.*;
 import java.util.LinkedList;
+import java.util.TreeSet;
 
 public class TopologicalSortView extends DepthFirstSearchView {
 
@@ -16,6 +17,18 @@ public class TopologicalSortView extends DepthFirstSearchView {
         super(panel);
     }
 
+    public void runAlgorithm() {
+        performTopologicalSort();
+    }
+
+    public void performTopologicalSort() {
+        lockCanvas();
+        runSetup();
+        topSort();
+        showResults();
+        unlockCanvas();
+    }
+
     @Override
     protected void runSetup() {
         super.runSetup();
@@ -23,15 +36,52 @@ public class TopologicalSortView extends DepthFirstSearchView {
         cycleDetected = false;
     }
 
-    protected void performDepthFirstSearch() {
+    protected void topSort() {
         for (Integer vertex : directedGraph.getVertexSet()) {
-            if (vertexNotVisited(vertex)) {
-                if (dfsFromVertex(vertex)) {
+            if (vertexUnvisited(vertex)) {
+                if (sortFromVertex(vertex)) {
                     break;
                 }
                 removeHighlightCircle();
             }
         }
+    }
+
+    private boolean sortFromVertex(int vertex) {
+        visitVertex(vertex);
+        TreeSet<Integer> vertexNeighbours = connectedVertices.get(vertex);
+
+        if (vertexNeighbours != null) {
+
+            displayMessage("Process vertex " + vertex + "'s neighbours.");
+            repaintwait();
+
+            for (Integer neighbor : vertexNeighbours) {
+
+                considerTraversingEdge(vertex, neighbor);
+
+                if (vertexUnvisited(neighbor)) {
+                    setEdgeAsTraversed(vertex, neighbor);
+
+                    if (sortFromVertex(neighbor)) {
+                        return true; //If a cycle is detected further down in DFS - Halt exploration
+                    }
+
+                    backTrackTo(vertex);
+                } else if (vertexBeingProcessed(neighbor)) {
+                    recordCycleDetected(neighbor);
+                    return true; // Indicate a cycle has been detected
+                } else {
+                    abortEdgeTraversal(vertex, neighbor);
+                }
+            }
+        } else {
+            displayMessage("Vertex " + vertex + " has no neighbours to be processed.");
+            repaintwait();
+        }
+
+        recordVertexFinish(vertex);
+        return false; // No cycle reported on this DFS exploration
     }
 
     @Override
@@ -70,7 +120,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
     private void buildAndDisplayOrdering() {
         String ordering = "";
         int numElementsInOrder = topologicalOrder.size();
-        for (int i = 0 ; i < numElementsInOrder ; i++) {
+        for (int i = 0; i < numElementsInOrder; i++) {
 
             if (i == numElementsInOrder - 1) {
                 ordering = ordering + topologicalOrder.get(i);
@@ -79,7 +129,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
             }
         }
 
-        displayMessage("Graph has topological order: " + ordering+".");
+        displayMessage("Graph has topological order: " + ordering + ".");
     }
 
     private int firstVertexInCycleIndex() {
@@ -91,11 +141,10 @@ public class TopologicalSortView extends DepthFirstSearchView {
         return -1;
     }
 
-    protected boolean indicateCycleDetected(int vertex) {
+    private void recordCycleDetected(int vertex) {
         cycleDetected = true;
         visitPath.add(vertex);
         firstVertexInCycle = vertex;
-        return true;
     }
 
 }
