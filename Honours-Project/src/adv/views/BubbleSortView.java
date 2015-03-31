@@ -11,11 +11,11 @@ public class BubbleSortView extends SortView {
 			}
 		}
 
-		displayMessage("Elements sorted.");
 	}
 
 	public void runAlgorithm() {
 		bubbleSort();
+		displayMessage("Elements sorted.");
 	}
 
 }
