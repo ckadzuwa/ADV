@@ -151,15 +151,15 @@ public class AVLTreeView extends View {
         vertex.height = heightOf(vertex);
         int heightAfter = vertex.height;
 
-        displayMessage("Check if vertex " + vertex.value + "'s height needs an update.");
+        displayMessage("Check if vertex " + vertex.key + "'s height needs an update.");
         setHighlightLineAt(vertex.label);
         repaintwait();
 
 
         if (heightBefore != heightAfter) {
-            displayMessage("Update vertex " + vertex.value + "'s height from " + heightBefore + " to " + heightAfter + ".");
+            displayMessage("Update vertex " + vertex.key + "'s height from " + heightBefore + " to " + heightAfter + ".");
         } else {
-            displayMessage("Vertex " + vertex.value + "'s height unchanged.");
+            displayMessage("Vertex " + vertex.key + "'s height unchanged.");
         }
 
         vertex.label.setLabel(String.valueOf(vertex.height));
@@ -197,15 +197,15 @@ public class AVLTreeView extends View {
 
         if (isVertexBalanced(vertex)) {
             if (vertex.hasParent()) {
-                displayMessage("Vertex " + vertex.value + " is balanced, checking parent.");
+                displayMessage("Vertex " + vertex.key + " is balanced, checking parent.");
                 repaintwait();
                 checkTreeBalanced(vertex.parent);
             } else {
-                displayMessage("Vertex " + vertex.value + " is balanced.");
+                displayMessage("Vertex " + vertex.key + " is balanced.");
                 repaintwait();
             }
         } else {
-            displayMessage("Vertex " + vertex.value + " is unbalanced!");
+            displayMessage("Vertex " + vertex.key + " is unbalanced!");
             repaintwait();
 
             //removeHighlightCircle();
@@ -313,20 +313,20 @@ public class AVLTreeView extends View {
         repaintwait();
 
 
-        displayMessage("Let "+vertexZ.value+" be unbalanced vertex z.");
+        displayMessage("Let "+vertexZ.key +" be unbalanced vertex z.");
         vertexZ.label.setLabel("z");
         removeHighlightCircle();
         addHalfSecondDelay();
         repaintwait();
 
 
-        displayMessage("Let "+vertexY.value+" be vertex y (child of z of greater height).");
+        displayMessage("Let "+vertexY.key +" be vertex y (child of z of greater height).");
         vertexY.label.setLabel("y");
         addHalfSecondDelay();
         repaintwait();
 
 
-        displayMessage("Let "+vertexX.value+" be vertex x (child of y of greater height).");
+        displayMessage("Let "+vertexX.key +" be vertex x (child of y of greater height).");
         vertexX.label.setLabel("x");
         addHalfSecondDelay();
         repaintwait();
@@ -675,7 +675,7 @@ public class AVLTreeView extends View {
     }
 
     private void setVertexAtAbsolutePosition(AVLVertex newVertex, int insertionXPosition, int insertionYPosition) {
-        GElement graphicVertex = createCircle(String.valueOf(newVertex.value), insertionXPosition, insertionYPosition);
+        GElement graphicVertex = createCircle(String.valueOf(newVertex.key), insertionXPosition, insertionYPosition);
         newVertex.graphicVertex = graphicVertex;
     }
 
@@ -708,7 +708,7 @@ public class AVLTreeView extends View {
         double vertexXPosition = getVertexTreeXPosition(vertex);
         double vertexYPosition = getVertexTreeYPosition(vertex);
 
-        GElement graphicVertex = createCircle(String.valueOf(vertex.value), vertexXPosition, vertexYPosition);
+        GElement graphicVertex = createCircle(String.valueOf(vertex.key), vertexXPosition, vertexYPosition);
         vertex.graphicVertex = graphicVertex;
     }
 
@@ -832,18 +832,18 @@ public class AVLTreeView extends View {
             repaintwait();
             return null;
         } else {
-            displayMessage("Search for " + k + ", starting from root vertex " + root.value + ".");
+            displayMessage("Search for " + k + ", starting from root vertex " + root.key + ".");
             AVLVertex u = root;
             setHighlightCircleAtRoot();
 
-            while (!u.isLeafVertex() && u.value != k) {
+            while (!u.isLeafVertex() && u.key != k) {
 
-                if (k < u.value) {
-                    displayMessage(k + " < " + u.value + ", go left.");
+                if (k < u.key) {
+                    displayMessage(k + " < " + u.key + ", go left.");
                     u = u.leftChild;
                     repaintwait();
                 } else {
-                    displayMessage(k + " > " + u.value + ", go right.");
+                    displayMessage(k + " > " + u.key + ", go right.");
                     u = u.rightChild;
                     repaintwait();
                 }
@@ -856,7 +856,7 @@ public class AVLTreeView extends View {
                 repaint();
             }
 
-            if (!u.isLeafVertex() && u.value == k) {
+            if (!u.isLeafVertex() && u.key == k) {
                 displayMessage("Found vertex with key " + k + ".");
                 repaintwait();
                 return u;
@@ -874,16 +874,16 @@ public class AVLTreeView extends View {
             repaintwait();
             return null;
         } else {
-            displayMessage("Find insertion location for " + k + ", starting from root vertex " + root.value + ".");
+            displayMessage("Find insertion location for " + k + ", starting from root vertex " + root.key + ".");
             AVLVertex u = root;
             setHighlightCircleAtRoot();
 
             while (!u.isLeafVertex()) {
-                if (k < u.value) {
-                    displayMessage(k + " < " + u.value + ", go left.");
+                if (k < u.key) {
+                    displayMessage(k + " < " + u.key + ", go left.");
                     u = u.leftChild;
                     repaintwait();
-                } else if (k == u.value) {
+                } else if (k == u.key) {
 
                     displayMessage("Found " + k + " high up in tree.");
                     repaintwait();
@@ -897,7 +897,7 @@ public class AVLTreeView extends View {
                     }
 
                 } else {
-                    displayMessage(k + " > " + u.value + ", go right.");
+                    displayMessage(k + " > " + u.key + ", go right.");
                     u = u.rightChild;
                     repaintwait();
                 }
@@ -913,10 +913,10 @@ public class AVLTreeView extends View {
 
         // If the vertex with the largest key no greater than k
         // has a smaller key than the key k
-        if (u.value < k) {
+        if (u.key < k) {
             leafLocation = u.rightChild;
         } else {
-            // Else if the vertex's value is equal to k
+            // Else if the vertex's key is equal to k
             leafLocation = u.leftChild;
         }
 
@@ -983,7 +983,7 @@ public class AVLTreeView extends View {
                 removeHighlightCircle();
                 deletedVertexPlaceHolder = simpleDeletion(vertexToDelete);
             } else {
-                displayMessage("Remove "+vertexToDelete.value+"'s key.");
+                displayMessage("Remove "+vertexToDelete.key +"'s key.");
                 vertexToDelete.removeValue();
                 repaintwait();
                 deletedVertexPlaceHolder = complexDeletion(vertexToDelete);
@@ -1035,7 +1035,7 @@ public class AVLTreeView extends View {
     private AVLVertex inheritValueFromVertexU(AVLVertex vertexToDelete, AVLVertex u) {
 
 
-        displayMessage("Move the key "+u.value+" up to replace deleted vertex.");
+        displayMessage("Move the key "+u.key +" up to replace deleted vertex.");
         floatValueUp(vertexToDelete, u);
         repaintwait();
 
@@ -1074,7 +1074,7 @@ public class AVLTreeView extends View {
         AnimatePath(floatingValue, floatingValue.getPosition(), vertexToDelete.graphicVertex.getPosition(), STEPS);
         removeAny(floatingValue);
 
-        vertexToDelete.setValue(Integer.parseInt(vertexValue));
+        vertexToDelete.setKey(Integer.parseInt(vertexValue));
 
         repaintwait();
         removeHighlightCircle();
@@ -1117,11 +1117,11 @@ public class AVLTreeView extends View {
             animateVertexVisit(z);
 
             if (!isVertexBalanced(z)) {
-                displayMessage("Vertex " + z.value + " is unbalanced!");
+                displayMessage("Vertex " + z.key + " is unbalanced!");
                 repaintwait();
                 balanceTree(z);
             } else {
-                displayMessage("Vertex " + z.value + " is balanced.");
+                displayMessage("Vertex " + z.key + " is balanced.");
                 repaintwait();
             }
 

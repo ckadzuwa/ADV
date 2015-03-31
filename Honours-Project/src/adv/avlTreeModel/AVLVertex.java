@@ -10,7 +10,7 @@ import java.security.InvalidParameterException;
  */
 public class AVLVertex {
 
-    public Integer value;
+    public Integer key;
     public AVLVertex parent;
     public AVLVertex leftChild;
     public AVLVertex rightChild;
@@ -23,7 +23,7 @@ public class AVLVertex {
 
     public static AVLVertex newVertex(int value) {
         AVLVertex newVertex = new AVLVertex();
-        newVertex.value = value;
+        newVertex.key = value;
         newVertex.height = 1;
 
         return newVertex;
@@ -31,7 +31,7 @@ public class AVLVertex {
 
     public static AVLVertex newLeafVertex() {
         AVLVertex leafVertex = new AVLVertex();
-        leafVertex.value = null;
+        leafVertex.key = null;
         leafVertex.leftChild = null;
         leafVertex.rightChild = null;
         leafVertex.height = 0;
@@ -48,7 +48,7 @@ public class AVLVertex {
     }
 
     public boolean isLeafVertex() {
-        return value == null;
+        return key == null;
     }
 
     public boolean isRightLeafVertex() {
@@ -87,16 +87,16 @@ public class AVLVertex {
 
         // Don't set to null since
         // vertex then becomes a leaf vertex
-        this.value = -1;
+        this.key = -1;
         graphicVertex.setLabel("");
 
     }
 
-    public void setValue(Integer value) {
+    public void setKey(Integer key) {
 
-        if (value >= 0) {
-            this.value = value;
-            graphicVertex.setLabel(String.valueOf(value));
+        if (key >= 0) {
+            this.key = key;
+            graphicVertex.setLabel(String.valueOf(key));
         } else {
             throw new InvalidParameterException();
         }
