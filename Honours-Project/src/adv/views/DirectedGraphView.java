@@ -118,7 +118,7 @@ public abstract class DirectedGraphView extends View {
     public void editVertex(GElementVertex state) {
         String s = (String) JOptionPane.showInputDialog(parent.getJavaContainer(),
                 Localized.getString("dgEditVertexMessage"), Localized.getString("dgEditVertexTitle"),
-                JOptionPane.QUESTION_MESSAGE, null, null, state.getVertexValue());
+                JOptionPane.QUESTION_MESSAGE, null, null, state.getVertexKey());
         if (s != null) {
             s = s.trim();
             if (!InputConstraints.isValidNumber(s)) {

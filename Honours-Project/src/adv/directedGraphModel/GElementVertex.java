@@ -39,28 +39,28 @@ import edu.usfca.xj.foundation.XJXMLSerializable;
 
 public class GElementVertex extends GElementCircle implements XJXMLSerializable {
 
-	private String vertexValue;
+	private String vertexKey;
 
 	public GElementVertex() {
 		setDraggable(true);
 	}
 
 	public GElementVertex(String vertexName, double x, double y) {
-		setVertexValue(vertexName);
+		setVertexKey(vertexName);
 		setPosition(x, y);
 		setDraggable(true);
 	}
 
-	public void setVertexValue(String state) {
-		this.vertexValue = state;
+	public void setVertexKey(String state) {
+		this.vertexKey = state;
 	}
 
-	public String getVertexValue() {
-		return vertexValue;
+	public String getVertexKey() {
+		return vertexKey;
 	}
 
 	public String getLabel() {
-		return getVertexValue();
+		return getVertexKey();
 	}
 
 	public boolean acceptIncomingLink() {

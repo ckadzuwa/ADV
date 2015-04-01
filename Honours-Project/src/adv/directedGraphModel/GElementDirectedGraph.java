@@ -43,7 +43,6 @@ import edu.usfca.xj.foundation.XJXMLSerializable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 // This class is based on GElementFAMachine
 // (found in Jean Bovet VAS app) but has been 
@@ -78,15 +77,15 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         return vertices.size();
     }
 
-    public void addVertexAtXY(String vertexValue, double x, double y) {
-        GElementVertex vertex = new GElementVertex(vertexValue, x, y);
+    public void addVertexAtXY(String vertexKey, double x, double y) {
+        GElementVertex vertex = new GElementVertex(vertexKey, x, y);
         vertex.setFillColor(Color.WHITE);
-        vertices.put(Integer.parseInt(vertex.getVertexValue()), vertex);
+        vertices.put(Integer.parseInt(vertex.getVertexKey()), vertex);
         addElement(vertex);
     }
 
     public void removeVertex(GElementVertex vertex) {
-        vertices.remove(Integer.parseInt(vertex.getVertexValue()));
+        vertices.remove(Integer.parseInt(vertex.getVertexKey()));
         removeElement(vertex);
         // Remove any other link which is using the vertex s
         ListIterator e = elements.listIterator();
@@ -106,14 +105,14 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         return vertices.containsKey(Integer.parseInt(s));
     }
 
-    public void renameVertex(GElementVertex vertex, String newVertexValue) {
-        int oldVertexValue = Integer.parseInt(vertex.getVertexValue());
+    public void renameVertex(GElementVertex vertex, String newVertexKey) {
+        int oldVertexKey = Integer.parseInt(vertex.getVertexKey());
 
-        GElementVertex storedVertex = (GElementVertex) vertices.get(oldVertexValue);
-        storedVertex.setVertexValue(newVertexValue);
+        GElementVertex storedVertex = (GElementVertex) vertices.get(oldVertexKey);
+        storedVertex.setVertexKey(newVertexKey);
 
-        vertices.remove(oldVertexValue);
-        vertices.put(Integer.parseInt(newVertexValue), storedVertex);
+        vertices.remove(oldVertexKey);
+        vertices.put(Integer.parseInt(newVertexKey), storedVertex);
 
         // Can't add and remove from a HashMap whilst iterating through it
         // So remove old edge relationships and put one ones in a temp variable
@@ -122,21 +121,21 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         Iterator<Edge> edgeIterator = getEdgeSet().iterator();
         while (edgeIterator.hasNext()) {
             Edge edge = edgeIterator.next();
-            if (edge.requiresUpdate(oldVertexValue)) {
+            if (edge.requiresUpdate(oldVertexKey)) {
                 GLink link = getEdge(edge.getFromVertex(), edge.getToVertex());
                 edgeIterator.remove();
-                newEdges.put(edge.updatedEdge(oldVertexValue, Integer.parseInt(newVertexValue)), link);
+                newEdges.put(edge.updatedEdge(oldVertexKey, Integer.parseInt(newVertexKey)), link);
             }
         }
         edges.putAll(newEdges);
     }
 
-    public Vector2D vertexPosition(int vertexValue) {
-        return getVertex(vertexValue).getPosition();
+    public Vector2D vertexPosition(int vertexKey) {
+        return getVertex(vertexKey).getPosition();
     }
 
-    public GElementVertex getVertex(Integer value) {
-        return vertices.get(value);
+    public GElementVertex getVertex(Integer key) {
+        return vertices.get(key);
     }
 
     public String lowestNumberedUnusedVertex() {
@@ -166,7 +165,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     public void createEdge(GElementVertex source, String sourceAnchorKey, GElementVertex target,
                            String targetAnchorKey, int shape, Point mouse) {
 
-        Edge edge = Edge.key(source.getVertexValue(), target.getVertexValue());
+        Edge edge = Edge.key(source.getVertexKey(), target.getVertexKey());
 
         if (edges.containsKey(edge)) {
             XJAlert.display(null, "Invalid Edge", "An edge already exists from vertex " + edge.getFromVertex()
@@ -184,7 +183,7 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
         if (pattern != null) {
             GLink link = new GLink(source, sourceAnchorKey, target, targetAnchorKey, shape, pattern, mouse,
                     GView.DEFAULT_LINK_FLATENESS);
-            edges.put(new Edge(source.getVertexValue(), target.getVertexValue()), link);
+            edges.put(new Edge(source.getVertexKey(), target.getVertexKey()), link);
             addElement(link);
         }
 

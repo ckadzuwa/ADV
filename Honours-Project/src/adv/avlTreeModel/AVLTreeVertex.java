@@ -8,12 +8,12 @@ import java.security.InvalidParameterException;
 /**
  * Created by CK on 08/01/2015.
  */
-public class AVLVertex {
+public class AVLTreeVertex {
 
     public Integer key;
-    public AVLVertex parent;
-    public AVLVertex leftChild;
-    public AVLVertex rightChild;
+    public AVLTreeVertex parent;
+    public AVLTreeVertex leftChild;
+    public AVLTreeVertex rightChild;
     public Integer height;
     public Integer depth;
     public Integer rowIndex;
@@ -21,16 +21,16 @@ public class AVLVertex {
     public GElement graphicVertex; //Circle (internal vertex) , Square (leaf vertex)
     public GElementLabel label;
 
-    public static AVLVertex newVertex(int value) {
-        AVLVertex newVertex = new AVLVertex();
+    public static AVLTreeVertex newVertex(int value) {
+        AVLTreeVertex newVertex = new AVLTreeVertex();
         newVertex.key = value;
         newVertex.height = 1;
 
         return newVertex;
     }
 
-    public static AVLVertex newLeafVertex() {
-        AVLVertex leafVertex = new AVLVertex();
+    public static AVLTreeVertex newLeafVertex() {
+        AVLTreeVertex leafVertex = new AVLTreeVertex();
         leafVertex.key = null;
         leafVertex.leftChild = null;
         leafVertex.rightChild = null;

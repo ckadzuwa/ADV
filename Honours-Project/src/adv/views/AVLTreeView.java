@@ -1,6 +1,6 @@
 package adv.views;
 
-import adv.avlTreeModel.AVLVertex;
+import adv.avlTreeModel.AVLTreeVertex;
 import adv.utility.InputConstraints;
 import edu.usfca.ds.shapes.DSShapeLink;
 import edu.usfca.xj.appkit.gview.base.Vector2D;
@@ -48,7 +48,7 @@ public class AVLTreeView extends View {
 
     private static final int STEPS = 40;
 
-    AVLVertex root;
+    AVLTreeVertex root;
     private GElementCircle highlightCircle;
     private GElement draggingCircle;
     private DSShapeLink rotatingEdge;
@@ -131,7 +131,7 @@ public class AVLTreeView extends View {
             addLeafChildren(root);
             repaint();
         } else {
-            AVLVertex vertexInserted = insertIntoTree(vertexToInsert);
+            AVLTreeVertex vertexInserted = insertIntoTree(vertexToInsert);
             addLeafChildren(vertexInserted);
 
             addTwoSecondDelay();
@@ -145,7 +145,7 @@ public class AVLTreeView extends View {
     }
 
     // Update the heights on the insertion/deletion path
-    private void updateHeightsOnPath(AVLVertex vertex) {
+    private void updateHeightsOnPath(AVLTreeVertex vertex) {
 
         int heightBefore = vertex.height;
         vertex.height = heightOf(vertex);
@@ -192,7 +192,7 @@ public class AVLTreeView extends View {
 
     }
 
-    private void checkTreeBalanced(AVLVertex vertex) {
+    private void checkTreeBalanced(AVLTreeVertex vertex) {
         animateVertexVisit(vertex);
 
         if (isVertexBalanced(vertex)) {
@@ -219,9 +219,9 @@ public class AVLTreeView extends View {
         removeHighlightCircle();
     }
 
-    private void balanceTree(AVLVertex vertexZ) {
-        AVLVertex vertexY = childOfGreaterHeight(vertexZ.leftChild, vertexZ.rightChild);
-        AVLVertex vertexX = childOfGreaterHeight(vertexY.leftChild, vertexY.rightChild);
+    private void balanceTree(AVLTreeVertex vertexZ) {
+        AVLTreeVertex vertexY = childOfGreaterHeight(vertexZ.leftChild, vertexZ.rightChild);
+        AVLTreeVertex vertexX = childOfGreaterHeight(vertexY.leftChild, vertexY.rightChild);
 
         boolean leftLeftCase = (vertexY.isLeftChild() && vertexX.isLeftChild());
         boolean rightRightCase = (vertexX.isRightChild() && vertexY.isRightChild());
@@ -246,11 +246,11 @@ public class AVLTreeView extends View {
         }
     }
 
-    private void performDoubleRotation(AVLVertex vertexZ, AVLVertex vertexY, AVLVertex vertexX) {
-        AVLVertex subtreeX = getSibling(vertexX);
-        AVLVertex subtreeY = getSibling(vertexY);
-        AVLVertex subtreeV = vertexX.leftChild;
-        AVLVertex subtreeW = vertexX.rightChild;
+    private void performDoubleRotation(AVLTreeVertex vertexZ, AVLTreeVertex vertexY, AVLTreeVertex vertexX) {
+        AVLTreeVertex subtreeX = getSibling(vertexX);
+        AVLTreeVertex subtreeY = getSibling(vertexY);
+        AVLTreeVertex subtreeV = vertexX.leftChild;
+        AVLTreeVertex subtreeW = vertexX.rightChild;
 
         labelVertices(vertexZ, vertexY, vertexX);
         labelAndColourSubtrees(subtreeV, subtreeW, subtreeX, subtreeY);
@@ -292,11 +292,11 @@ public class AVLTreeView extends View {
         redrawHeights(root);
     }
 
-    private void singleRotationInDoubleRotation(AVLVertex vertexX, AVLVertex subtreeV, AVLVertex subtreeW, AVLVertex vertexXParent) {
+    private void singleRotationInDoubleRotation(AVLTreeVertex vertexX, AVLTreeVertex subtreeV, AVLTreeVertex subtreeW, AVLTreeVertex vertexXParent) {
         boolean vertexXWasLeftChild = vertexX.isLeftChild();
         boolean vertexYWasLeftChild = vertexXParent.isLeftChild();
 
-        AVLVertex subtreeToMove;
+        AVLTreeVertex subtreeToMove;
         if (vertexXWasLeftChild) {
             subtreeToMove = subtreeW;
         } else {
@@ -308,7 +308,7 @@ public class AVLTreeView extends View {
         repaintwait();
     }
 
-    private void labelVertices(AVLVertex vertexZ, AVLVertex vertexY, AVLVertex vertexX) {
+    private void labelVertices(AVLTreeVertex vertexZ, AVLTreeVertex vertexY, AVLTreeVertex vertexX) {
         blankVertexLabels(root);
         repaintwait();
 
@@ -333,7 +333,7 @@ public class AVLTreeView extends View {
 
     }
 
-    private void blankVertexLabels(AVLVertex vertex) {
+    private void blankVertexLabels(AVLTreeVertex vertex) {
         vertex.label.setLabel("");
         vertex.graphicVertex.setFillColor(null);
         if (!vertex.isLeafVertex()) {
@@ -342,11 +342,11 @@ public class AVLTreeView extends View {
         }
     }
 
-    private void performSingleRotation(AVLVertex vertexZ, AVLVertex vertexY, AVLVertex vertexX) {
-        AVLVertex subtreeX = getSibling(vertexX);
-        AVLVertex subtreeY = getSibling(vertexY);
-        AVLVertex subtreeV = vertexX.leftChild;
-        AVLVertex subtreeW = vertexX.rightChild;
+    private void performSingleRotation(AVLTreeVertex vertexZ, AVLTreeVertex vertexY, AVLTreeVertex vertexX) {
+        AVLTreeVertex subtreeX = getSibling(vertexX);
+        AVLTreeVertex subtreeY = getSibling(vertexY);
+        AVLTreeVertex subtreeV = vertexX.leftChild;
+        AVLTreeVertex subtreeW = vertexX.rightChild;
 
         labelVertices(vertexZ, vertexY, vertexX);
         labelAndColourSubtrees(subtreeV, subtreeW, subtreeX, subtreeY);
@@ -375,7 +375,7 @@ public class AVLTreeView extends View {
         repaintwait();
     }
 
-    private void redrawHeights(AVLVertex vertex) {
+    private void redrawHeights(AVLTreeVertex vertex) {
         vertex.label.setLabel(String.valueOf(vertex.height));
         if (!vertex.isLeafVertex()) {
             redrawHeights(vertex.leftChild);
@@ -384,17 +384,17 @@ public class AVLTreeView extends View {
 
     }
 
-    private void adoptLeftChild(AVLVertex parent, AVLVertex child) {
+    private void adoptLeftChild(AVLTreeVertex parent, AVLTreeVertex child) {
         parent.leftChild = child;
         child.parent = parent;
     }
 
-    private void adoptRightChild(AVLVertex parent, AVLVertex child) {
+    private void adoptRightChild(AVLTreeVertex parent, AVLTreeVertex child) {
         parent.rightChild = child;
         child.parent = parent;
     }
 
-    private void rotateAroundVertex(AVLVertex rotateVertex, boolean rotateVertexWasLeftChild, AVLVertex rotateVertexParent, boolean parentWasLeftChild) {
+    private void rotateAroundVertex(AVLTreeVertex rotateVertex, boolean rotateVertexWasLeftChild, AVLTreeVertex rotateVertexParent, boolean parentWasLeftChild) {
 
         if (rotateVertexParent == root) {
             setAsRoot(rotateVertex);
@@ -408,7 +408,7 @@ public class AVLTreeView extends View {
     }
 
     //Adopt grandchild in place of parent
-    private void adoptGrandChild(AVLVertex grandParent, AVLVertex parent, AVLVertex grandChild, boolean parentWasLeftChild) {
+    private void adoptGrandChild(AVLTreeVertex grandParent, AVLTreeVertex parent, AVLTreeVertex grandChild, boolean parentWasLeftChild) {
 
         if (parentWasLeftChild) {
             adoptLeftChild(grandParent, grandChild);
@@ -421,7 +421,7 @@ public class AVLTreeView extends View {
 
     }
 
-    private void moveParentDown(AVLVertex rotateVertex, boolean rotateVertexWasLeftChild, AVLVertex rotateVertexParent) {
+    private void moveParentDown(AVLTreeVertex rotateVertex, boolean rotateVertexWasLeftChild, AVLTreeVertex rotateVertexParent) {
         if (rotateVertexWasLeftChild) {
             adoptRightChild(rotateVertex, rotateVertexParent);
         } else {
@@ -433,14 +433,14 @@ public class AVLTreeView extends View {
         edge.setTarget(rotateVertexParent.graphicVertex);
     }
 
-    private void setAsRoot(AVLVertex vertex) {
+    private void setAsRoot(AVLTreeVertex vertex) {
         root = vertex;
         vertex.depth = 0;
         vertex.rowIndex = 1;
         vertex.parent = null;
     }
 
-    private void animateTreeMovement(AVLVertex vertex, boolean isTreeRotation) {
+    private void animateTreeMovement(AVLTreeVertex vertex, boolean isTreeRotation) {
 
         // Structures to assign ids to graphic elements
         AtomicInteger graphicElementIdStamper = new AtomicInteger();
@@ -468,7 +468,7 @@ public class AVLTreeView extends View {
         draggingCircle = null;
     }
 
-    private void prepareEdgeRotation(AVLVertex vertex, AtomicInteger graphicElementIdStamper,
+    private void prepareEdgeRotation(AVLTreeVertex vertex, AtomicInteger graphicElementIdStamper,
                                      LinkedHashMap<Integer, GElement> idToGraphicElement, AtomicInteger pathIdStamper,
                                      LinkedHashMap<Integer, Vector2D[]> idToPath) {
 
@@ -503,7 +503,7 @@ public class AVLTreeView extends View {
         computePath(root, idStamper, idToPath);
     }
 
-    private void computePath(AVLVertex vertex, AtomicInteger idStamper, LinkedHashMap<Integer, Vector2D[]> idToPath) {
+    private void computePath(AVLTreeVertex vertex, AtomicInteger idStamper, LinkedHashMap<Integer, Vector2D[]> idToPath) {
         double x = getVertexTreeXPosition(vertex);
         double y = getVertexTreeYPosition(vertex);
         Vector2D vertexTargetPosition = new Vector2D(x, y);
@@ -525,7 +525,7 @@ public class AVLTreeView extends View {
         assignId(root, idStamper, idToGraphicElement);
     }
 
-    private void assignId(AVLVertex vertex, AtomicInteger idStamper, LinkedHashMap<Integer, GElement> idToGraphicElement) {
+    private void assignId(AVLTreeVertex vertex, AtomicInteger idStamper, LinkedHashMap<Integer, GElement> idToGraphicElement) {
         idToGraphicElement.put(idStamper.incrementAndGet(), vertex.graphicVertex);
         idToGraphicElement.put(idStamper.incrementAndGet(), vertex.label);
 
@@ -535,7 +535,7 @@ public class AVLTreeView extends View {
         }
     }
 
-    private void updateTreeModel(AVLVertex vertex) {
+    private void updateTreeModel(AVLTreeVertex vertex) {
 
         if (!vertex.isLeafVertex()) {
             setChildDepth(vertex.leftChild, vertex);
@@ -552,7 +552,7 @@ public class AVLTreeView extends View {
 
     }
 
-    private int heightOf(AVLVertex vertex) {
+    private int heightOf(AVLTreeVertex vertex) {
         if (vertex.isLeafVertex()) {
             return 0;
         } else {
@@ -560,7 +560,7 @@ public class AVLTreeView extends View {
         }
     }
 
-    private void moveSubtree(AVLVertex subTreeToMove, AVLVertex formerParent, boolean formerParentWasLeftChild, AVLVertex newParent) {
+    private void moveSubtree(AVLTreeVertex subTreeToMove, AVLTreeVertex formerParent, boolean formerParentWasLeftChild, AVLTreeVertex newParent) {
         if (formerParentWasLeftChild) {
             adoptLeftChild(newParent, subTreeToMove);
         } else {
@@ -570,14 +570,14 @@ public class AVLTreeView extends View {
         setUpEdgeRotation(formerParent, subTreeToMove);
     }
 
-    private void setUpEdgeRotation(AVLVertex vertexY, AVLVertex subtreeX) {
+    private void setUpEdgeRotation(AVLTreeVertex vertexY, AVLTreeVertex subtreeX) {
         rotatingEdge = (DSShapeLink) getLink(vertexY.graphicVertex, subtreeX.graphicVertex);
         draggingCircle = createCircle("", vertexY.graphicVertex.getPositionX(), vertexY.graphicVertex.getPositionY());
         draggingCircle.setElementVisible(false);
         rotatingEdge.setSource(draggingCircle);
     }
 
-    private void labelAndColourSubtrees(AVLVertex subtreeV, AVLVertex subtreeW, AVLVertex subtreeX, AVLVertex subtreeY) {
+    private void labelAndColourSubtrees(AVLTreeVertex subtreeV, AVLTreeVertex subtreeW, AVLTreeVertex subtreeX, AVLTreeVertex subtreeY) {
         displayMessage("V is the subtree rooted at x's left child.");
         colourSubtree(subtreeV, SUBTREE_V_COLOR);
         subtreeV.label.setLabel("V");
@@ -606,7 +606,7 @@ public class AVLTreeView extends View {
         repaintwait();
     }
 
-    private void colourSubtree(AVLVertex subtree, Color color) {
+    private void colourSubtree(AVLTreeVertex subtree, Color color) {
         subtree.graphicVertex.setFillColor(color);
 
         if (!subtree.isLeafVertex()) {
@@ -615,7 +615,7 @@ public class AVLTreeView extends View {
         }
     }
 
-    private AVLVertex getSibling(AVLVertex vertex) {
+    private AVLTreeVertex getSibling(AVLTreeVertex vertex) {
         if (vertex.isLeftChild()) {
             return vertex.parent.rightChild;
         } else {
@@ -623,7 +623,7 @@ public class AVLTreeView extends View {
         }
     }
 
-    private AVLVertex childOfGreaterHeight(AVLVertex leftChild, AVLVertex rightChild) {
+    private AVLTreeVertex childOfGreaterHeight(AVLTreeVertex leftChild, AVLTreeVertex rightChild) {
         if (leftChild.height >= rightChild.height) {
             return leftChild;
         } else {
@@ -631,7 +631,7 @@ public class AVLTreeView extends View {
         }
     }
 
-    private boolean isVertexBalanced(AVLVertex vertex) {
+    private boolean isVertexBalanced(AVLTreeVertex vertex) {
         int leftChildHeight = vertex.leftChild.height;
         int rightChildHeight = vertex.rightChild.height;
         int heightDifference = Math.abs(leftChildHeight - rightChildHeight);
@@ -639,8 +639,8 @@ public class AVLTreeView extends View {
         return heightDifference <= 1;
     }
 
-    private AVLVertex insertRootVertex(int vertexToInsert) {
-        AVLVertex rootVertex = AVLVertex.newVertex(vertexToInsert);
+    private AVLTreeVertex insertRootVertex(int vertexToInsert) {
+        AVLTreeVertex rootVertex = AVLTreeVertex.newVertex(vertexToInsert);
         setAsRoot(rootVertex);
         setVertexAtTreePosition(rootVertex);
         setVertexLabel(rootVertex);
@@ -648,22 +648,22 @@ public class AVLTreeView extends View {
         return rootVertex;
     }
 
-    private double getVertexTreeXPosition(AVLVertex vertex) {
+    private double getVertexTreeXPosition(AVLTreeVertex vertex) {
         double canvasWidth = getRealSize().getWidth();
         return (canvasWidth * vertex.rowIndex) / (Math.pow(2, vertex.depth) + 1);
     }
 
-    private double getVertexTreeYPosition(AVLVertex vertex) {
+    private double getVertexTreeYPosition(AVLTreeVertex vertex) {
         return (vertex.depth + 1) * HEIGHT_DELTA;
     }
 
-    private AVLVertex insertIntoTree(int vertexToInsert) {
-        AVLVertex newVertex = AVLVertex.newVertex(vertexToInsert);
+    private AVLTreeVertex insertIntoTree(int vertexToInsert) {
+        AVLTreeVertex newVertex = AVLTreeVertex.newVertex(vertexToInsert);
         setVertexAtAbsolutePosition(newVertex, INSERTION_X_POSITION, INSERTION_Y_POSITION);
         displayMessage("Prepare to insert vertex " + vertexToInsert + " into the tree.");
         repaintwait();
 
-        AVLVertex leafVertexToReplace = findInsertionLocation(vertexToInsert);
+        AVLTreeVertex leafVertexToReplace = findInsertionLocation(vertexToInsert);
         displayMessage("Insert vertex " + vertexToInsert + " at leaf location.");
         repaintwait();
         positionVertex(newVertex, leafVertexToReplace);
@@ -674,13 +674,13 @@ public class AVLTreeView extends View {
         return newVertex;
     }
 
-    private void setVertexAtAbsolutePosition(AVLVertex newVertex, int insertionXPosition, int insertionYPosition) {
+    private void setVertexAtAbsolutePosition(AVLTreeVertex newVertex, int insertionXPosition, int insertionYPosition) {
         GElement graphicVertex = createCircle(String.valueOf(newVertex.key), insertionXPosition, insertionYPosition);
         newVertex.graphicVertex = graphicVertex;
     }
 
-    private void replaceLeafVertex(AVLVertex newVertex, AVLVertex leafVertexToReplace) {
-        AVLVertex parent = leafVertexToReplace.parent;
+    private void replaceLeafVertex(AVLTreeVertex newVertex, AVLTreeVertex leafVertexToReplace) {
+        AVLTreeVertex parent = leafVertexToReplace.parent;
 
         // Replace the leaf vertex with the new vertex
         // by adopting new vertex as child
@@ -697,14 +697,14 @@ public class AVLTreeView extends View {
         removeHighlightCircle();
     }
 
-    private void positionVertex(AVLVertex newVertex, AVLVertex leafVertexToReplace) {
+    private void positionVertex(AVLTreeVertex newVertex, AVLTreeVertex leafVertexToReplace) {
         GElement newGraphicVertex = newVertex.graphicVertex;
         GElement leafGraphicVertex = leafVertexToReplace.graphicVertex;
 
         AnimatePath(newGraphicVertex, newGraphicVertex.getPosition(), leafGraphicVertex.getPosition(), STEPS);
     }
 
-    private void setVertexAtTreePosition(AVLVertex vertex) {
+    private void setVertexAtTreePosition(AVLTreeVertex vertex) {
         double vertexXPosition = getVertexTreeXPosition(vertex);
         double vertexYPosition = getVertexTreeYPosition(vertex);
 
@@ -712,14 +712,14 @@ public class AVLTreeView extends View {
         vertex.graphicVertex = graphicVertex;
     }
 
-    private void setVertexLabel(AVLVertex vertex) {
+    private void setVertexLabel(AVLTreeVertex vertex) {
         Vector2D labelPosition = getLabelPosition(vertex, vertex.graphicVertex.getPosition());
         GElementLabel graphicLabel = createLabel(String.valueOf(vertex.height), labelPosition.x, labelPosition.y);
         graphicLabel.setLabelColor(Color.BLUE);
         vertex.label = graphicLabel;
     }
 
-    private Vector2D getLabelPosition(AVLVertex vertex, Vector2D assumedPosition) {
+    private Vector2D getLabelPosition(AVLTreeVertex vertex, Vector2D assumedPosition) {
         int sign = -1;
         if (vertex.isRightChild()) {
             sign = 1;
@@ -739,7 +739,7 @@ public class AVLTreeView extends View {
         return new Vector2D(labelXPosition, labelYPosition);
     }
 
-    private void setLeafVertexAtTreePosition(AVLVertex vertex) {
+    private void setLeafVertexAtTreePosition(AVLTreeVertex vertex) {
         double vertexXPosition = getVertexTreeXPosition(vertex);
         double vertexYPosition = getVertexTreeYPosition(vertex);
 
@@ -747,9 +747,9 @@ public class AVLTreeView extends View {
         vertex.graphicVertex = graphicVertex;
     }
 
-    private void addLeafChildren(AVLVertex parentVertex) {
-        AVLVertex leftLeafVertex = AVLVertex.newLeafVertex();
-        AVLVertex rightLeafVertex = AVLVertex.newLeafVertex();
+    private void addLeafChildren(AVLTreeVertex parentVertex) {
+        AVLTreeVertex leftLeafVertex = AVLTreeVertex.newLeafVertex();
+        AVLTreeVertex rightLeafVertex = AVLTreeVertex.newLeafVertex();
 
         addLeftChild(parentVertex, leftLeafVertex);
         addRightChild(parentVertex, rightLeafVertex);
@@ -763,33 +763,33 @@ public class AVLTreeView extends View {
         addGraphicEdge(parentVertex, rightLeafVertex);
     }
 
-    private void addLeftChild(AVLVertex parent, AVLVertex leftChild) {
+    private void addLeftChild(AVLTreeVertex parent, AVLTreeVertex leftChild) {
         parent.leftChild = leftChild;
         leftChild.parent = parent;
         setChildDepth(leftChild, parent);
         setLeftChildRowIndex(leftChild, parent);
     }
 
-    private void setLeftChildRowIndex(AVLVertex leftChild, AVLVertex parent) {
+    private void setLeftChildRowIndex(AVLTreeVertex leftChild, AVLTreeVertex parent) {
         leftChild.rowIndex = parent.rowIndex * 2 - 1;
     }
 
-    private void setChildDepth(AVLVertex child, AVLVertex parent) {
+    private void setChildDepth(AVLTreeVertex child, AVLTreeVertex parent) {
         child.depth = parent.depth + 1;
     }
 
-    private void addRightChild(AVLVertex parent, AVLVertex rightChild) {
+    private void addRightChild(AVLTreeVertex parent, AVLTreeVertex rightChild) {
         parent.rightChild = rightChild;
         rightChild.parent = parent;
         setChildDepth(rightChild, parent);
         setRightChildRowIndex(rightChild, parent);
     }
 
-    private void setRightChildRowIndex(AVLVertex rightChild, AVLVertex parent) {
+    private void setRightChildRowIndex(AVLTreeVertex rightChild, AVLTreeVertex parent) {
         rightChild.rowIndex = parent.rowIndex * 2;
     }
 
-    private void addGraphicEdge(AVLVertex parent, AVLVertex child) {
+    private void addGraphicEdge(AVLTreeVertex parent, AVLTreeVertex child) {
         DSShapeLink edge;
 
         //If the child is a leaf vertex , edge should be anchored to the top of square
@@ -825,7 +825,7 @@ public class AVLTreeView extends View {
     }
 
     //Returns vertex if element found , null otherwise
-    private AVLVertex findElement(int k, boolean hideHighlightCircle) {
+    private AVLTreeVertex findElement(int k, boolean hideHighlightCircle) {
 
         if (root == null) {
             displayMessage("No elements found since the tree is empty!");
@@ -833,7 +833,7 @@ public class AVLTreeView extends View {
             return null;
         } else {
             displayMessage("Search for " + k + ", starting from root vertex " + root.key + ".");
-            AVLVertex u = root;
+            AVLTreeVertex u = root;
             setHighlightCircleAtRoot();
 
             while (!u.isLeafVertex() && u.key != k) {
@@ -868,14 +868,14 @@ public class AVLTreeView extends View {
         }
     }
 
-    private AVLVertex findInsertionLocation(int k) {
+    private AVLTreeVertex findInsertionLocation(int k) {
         if (root == null) {
             displayMessage("No elements in tree! Insert " + k + " as root vertex.");
             repaintwait();
             return null;
         } else {
             displayMessage("Find insertion location for " + k + ", starting from root vertex " + root.key + ".");
-            AVLVertex u = root;
+            AVLTreeVertex u = root;
             setHighlightCircleAtRoot();
 
             while (!u.isLeafVertex()) {
@@ -907,9 +907,9 @@ public class AVLTreeView extends View {
         }
     }
 
-    private AVLVertex appropriateLeafLocation(int k, AVLVertex u) {
+    private AVLTreeVertex appropriateLeafLocation(int k, AVLTreeVertex u) {
 
-        AVLVertex leafLocation;
+        AVLTreeVertex leafLocation;
 
         // If the vertex with the largest key no greater than k
         // has a smaller key than the key k
@@ -929,7 +929,7 @@ public class AVLTreeView extends View {
         highlightCircle = null;
     }
 
-    private void animateVertexVisit(AVLVertex u) {
+    private void animateVertexVisit(AVLTreeVertex u) {
         if (highlightCircle == null) {
             setHighlightCircleAtVertex(u);
             repaintwait();
@@ -946,7 +946,7 @@ public class AVLTreeView extends View {
         repaintwait();
     }
 
-    private void setHighlightCircleAtVertex(AVLVertex vertex) {
+    private void setHighlightCircleAtVertex(AVLTreeVertex vertex) {
         highlightCircle = createCircle("", vertex.graphicVertex.getPositionX(), vertex.graphicVertex.getPositionY());
         highlightCircle.setOutlineColor(Color.RED);
     }
@@ -970,13 +970,13 @@ public class AVLTreeView extends View {
     }
 
     private void deleteVertex(int vertex) {
-        AVLVertex vertexToDelete = findElement(vertex, false);
+        AVLTreeVertex vertexToDelete = findElement(vertex, false);
 
         if (vertexToDelete == null) {
             removeHighlightCircle();
         } else {
 
-            AVLVertex deletedVertexPlaceHolder;
+            AVLTreeVertex deletedVertexPlaceHolder;
 
             // Vertex to delete is root or internal vertex with two leaves
             if (vertexToDelete.hasTwoLeafChildren()) {
@@ -995,7 +995,7 @@ public class AVLTreeView extends View {
         }
     }
 
-    private void finishHandlingDeletion(AVLVertex deletedVertexPlaceHolder) {
+    private void finishHandlingDeletion(AVLTreeVertex deletedVertexPlaceHolder) {
         // Null when all vertices have been removed from tree
         if (deletedVertexPlaceHolder != null) {
             addOneSecondDelay();
@@ -1014,9 +1014,9 @@ public class AVLTreeView extends View {
         }
     }
 
-    private AVLVertex complexDeletion(AVLVertex vertexToDelete) {
+    private AVLTreeVertex complexDeletion(AVLTreeVertex vertexToDelete) {
 
-        AVLVertex u;
+        AVLTreeVertex u;
 
         if (vertexToDelete.leftChildIsInternalVertex()) {
             displayMessage("Use the greatest key in left subtree to replace deleted key.");
@@ -1032,7 +1032,7 @@ public class AVLTreeView extends View {
         return inheritValueFromVertexU(vertexToDelete, u);
     }
 
-    private AVLVertex inheritValueFromVertexU(AVLVertex vertexToDelete, AVLVertex u) {
+    private AVLTreeVertex inheritValueFromVertexU(AVLTreeVertex vertexToDelete, AVLTreeVertex u) {
 
 
         displayMessage("Move the key "+u.key +" up to replace deleted vertex.");
@@ -1040,13 +1040,13 @@ public class AVLTreeView extends View {
         repaintwait();
 
         if (u.hasTwoLeafChildren()) {
-            AVLVertex leafVertex = AVLVertex.newLeafVertex();
+            AVLTreeVertex leafVertex = AVLTreeVertex.newLeafVertex();
             replaceInternalVertex(leafVertex, u);
 
             return leafVertex;
         } else {
-            AVLVertex uParent = u.parent;
-            AVLVertex uLeftChild = u.leftChild;
+            AVLTreeVertex uParent = u.parent;
+            AVLTreeVertex uLeftChild = u.leftChild;
             adoptGrandChild(uParent, u, uLeftChild, u.isLeftChild());
             updateTreeModel(root);
             removePredecessorGraphicElements(u);
@@ -1057,7 +1057,7 @@ public class AVLTreeView extends View {
 
     }
 
-    private void removePredecessorGraphicElements(AVLVertex u) {
+    private void removePredecessorGraphicElements(AVLTreeVertex u) {
         removeLink(u.graphicVertex, u.rightChild.graphicVertex);
         removeAny(u.graphicVertex);
         removeAny(u.label);
@@ -1066,7 +1066,7 @@ public class AVLTreeView extends View {
         removeLink(u.graphicVertex, u.leftChild.graphicVertex);
     }
 
-    private void floatValueUp(AVLVertex vertexToDelete, AVLVertex u) {
+    private void floatValueUp(AVLTreeVertex vertexToDelete, AVLTreeVertex u) {
         String vertexValue = u.graphicVertex.getLabel();
 
         u.removeValue();
@@ -1080,10 +1080,10 @@ public class AVLTreeView extends View {
         removeHighlightCircle();
     }
 
-    private AVLVertex findInOrderPredecessor(AVLVertex vertex) {
+    private AVLTreeVertex findInOrderPredecessor(AVLTreeVertex vertex) {
 
         displayMessage("Go left once.");
-        AVLVertex u = vertex.leftChild;
+        AVLTreeVertex u = vertex.leftChild;
         repaintwait();
 
         animateVertexVisit(u);
@@ -1098,22 +1098,22 @@ public class AVLTreeView extends View {
         return u;
     }
 
-    private AVLVertex simpleDeletion(AVLVertex vertexToDelete) {
+    private AVLTreeVertex simpleDeletion(AVLTreeVertex vertexToDelete) {
         if (vertexToDelete == root) {
             removeGraphicalElementsForVertex(root);
             root = null;
             return null;
         } else {
-            AVLVertex leafVertex = AVLVertex.newLeafVertex();
+            AVLTreeVertex leafVertex = AVLTreeVertex.newLeafVertex();
             replaceInternalVertex(leafVertex, vertexToDelete);
             return leafVertex;
         }
     }
 
-    private void checkTreeBalancedAfterDeletion(AVLVertex u) {
+    private void checkTreeBalancedAfterDeletion(AVLTreeVertex u) {
 
         while (u != root) {
-            AVLVertex z = u.parent;
+            AVLTreeVertex z = u.parent;
             animateVertexVisit(z);
 
             if (!isVertexBalanced(z)) {
@@ -1132,8 +1132,8 @@ public class AVLTreeView extends View {
         removeHighlightCircle();
     }
 
-    private void replaceInternalVertex(AVLVertex leafVertex, AVLVertex vertexToDelete) {
-        AVLVertex parent = vertexToDelete.parent;
+    private void replaceInternalVertex(AVLTreeVertex leafVertex, AVLTreeVertex vertexToDelete) {
+        AVLTreeVertex parent = vertexToDelete.parent;
 
         // Replace the internal vertex with the leaf
         // vertex by adopting leaf vertex as child
@@ -1152,7 +1152,7 @@ public class AVLTreeView extends View {
         repaintwaitmin();
     }
 
-    private void removeGraphicalElementsForVertex(AVLVertex vertexToDelete) {
+    private void removeGraphicalElementsForVertex(AVLTreeVertex vertexToDelete) {
 
         if (vertexToDelete.hasParent()) {
             removeLink(vertexToDelete.parent.graphicVertex, vertexToDelete.graphicVertex);
