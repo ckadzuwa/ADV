@@ -20,7 +20,6 @@ public abstract class DirectedGraphView extends View {
 
     // Menu items
     private static final int MI_ADD_VERTEX = 0;
-    private static final int MI_EDIT_VERTEX = 1;
     private static final int MI_REMOVE_VERTEX = 2;
     private static final int MI_EDIT_EDGE = 3;
     private static final int MI_REMOVE_EDGE = 4;
@@ -77,8 +76,14 @@ public abstract class DirectedGraphView extends View {
             menu.addPopupMenuListener(new MyContextualMenuListener());
 
             if (vertexSelected) {
-                addMenuItem(menu, Localized.getString("dgEditVertexTitle"), MI_EDIT_VERTEX, element);
-                addMenuItem(menu, Localized.getString("dgMIDelete"), MI_REMOVE_VERTEX, element);
+                int N = directedGraph.getNumberVertices();
+                GElementVertex selectedVertex = (GElementVertex) element;
+                int vertexKey = Integer.parseInt(selectedVertex.getLabel());
+
+                if (vertexKey == N - 1) {
+                    addMenuItem(menu, Localized.getString("dgMIDelete"), MI_REMOVE_VERTEX, element);
+                }
+
             } else if (linkSelected) {
 
                 if (edgeModificationAllowed) {
@@ -115,27 +120,6 @@ public abstract class DirectedGraphView extends View {
         }
     }
 
-    public void editVertex(GElementVertex state) {
-        String s = (String) JOptionPane.showInputDialog(parent.getJavaContainer(),
-                Localized.getString("dgEditVertexMessage"), Localized.getString("dgEditVertexTitle"),
-                JOptionPane.QUESTION_MESSAGE, null, null, state.getVertexKey());
-        if (s != null) {
-            s = s.trim();
-            if (!InputConstraints.isValidNumber(s)) {
-                XJAlert.display(parent.getJavaContainer(), Localized.getString("dgInvalidInputTitle"),
-                        "Please enter a valid number between "+InputConstraints.MIN_INPUT_VALUE+
-                                "and "+InputConstraints.MAX_INPUT_VALUE+".");
-            } else if (getDirectedGraph().containsVertex(s))
-                XJAlert.display(parent.getJavaContainer(), Localized.getString("dgEditVertexTitle"),
-                        Localized.getString("dgEditVertexAlreadyExists"));
-            else {
-                getDirectedGraph().renameVertex(state, s);
-                changeDone();
-                setDefaultGraphColours();
-                checkGraphHasVertices();
-            }
-        }
-    }
 
     public void handleMenuEvent(XJMenu menu, XJMenuItem item) {
         switch (item.getTag()) {
@@ -143,9 +127,6 @@ public abstract class DirectedGraphView extends View {
                 if (spaceExistsForVertex()) {
                     createVertexAtXY(getLastMousePosition().getX(), getLastMousePosition().getY());
                 }
-                break;
-            case MI_EDIT_VERTEX:
-                editVertex((GElementVertex) item.getObject());
                 break;
             case MI_REMOVE_VERTEX:
                 getDirectedGraph().removeVertex((GElementVertex) item.getObject());
@@ -263,13 +244,6 @@ public abstract class DirectedGraphView extends View {
                 }
             }
 
-            if (e instanceof GElementVertex) {
-                // Don't allow vertex editing via double click in edge creation mode
-                // (Since double-clicking is for adding an edge from vertex to itself)
-                if (designToolFA.getSelectedTool() != DesignToolsDG.TOOL_EDGE) {
-                    editVertex((GElementVertex) e);
-                }
-            }
         }
     }
 

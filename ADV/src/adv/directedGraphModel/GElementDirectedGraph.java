@@ -49,19 +49,19 @@ import java.util.*;
 // modified for directed graphs
 public class GElementDirectedGraph extends GElement implements XJXMLSerializable {
 
-    private TreeMap<Integer, GElementVertex> vertices;
+    private GElementVertex[] vertices;
     private HashMap<Edge, GLink> edges;
     private boolean edgeModificationAllowed;
 
     public GElementDirectedGraph(boolean edgeModificationAllowed) {
-        vertices = new TreeMap<Integer, GElementVertex>();
+        vertices = new GElementVertex[InputConstraints.MAX_NUM_ELEMENTS];
         edges = new HashMap<Edge, GLink>();
         this.edgeModificationAllowed = edgeModificationAllowed;
     }
 
     public void clear() {
         elements.clear();
-        vertices.clear();
+        vertices = new GElementVertex[InputConstraints.MAX_NUM_ELEMENTS];
         edges.clear();
     }
 
@@ -69,23 +69,35 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     // VERTEX METHODS
     //------------------------------------
 
-    public Set<Integer> getVertexSet() {
-        return vertices.keySet();
+    public GElementVertex[] getVertexSet() {
+        return vertices;
     }
 
     public int getNumberVertices() {
-        return vertices.size();
+
+        int numberOfVerticesPresent = 0;
+
+        for (int i = 0 ; i < vertices.length ; i++) {
+            if (vertices[i] != null) {
+                numberOfVerticesPresent++;
+            }
+        }
+
+        return numberOfVerticesPresent;
+
     }
 
     public void addVertexAtXY(String vertexKey, double x, double y) {
         GElementVertex vertex = new GElementVertex(vertexKey, x, y);
         vertex.setFillColor(Color.WHITE);
-        vertices.put(Integer.parseInt(vertex.getVertexKey()), vertex);
+        int i = Integer.parseInt(vertex.getVertexKey());
+        vertices[i] = vertex;
         addElement(vertex);
     }
 
     public void removeVertex(GElementVertex vertex) {
-        vertices.remove(Integer.parseInt(vertex.getVertexKey()));
+        int i = Integer.parseInt(vertex.getVertexKey());
+        vertices[i] = null;
         removeElement(vertex);
         // Remove any other link which is using the vertex s
         ListIterator e = elements.listIterator();
@@ -102,40 +114,17 @@ public class GElementDirectedGraph extends GElement implements XJXMLSerializable
     }
 
     public boolean containsVertex(String s) {
-        return vertices.containsKey(Integer.parseInt(s));
+        int i = Integer.parseInt(s);
+        return vertices[i] != null;
     }
 
-    public void renameVertex(GElementVertex vertex, String newVertexKey) {
-        int oldVertexKey = Integer.parseInt(vertex.getVertexKey());
-
-        GElementVertex storedVertex = (GElementVertex) vertices.get(oldVertexKey);
-        storedVertex.setVertexKey(newVertexKey);
-
-        vertices.remove(oldVertexKey);
-        vertices.put(Integer.parseInt(newVertexKey), storedVertex);
-
-        // Can't add and remove from a HashMap whilst iterating through it
-        // So remove old edge relationships and put one ones in a temp variable
-        HashMap<Edge,GLink> newEdges = new HashMap<Edge,GLink>();
-
-        Iterator<Edge> edgeIterator = getEdgeSet().iterator();
-        while (edgeIterator.hasNext()) {
-            Edge edge = edgeIterator.next();
-            if (edge.requiresUpdate(oldVertexKey)) {
-                GLink link = getEdge(edge.getFromVertex(), edge.getToVertex());
-                edgeIterator.remove();
-                newEdges.put(edge.updatedEdge(oldVertexKey, Integer.parseInt(newVertexKey)), link);
-            }
-        }
-        edges.putAll(newEdges);
-    }
 
     public Vector2D vertexPosition(int vertexKey) {
         return getVertex(vertexKey).getPosition();
     }
 
     public GElementVertex getVertex(Integer key) {
-        return vertices.get(key);
+        return vertices[key];
     }
 
     public String lowestNumberedUnusedVertex() {

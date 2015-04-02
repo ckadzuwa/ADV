@@ -1,5 +1,7 @@
 package adv.directedGraphModel;
 
+// Bookkeeping structure used to record an edge from
+// a vertex to a neighbour
 public class Edge {
 
     private int fromVertex;

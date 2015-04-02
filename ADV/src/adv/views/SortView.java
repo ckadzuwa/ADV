@@ -113,7 +113,6 @@ public abstract class SortView extends View {
     }
 
 
-
     public boolean greaterThan(int index1, int index2) {
 
         boolean greaterThan = arrayLocationValue[index1] > arrayLocationValue[index2];

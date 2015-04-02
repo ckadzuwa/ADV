@@ -28,7 +28,7 @@ public class AVLTreeView extends View {
     private static int rotationCurrentlyPerforming;
 
     // The width/height difference between two levels in the tree for insertion
-    //private static final int WIDTH_DELTA = 20;
+
     private static final int WIDTH_DELTA = 50;
     private static final int HEIGHT_DELTA = 100;
     private static final int INSERTION_X_POSITION = 100;
@@ -39,9 +39,6 @@ public class AVLTreeView extends View {
     private static final Color SUBTREE_W_COLOR = Color.decode("#4FC3F7");
     private static final Color SUBTREE_X_COLOR = Color.decode("#FFB74D");
     private static final Color SUBTREE_Y_COLOR = Color.LIGHT_GRAY;
-
-
-
 
     //Length for a square leaf vertex
     private static final int LEAF_LENGTH = 20;
@@ -246,6 +243,7 @@ public class AVLTreeView extends View {
         }
     }
 
+    // Animation method for performing a double rotation within an AVL ree.
     private void performDoubleRotation(AVLTreeVertex vertexZ, AVLTreeVertex vertexY, AVLTreeVertex vertexX) {
         AVLTreeVertex subtreeX = getSibling(vertexX);
         AVLTreeVertex subtreeY = getSibling(vertexY);
@@ -342,6 +340,7 @@ public class AVLTreeView extends View {
         }
     }
 
+    // Animation method for performing a single rotation within an AVL tree.
     private void performSingleRotation(AVLTreeVertex vertexZ, AVLTreeVertex vertexY, AVLTreeVertex vertexX) {
         AVLTreeVertex subtreeX = getSibling(vertexX);
         AVLTreeVertex subtreeY = getSibling(vertexY);
@@ -394,6 +393,7 @@ public class AVLTreeView extends View {
         child.parent = parent;
     }
 
+    // Method that updates internal model and then synchronises it with the graph model
     private void rotateAroundVertex(AVLTreeVertex rotateVertex, boolean rotateVertexWasLeftChild, AVLTreeVertex rotateVertexParent, boolean parentWasLeftChild) {
 
         if (rotateVertexParent == root) {
@@ -657,6 +657,7 @@ public class AVLTreeView extends View {
         return (vertex.depth + 1) * HEIGHT_DELTA;
     }
 
+    // AVL Tree insertion algorithm from INF2B course notes.
     private AVLTreeVertex insertIntoTree(int vertexToInsert) {
         AVLTreeVertex newVertex = AVLTreeVertex.newVertex(vertexToInsert);
         setVertexAtAbsolutePosition(newVertex, INSERTION_X_POSITION, INSERTION_Y_POSITION);
@@ -824,7 +825,8 @@ public class AVLTreeView extends View {
 
     }
 
-    //Returns vertex if element found , null otherwise
+    // Algorithm for finding an element in a binary search tree
+    // taken from the INF2B notes.
     private AVLTreeVertex findElement(int k, boolean hideHighlightCircle) {
 
         if (root == null) {
@@ -969,6 +971,7 @@ public class AVLTreeView extends View {
 
     }
 
+    // AVL Tree deletion algorithm from INF2B course notes.
     private void deleteVertex(int vertex) {
         AVLTreeVertex vertexToDelete = findElement(vertex, false);
 

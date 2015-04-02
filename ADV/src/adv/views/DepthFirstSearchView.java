@@ -32,6 +32,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
         performDepthFirstSearch();
     }
 
+
     public void performDepthFirstSearch() {
         lockCanvas();
         runSetup();
@@ -40,10 +41,12 @@ public class DepthFirstSearchView extends DirectedGraphView {
         unlockCanvas();
     }
 
+    // Method for locking canvas so users can't add vertices during visualisation
     protected void lockCanvas() {
         canvasLocked = true;
     }
 
+    // Method for unlocking canvas after visualisation
     protected void unlockCanvas() {
         canvasLocked = false;
     }
@@ -53,15 +56,20 @@ public class DepthFirstSearchView extends DirectedGraphView {
         visitPath = new ArrayList<Integer>();
     }
 
+    // Depth first search visualisation
     protected void dfs() {
-        for (Integer vertex : directedGraph.getVertexSet()) {
-            if (vertexUnvisited(vertex)) {
-                dfsFromVertex(vertex);
+
+        int N = directedGraph.getNumberVertices();
+
+        for (int i = 0 ; i < N ; i++) {
+            if (vertexUnvisited(i)) {
+                dfsFromVertex(i);
             }
             removeHighlightCircle();
         }
     }
 
+    // Depth first search algorithm from INF2B notes
     protected void dfsFromVertex(int vertex) {
         visitVertex(vertex);
         TreeSet<Integer> vertexNeighbours = connectedVertices.get(vertex);
@@ -92,16 +100,19 @@ public class DepthFirstSearchView extends DirectedGraphView {
         recordVertexFinish(vertex);
     }
 
-    protected void setEdgeAsTraversed(Integer fromVertex, Integer toVertex) {
-        getEdge(fromVertex, toVertex).setOutlineColor(TRAVERSED_EDGE_COLOR);
-    }
-
+    // Animation method for turning edge amber
     protected void considerTraversingEdge(Integer fromVertex, Integer toVertex) {
         displayMessage("Consider traversing edge from vertex " + fromVertex + " to vertex " + toVertex + ".");
         getEdge(fromVertex, toVertex).setOutlineColor(CONSIDER_EDGE_COLOR);
         repaintwait();
     }
 
+    // Animation method for turning edge blue
+    protected void setEdgeAsTraversed(Integer fromVertex, Integer toVertex) {
+        getEdge(fromVertex, toVertex).setOutlineColor(TRAVERSED_EDGE_COLOR);
+    }
+
+    // Record that a vertex has turned black
     protected void recordVertexFinish(int vertex) {
         displayMessage("Finished processing vertex " + vertex + ".");
         getVertex(vertex).setFillColor(VISITED_AND_FINISHED);
@@ -109,12 +120,14 @@ public class DepthFirstSearchView extends DirectedGraphView {
         repaintwait();
     }
 
+    // Animation method for performing backtracking
     protected void backTrackTo(int vertex) {
         displayMessage("Backtrack to vertex " + vertex + ".");
         AnimatePath(highlightCircle, highlightCircle.getPosition(), vertexPosition(vertex), 40);
         repaintwait();
     }
 
+    // Animation method for visiting a vertex
     protected void visitVertex(int vertex) {
 
         displayMessage("Visit vertex " + vertex + ".");
@@ -137,11 +150,13 @@ public class DepthFirstSearchView extends DirectedGraphView {
         recordVertexVisit(vertex);
     }
 
+    // Animation method for positioning highlight circle at a vertex
     private void setHighlightCircleAtVertex(int vertex) {
         highlightCircle = createCircle("", vertexPosition(vertex).getX(), vertexPosition(vertex).getY());
         highlightCircle.setOutlineColor(Color.RED);
     }
 
+    // Show the visit order
     protected void showResults() {
         removeHighlightCircle();
         String dfsTraversalOrder = "";
@@ -157,6 +172,7 @@ public class DepthFirstSearchView extends DirectedGraphView {
         displayMessage("Finished traversal," + " vertices visited in the order: " + dfsTraversalOrder);
     }
 
+    // Show the visit order
     protected void recordVertexVisit(int vertex) {
         visitPath.add(vertex);
         displayMessage("Vertex " + vertex + " has been visited.");
@@ -164,18 +180,22 @@ public class DepthFirstSearchView extends DirectedGraphView {
         repaintwait();
     }
 
+    // Retrieve the (x,y) coordinate for graphical vertex
     protected Vector2D vertexPosition(int vertex) {
         return directedGraph.vertexPosition(vertex);
     }
 
+    // Check if vertex is white
     protected boolean vertexUnvisited(int vertex) {
         return directedGraph.getVertex(vertex).getFillColor() == UNVISITED;
     }
 
+    // Check if vertex is grey
     protected boolean vertexBeingProcessed(int vertex) {
         return directedGraph.getVertex(vertex).getFillColor() == VISITED_AND_PROCESSING;
     }
 
+    // Check if vertex is black
     protected boolean vertexVisited(int vertex) {
         return directedGraph.getVertex(vertex).getFillColor() == VISITED_AND_FINISHED;
     }
@@ -185,6 +205,10 @@ public class DepthFirstSearchView extends DirectedGraphView {
         setDefaultGraphColours();
     }
 
+    // Reset graphical objects to their default colours
+    // This is used when changes are made to the graph
+    // after a visualisation. This created a new graph
+    // hence we reset the state.
     @Override
     protected void setDefaultGraphColours() {
         displayMessage("Message Text");
@@ -195,10 +219,13 @@ public class DepthFirstSearchView extends DirectedGraphView {
     }
 
     private void setDefaultVertexColor() {
-        for (Integer vertex : directedGraph.getVertexSet()) {
-            getVertex(vertex).setFillColor(UNVISITED);
-            getVertex(vertex).setLabelColor(Color.BLACK);
+        int N = directedGraph.getNumberVertices();
+
+        for (int i = 0 ; i < N ; i++) {
+            getVertex(i).setFillColor(UNVISITED);
+            getVertex(i).setLabelColor(Color.BLACK);
         }
+
     }
 
     private void setDefaultEdgeColor() {

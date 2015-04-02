@@ -36,10 +36,13 @@ public class TopologicalSortView extends DepthFirstSearchView {
         cycleDetected = false;
     }
 
+    // Topological sort algorithm discussed within INF2B
     protected void topSort() {
-        for (Integer vertex : directedGraph.getVertexSet()) {
-            if (vertexUnvisited(vertex)) {
-                if (sortFromVertex(vertex)) {
+        int N = directedGraph.getNumberVertices();
+
+        for (int i = 0; i < N; i++) {
+            if (vertexUnvisited(i)) {
+                if (sortFromVertex(i)) {
                     break;
                 }
                 removeHighlightCircle();
@@ -47,6 +50,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
         }
     }
 
+    // Recursive DFS used by topological sort
     private boolean sortFromVertex(int vertex) {
         visitVertex(vertex);
         TreeSet<Integer> vertexNeighbours = connectedVertices.get(vertex);
@@ -89,6 +93,8 @@ public class TopologicalSortView extends DepthFirstSearchView {
         super.backTrackTo(vertex);
     }
 
+
+    // Record that a vertex has turned black
     @Override
     protected void recordVertexFinish(int vertex) {
         super.recordVertexFinish(vertex);
@@ -96,6 +102,9 @@ public class TopologicalSortView extends DepthFirstSearchView {
         visitPath.remove(new Integer(vertex));
     }
 
+    // Show topological order if one exists or display that
+    // a cycle exists and highlight the edges that form a
+    // a cycle
     @Override
     protected void showResults() {
         removeHighlightCircle();
@@ -117,6 +126,7 @@ public class TopologicalSortView extends DepthFirstSearchView {
 
     }
 
+    // Display topological order
     private void buildAndDisplayOrdering() {
         String ordering = "";
         int numElementsInOrder = topologicalOrder.size();

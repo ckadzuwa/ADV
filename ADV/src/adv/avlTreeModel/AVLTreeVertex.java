@@ -5,9 +5,7 @@ import edu.usfca.xj.appkit.gview.object.GElementLabel;
 
 import java.security.InvalidParameterException;
 
-/**
- * Created by CK on 08/01/2015.
- */
+// Bookkeeping structure used to model AVL tree
 public class AVLTreeVertex {
 
     public Integer key;
@@ -16,10 +14,10 @@ public class AVLTreeVertex {
     public AVLTreeVertex rightChild;
     public Integer height;
     public Integer depth;
-    public Integer rowIndex;
+    public Integer rowIndex; // Used to store the location of a vertex in a row of the tree
 
     public GElement graphicVertex; //Circle (internal vertex) , Square (leaf vertex)
-    public GElementLabel label;
+    public GElementLabel label; // Used for the height of a vertex
 
     public static AVLTreeVertex newVertex(int value) {
         AVLTreeVertex newVertex = new AVLTreeVertex();
