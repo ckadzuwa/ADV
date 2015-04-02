@@ -1,5 +1,7 @@
-ADV
+ADV 
 ====
 
-This repository hosts the for the algorithm 
-visualisaiton tool known as ADV. 
+This repository hosts the algorithm visualisaiton tool known as 
+ADV (Algorithms and Data Structures Visualiser).
+
+
